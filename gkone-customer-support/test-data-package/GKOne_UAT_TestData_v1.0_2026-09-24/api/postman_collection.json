@@ -1,0 +1,101 @@
+{
+  "info": {
+    "name": "GKOne UAT Test Data Package v1.0",
+    "description": "One request per in-scope endpoint for the GKOne UAT external integration test data package. Example bodies use real (masked/synthetic) values from this package's data/ folder. Replace {{access_token}} via your own auth flow -- it is never populated here.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "{{base_url}}" },
+    { "key": "access_token", "value": "{{access_token}}" },
+    { "key": "userId", "value": "053db63f-dbfd-45d1-8677-3bf18b28c093" },
+    { "key": "transactionId", "value": "f1e89f7f-6094-0834-0647-cdead6b808d7" },
+    { "key": "mtcn", "value": "3524056646" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [ { "key": "token", "value": "{{access_token}}", "type": "string" } ]
+  },
+  "item": [
+    {
+      "name": "Filter customers",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/customers/filter",
+          "host": [ "{{base_url}}" ],
+          "path": [ "api", "v1", "customers", "filter" ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"source\": \"GKONE\",\n  \"lookupType\": \"EMAIL\",\n  \"emailAddress\": \"naomi.qatesting+danny@gmail.com\"\n}"
+        },
+        "description": "Only one lookupType per request. See customer-filter.md context notes for the full lookupType/field matrix. Returns 200 with an empty result on no match (not 404)."
+      }
+    },
+    {
+      "name": "Filter transactions for user",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/users/{{userId}}/Transactions/Filter",
+          "host": [ "{{base_url}}" ],
+          "path": [ "api", "v1", "users", "{{userId}}", "Transactions", "Filter" ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"dateFrom\": \"2026-09-23T00:00:00.0000000Z\",\n  \"dateTo\": \"2026-09-24T00:00:00.0000000Z\",\n  \"limit\": 10,\n  \"offset\": 0\n}"
+        },
+        "description": "dateFrom and dateTo are required; limit/offset are optional. userId is a required path parameter, not a body field."
+      }
+    },
+    {
+      "name": "Get transaction by id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/users/{{userId}}/Transactions/{{transactionId}}",
+          "host": [ "{{base_url}}" ],
+          "path": [ "api", "v1", "users", "{{userId}}", "Transactions", "{{transactionId}}" ]
+        },
+        "description": "Returns 404 'Record does not exist' if transactionId does not belong to userId, or if either id is unknown. Returns 400 if either id fails GUID format validation."
+      }
+    },
+    {
+      "name": "Validate inbound remittance (MTCN)",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/remittances/{{mtcn}}/validation",
+          "host": [ "{{base_url}}" ],
+          "path": [ "api", "v1", "remittances", "{{mtcn}}", "validation" ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"lookupType\": \"GKO_NUMBER\",\n  \"gkoNumber\": \"MB20240327D2C4B69B0F2D103854\",\n  \"purposeOfTransaction\": \"Family Support/Living Expenses\",\n  \"relationship\": \"Family\"\n}"
+        },
+        "description": "Example body deliberately reproduces the RECEIVER NAME MATCHING FAILED (422) case documented in scenarios/test-scenarios.csv (MV-02) -- swap gkoNumber for the true receiver's identifier to attempt a different outcome. See data/mtcns.csv for which MTCNs are known already_paid vs. uncertain."
+      }
+    },
+    {
+      "name": "Update receiver name (expect 501)",
+      "request": {
+        "method": "PATCH",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/remittances/{{mtcn}}/receiver/name",
+          "host": [ "{{base_url}}" ],
+          "path": [ "api", "v1", "remittances", "{{mtcn}}", "receiver", "name" ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"senderName\": \"Nicoreen Test\",\n  \"idType\": \"PASSPORT\",\n  \"idNumber\": \"A4321123\",\n  \"dob\": \"1997-01-11\",\n  \"idExpiry\": \"2027-01-11\",\n  \"transactionSource\": \"GKOne\",\n  \"sourceFunds\": \"Savings/Bank Account\",\n  \"reason\": \"Correction of receiver's name\",\n  \"namePart\": \"FIRST_NAME\",\n  \"correctedValue\": \"Red\"\n}"
+        },
+        "description": "IMPORTANT: a well-formed, valid request to this endpoint is EXPECTED to return 501 Not Implemented. This is documented, intentional behavior -- do not log it as a defect. See README.md."
+      }
+    }
+  ]
+}

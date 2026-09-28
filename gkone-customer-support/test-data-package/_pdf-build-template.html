@@ -1,0 +1,355 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: Letter; margin: 20mm 18mm; }
+  body {
+    font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+    color: #1a1a1a;
+    font-size: 10.5pt;
+    line-height: 1.5;
+  }
+  h1 {
+    font-size: 20pt;
+    margin: 0 0 2px 0;
+  }
+  .subtitle {
+    font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+    color: #6b7280;
+    font-size: 9.5pt;
+    margin: 0 0 16px 0;
+  }
+  h2 {
+    font-size: 13.5pt;
+    margin: 26px 0 4px 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #2563eb;
+    color: #1e3a8a;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 11.5pt;
+    margin: 16px 0 4px 0;
+    page-break-after: avoid;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 18px 0;
+  }
+  blockquote {
+    background: #f4f6fb;
+    border-left: 3px solid #2563eb;
+    margin: 10px 0;
+    padding: 8px 14px;
+    color: #374151;
+  }
+  blockquote p { margin: 4px 0; }
+  code {
+    font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+    background: #f1f3f5;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 9.3pt;
+    color: #b91c1c;
+  }
+  pre {
+    background: #1e1e2e;
+    color: #e5e7eb;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 9.3pt;
+    line-height: 1.6;
+    overflow-x: auto;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  ul { margin: 4px 0 12px 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 10px 0;
+    font-size: 9.3pt;
+  }
+  th, td {
+    border: 1px solid #d1d5db;
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: #f1f3f5;
+    font-size: 8.8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #4b5563;
+  }
+  .tag-label {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  /* Sections that should never be split across a page break -- if they
+     don't fit in the remaining space, push the whole section to a new page. */
+  .keep-together, .customer-block {
+    page-break-inside: avoid;
+  }
+  /* Sections that must always start at the top of a fresh page. */
+  .page-start {
+    page-break-before: always;
+  }
+  a { color: #2563eb; }
+</style>
+</head>
+<body>
+
+<h1>GKOne UAT Test Data - gkone-customer-support API</h1>
+<p class="subtitle">uat-pull-2026-09-24 · test-data-summary.md</p>
+
+<blockquote>
+<p>This is the test data reference for the third-party team building an integration that answers user inquiries about GKOne users and transactions. Each customer below lists what you can look them up by, what their transaction history contains, and - where relevant - what an MTCN validation call against their transfers should return.</p>
+<p>Everything here comes from a single pull of GKOne's UAT environment. It's synthetic or masked test data - none of it represents a real customer or real financial activity - but it behaves like the real thing, including a couple of genuinely-observed failure cases (see the <a href="#mtcn-validation-reference">MTCN validation reference</a>) rather than invented ones. UAT is refreshed periodically, so treat the specific IDs and MTCNs below as valid for this pull rather than permanent.</p>
+</blockquote>
+
+<div class="keep-together">
+<h2>Tags</h2>
+<p><span class="tag-label">SYNTHETIC</span> a fabricated value, not tied to any real transaction or user</p>
+</div>
+
+<hr>
+
+<div class="keep-together">
+<h2>Endpoints in Scope</h2>
+<pre><code>POST    /api/v1/customers/filter
+POST    /api/v1/users/{userId}/transactions/filter
+GET     /api/v1/users/{userId}/transactions/{transactionId}
+POST    /api/v1/remittances/{mtcn}/validation
+PATCH   /api/v1/remittances/{mtcn}/receiver/name</code></pre>
+
+<blockquote><p><strong>Important:</strong> a valid, well-formed request to the PATCH endpoint above currently returns <code>501 Not Implemented</code>. This is expected, documented behavior - please don't log it as a defect.</p></blockquote>
+</div>
+
+<hr>
+
+<div class="keep-together">
+<h2>How to read this</h2>
+<ul>
+<li><span class="tag-label">LOOKUP TYPES</span> - <code>/customers/filter</code> and <code>/remittances/{mtcn}/validation</code> both take one identifier per request: <code>GKO_NUMBER</code>, <code>TRN</code>, <code>ID_DOCUMENT</code>, or <code>EMAIL</code>. Each customer below lists which of these it actually has a value for, and what that value is. Don't try a lookup type marked "not available" - it'll just return empty. More details are included in the accompanying documentation.</li>
+<li><span class="tag-label">STATUSES / PRODUCT TYPES</span> - <code>/users/{userId}/Transactions/Filter</code> lets you filter by <code>statuses</code> and <code>productTypes</code>. Each customer below lists the exact values their own transaction history contains, so you can build a filter test that's guaranteed to return something (or, by using a value they <em>don't</em> have, guaranteed to return nothing).</li>
+<li><span class="tag-label">MTCNS</span> - where a customer's transactions include a settled Western Union transfer, its MTCN is listed. See the <a href="#mtcn-validation-reference">MTCN validation reference</a> at the end for expected outcomes.</li>
+</ul>
+</div>
+
+<hr>
+
+<h2>Customers</h2>
+
+<div class="customer-block">
+<h3>Dane Tester</h3>
+<ul>
+<li><code>userId</code>: <code>34e7bc04-3828-4093-a2e2-d5ad8d1626ee</code></li>
+<li><span class="tag-label">LOOKUP TYPES</span> <code>EMAIL</code> = <code>naomi.qatesting+dane@gmail.com</code> · <code>GKO_NUMBER</code> = <code>DT2024102387A607CFCCEA124609</code> · <code>ID_DOCUMENT</code> = <code>ID_CARD</code> / <code>123456703</code> · <code>TRN</code> - not available (blank in this data)</li>
+<li><span class="tag-label">ID TYPE ON FILE</span> <code>ID_CARD</code></li>
+<li><span class="tag-label">CUSTOMER TERRITORY</span> <code>GY</code></li>
+<li><span class="tag-label">TRANSACTIONS</span> 2 (at recorded pull time)</li>
+<li><span class="tag-label">STATUSES</span> <code>COMPLETED</code>, <code>SETTLED</code></li>
+<li><span class="tag-label">PRODUCT TYPES</span> <code>remittance.inbound</code></li>
+<li><span class="tag-label">MTCNS</span> <code>3524056646</code> (receiving side) - see reference table</li>
+</ul>
+</div>
+
+<div class="customer-block">
+<h3>Danny Phantom</h3>
+<ul>
+<li><code>userId</code>: <code>053db63f-dbfd-45d1-8677-3bf18b28c093</code></li>
+<li><span class="tag-label">LOOKUP TYPES</span> <code>EMAIL</code> = <code>naomi.qatesting+danny@gmail.com</code> · <code>TRN</code> = <code>225421035</code> · <code>GKO_NUMBER</code> = <code>DP20250221951B6A5C4A52140754</code> · <code>ID_DOCUMENT</code> = <code>ID_CARD</code> / <code>5421035</code></li>
+<li><span class="tag-label">ID TYPE ON FILE</span> <code>ID_CARD</code></li>
+<li><span class="tag-label">CUSTOMER TERRITORY</span> <code>JM</code></li>
+<li><span class="tag-label">TRANSACTIONS</span> 14 (at recorded pull time)</li>
+<li><span class="tag-label">STATUSES</span> <code>COMPLETED</code>, <code>FAILED</code>, <code>SETTLED</code></li>
+<li><span class="tag-label">PRODUCT TYPES</span> <code>bill-payment.notification</code>, <code>bill-payment.order-finalisation</code>, <code>bill-payment.receipt</code>, <code>bill-payment.settle</code>, <code>bill-payment.verify-account</code>, <code>remittance.outbound</code>, <code>remittance.outbound-quote</code></li>
+<li><span class="tag-label">MTCNS</span> <code>3524056646</code> - see reference table</li>
+</ul>
+</div>
+
+<div class="customer-block">
+<h3>Jaelynn Watt</h3>
+<ul>
+<li><code>userId</code>: <code>c5709ac5-3343-47f7-a2e8-029c381adedd</code></li>
+<li><span class="tag-label">LOOKUP TYPES</span> <code>EMAIL</code> = <code>naomi.qatesting+jaelynn@gmail.com</code> · <code>TRN</code> = <code>124321029</code> · <code>GKO_NUMBER</code> = <code>JW202406180C0F0F36B3FD193524</code> · <code>ID_DOCUMENT</code> = <code>PASSPORT</code> / <code>A4321029</code></li>
+<li><span class="tag-label">ID TYPE ON FILE</span> <code>PASSPORT</code></li>
+<li><span class="tag-label">CUSTOMER TERRITORY</span> <code>JM</code></li>
+<li><span class="tag-label">TRANSACTIONS</span> 13 (at recorded pull time)</li>
+<li><span class="tag-label">STATUSES</span> <code>COMPLETED</code>, <code>FAILED</code>, <code>SETTLED</code></li>
+<li><span class="tag-label">PRODUCT TYPES</span> <code>payment.card-capture</code>, <code>payment.card-charge</code>, <code>payment.preauth</code>, <code>remittance.outbound</code>, <code>remittance.outbound-quote</code>, <code>wallet.delete-card</code></li>
+<li><span class="tag-label">MTCNS</span> <code>0123243471</code>, <code>1160897583</code> - see reference table</li>
+</ul>
+</div>
+
+<div class="customer-block">
+<h3>Jaisie Jones</h3>
+<ul>
+<li><code>userId</code>: <code>e867f245-74a3-4275-ae2e-30fb8ade9503</code></li>
+<li><span class="tag-label">LOOKUP TYPES</span> <code>EMAIL</code> = <code>naomi.qatesting+jaisie@gmail.com</code> · <code>TRN</code> = <code>228881938</code> · <code>ID_DOCUMENT</code> = <code>ID_CARD</code> / <code>4441033</code> · <code>GKO_NUMBER</code> - not available</li>
+<li><span class="tag-label">ID TYPE ON FILE</span> <code>ID_CARD</code></li>
+<li><span class="tag-label">CUSTOMER TERRITORY</span> <code>JM</code></li>
+<li><span class="tag-label">TRANSACTIONS</span> 0</li>
+<li><span class="tag-label">STATUSES</span> none</li>
+<li><span class="tag-label">PRODUCT TYPES</span> none</li>
+<li><span class="tag-label">MTCNS</span> none</li>
+</ul>
+</div>
+
+<div class="customer-block">
+<h3>Jamie Testimony</h3>
+<ul>
+<li><code>userId</code>: <code>b2bf18cb-434f-4812-9877-d7d4924ca8b9</code></li>
+<li><span class="tag-label">LOOKUP TYPES</span> <code>EMAIL</code> = <code>naomi.qatesting+jamie@gmail.com</code> · <code>TRN</code> = <code>125649002</code> · <code>GKO_NUMBER</code> = <code>JT20240611142058E23BA3121819</code> · <code>ID_DOCUMENT</code> = <code>ID_CARD</code> / <code>5649002</code></li>
+<li><span class="tag-label">ID TYPE ON FILE</span> <code>ID_CARD</code></li>
+<li><span class="tag-label">CUSTOMER TERRITORY</span> <code>JM</code></li>
+<li><span class="tag-label">TRANSACTIONS</span> 0 - use for "customer exists, no transaction history" cases.</li>
+<li><span class="tag-label">STATUSES</span> none</li>
+<li><span class="tag-label">PRODUCT TYPES</span> none</li>
+<li><span class="tag-label">MTCNS</span> none</li>
+</ul>
+</div>
+
+<div class="customer-block">
+<h3>Jordanne Testimony</h3>
+<ul>
+<li><code>userId</code>: <code>f9f49e15-1fc9-43c3-bf33-9342d7d495aa</code></li>
+<li><span class="tag-label">LOOKUP TYPES</span> <code>EMAIL</code> = <code>naomi.qatesting+jordanne@gmail.com</code> · <code>TRN</code> = <code>125649003</code> · <code>GKO_NUMBER</code> = <code>JT20240611375F5BD5FFC1124736</code> · <code>ID_DOCUMENT</code> = <code>ID_CARD</code> / <code>5649003</code></li>
+<li><span class="tag-label">ID TYPE ON FILE</span> <code>ID_CARD</code></li>
+<li><span class="tag-label">CUSTOMER TERRITORY</span> <code>JM</code></li>
+<li><span class="tag-label">TRANSACTIONS</span> 0</li>
+<li><span class="tag-label">STATUSES</span> none</li>
+<li><span class="tag-label">PRODUCT TYPES</span> none</li>
+<li><span class="tag-label">MTCNS</span> none</li>
+</ul>
+</div>
+
+<div class="customer-block">
+<h3>May Banks</h3>
+<ul>
+<li><code>userId</code>: <code>fcc75c1d-0f37-477c-a987-922ce38bb0c6</code></li>
+<li><span class="tag-label">LOOKUP TYPES</span> <code>EMAIL</code> = <code>naomi.qatesting+may02@gmail.com</code> · <code>TRN</code> = <code>424321009</code> · <code>GKO_NUMBER</code> = <code>MB20240327D2C4B69B0F2D103854</code> · <code>ID_DOCUMENT</code> = <code>DRIVER_LICENSE</code> / <code>424321009</code></li>
+<li><span class="tag-label">ID TYPE ON FILE</span> <code>DRIVER_LICENSE</code></li>
+<li><span class="tag-label">CUSTOMER TERRITORY</span> <code>JM</code></li>
+<li><span class="tag-label">TRANSACTIONS</span> 19 (at recorded pull time)</li>
+<li><span class="tag-label">STATUSES</span> <code>COMPLETED</code>, <code>FAILED</code>, <code>SETTLED</code></li>
+<li><span class="tag-label">PRODUCT TYPES</span> <code>bill-payment.notification</code>, <code>bill-payment.order-finalisation</code>, <code>bill-payment.receipt</code>, <code>bill-payment.settle</code>, <code>bill-payment.verify-account</code>, <code>payment.card-capture</code>, <code>remittance.inbound-validate</code>, <code>remittance.outbound</code>, <code>remittance.outbound-quote</code></li>
+<li><span class="tag-label">MTCNS</span> <code>4773916423</code>, <code>8553916423</code> - see reference table</li>
+</ul>
+</div>
+
+<div class="customer-block">
+<h3>Naomi Benjamin</h3>
+<ul>
+<li><code>userId</code>: <code>7d1c3b30-223b-43fb-9652-74bb4a043479</code></li>
+<li><span class="tag-label">LOOKUP TYPES</span> <code>EMAIL</code> = <code>naomi.qatesting+naomitt@gmail.com</code> · <code>GKO_NUMBER</code> = <code>NB202508270C1CF4182345153113</code> · <code>ID_DOCUMENT</code> = <code>PASSPORT</code> / <code>A6948561</code> · <code>TRN</code> - not available (blank in this data)</li>
+<li><span class="tag-label">ID TYPE ON FILE</span> <code>PASSPORT</code></li>
+<li><span class="tag-label">CUSTOMER TERRITORY</span> <code>TT</code></li>
+<li><span class="tag-label">TRANSACTIONS</span> 3 (at recorded pull time)</li>
+<li><span class="tag-label">STATUSES</span> <code>COMPLETED</code>, <code>FAILED</code>, <code>SETTLED</code></li>
+<li><span class="tag-label">PRODUCT TYPES</span> <code>remittance.inbound</code></li>
+<li><span class="tag-label">MTCNS</span> <code>8454322287</code> (receiving side), <code>7042358185</code> - see reference table</li>
+</ul>
+</div>
+
+<div class="customer-block">
+<h3>Nicoreen Test</h3>
+<ul>
+<li><code>userId</code>: <code>3a4663ac-9e22-447b-9b63-8e3a29ced6f6</code></li>
+<li><span class="tag-label">LOOKUP TYPES</span> <code>EMAIL</code> = <code>naomi.qatesting+vailie@gmail.com</code> · <code>GKO_NUMBER</code> = <code>NT20241022CF2A196E1824164757</code> · <code>ID_DOCUMENT</code> = <code>PASSPORT</code> / <code>A3020192</code> · <code>TRN</code> - not available (blank in this data)</li>
+<li><span class="tag-label">ID TYPE ON FILE</span> <code>PASSPORT</code></li>
+<li><span class="tag-label">CUSTOMER TERRITORY</span> <code>KY</code></li>
+<li><span class="tag-label">TRANSACTIONS</span> 4 (at recorded pull time)</li>
+<li><span class="tag-label">STATUSES</span> <code>COMPLETED</code>, <code>SETTLED</code></li>
+<li><span class="tag-label">PRODUCT TYPES</span> <code>remittance.outbound</code>, <code>remittance.outbound-quote</code></li>
+<li><span class="tag-label">MTCNS</span> <code>8454322287</code> - see reference table</li>
+</ul>
+</div>
+
+<div class="customer-block">
+<h3>Sally Bryce</h3>
+<ul>
+<li><code>userId</code>: <code>b2d86d8f-52da-413d-ad49-aa91906f8daf</code></li>
+<li><span class="tag-label">LOOKUP TYPES</span> <code>EMAIL</code> = <code>naomi.qatesting+sally@gmail.com</code> only - <code>TRN</code>, <code>GKO_NUMBER</code>, <code>ID_DOCUMENT</code> all not available (unregistered/unverified customer)</li>
+<li><span class="tag-label">ID TYPE ON FILE</span> none on file (unregistered/unverified customer)</li>
+<li><span class="tag-label">CUSTOMER TERRITORY</span> <code>JM</code></li>
+<li><span class="tag-label">TRANSACTIONS</span> 0</li>
+<li><span class="tag-label">STATUSES</span> none</li>
+<li><span class="tag-label">PRODUCT TYPES</span> none</li>
+<li><span class="tag-label">MTCNS</span> none</li>
+</ul>
+</div>
+
+<div class="customer-block">
+<h3>Shaggy Rogers</h3>
+<ul>
+<li><code>userId</code>: <code>788c70d5-e292-444b-bbf4-ab49bbf70d33</code></li>
+<li><span class="tag-label">LOOKUP TYPES</span> <code>EMAIL</code> = <code>naomi.qatesting+shaggy@gmail.com</code> · <code>TRN</code> = <code>225421036</code> · <code>GKO_NUMBER</code> = <code>SR2025022161DBC271FFE2142237</code> · <code>ID_DOCUMENT</code> = <code>ID_CARD</code> / <code>5421036</code></li>
+<li><span class="tag-label">ID TYPE ON FILE</span> <code>ID_CARD</code></li>
+<li><span class="tag-label">CUSTOMER TERRITORY</span> <code>JM</code></li>
+<li><span class="tag-label">TRANSACTIONS</span> 0</li>
+<li><span class="tag-label">STATUSES</span> none</li>
+<li><span class="tag-label">PRODUCT TYPES</span> none</li>
+<li><span class="tag-label">MTCNS</span> none</li>
+</ul>
+</div>
+
+<hr>
+
+<div class="keep-together">
+<h2>Other transaction activity (no linked customer profile in this pull)</h2>
+<p>These <code>userId</code>s appear in the transaction data but don't have a matching record in the customer data above - use their transaction history directly.</p>
+
+<div class="customer-block">
+<h3>Devin Jackson</h3>
+<ul>
+<li><code>userId</code>: <code>ad61ad30-c4c9-4f86-9549-f30d13e72a45</code></li>
+<li><span class="tag-label">CONTACT</span> Email: <code>naomi.qatesting+devin@gmail.com</code> · Phone: <code>+18764321018</code></li>
+<li><span class="tag-label">TRANSACTIONS</span> 5</li>
+<li><span class="tag-label">STATUSES</span> <code>COMPLETED</code>, <code>FAILED</code></li>
+<li><span class="tag-label">PRODUCT TYPES</span> <code>bill-payment.verify-account</code>, <code>remittance.outbound</code>, <code>remittance.outbound-quote</code></li>
+</ul>
+</div>
+
+<div class="customer-block">
+<h3>Fred Flinstone</h3>
+<ul>
+<li><code>userId</code>: <code>5663542d-1093-472d-b5d2-37f1ce149e19</code></li>
+<li><span class="tag-label">CONTACT</span> Email: <code>naomi.qatesting+fred@gmail.com</code> · Phone: <code>+18764321136</code></li>
+<li><span class="tag-label">TRANSACTIONS</span> 31 - the largest set in this data; best candidate for paging tests.</li>
+<li><span class="tag-label">STATUSES</span> <code>COMPLETED</code>, <code>FAILED</code>, <code>SETTLED</code></li>
+<li><span class="tag-label">PRODUCT TYPES</span> <code>bill-payment.notification</code>, <code>bill-payment.order-finalisation</code>, <code>bill-payment.receipt</code>, <code>bill-payment.settle</code>, <code>bill-payment.verify-account</code>, <code>remittance.outbound</code>, <code>remittance.outbound-quote</code></li>
+</ul>
+</div>
+<hr>
+
+<div class="keep-together page-start">
+<h2 id="mtcn-validation-reference">MTCN Validation Reference</h2>
+<table>
+<thead>
+<tr><th>MTCN</th><th>Sender</th><th>Receiver</th><th>Expected outcome</th><th>Notes</th></tr>
+</thead>
+<tbody>
+<tr><td><code>3524056646</code></td><td>Danny Phantom</td><td>Dane Tester</td><td>already paid</td><td>Outbound + inbound legs both settled - fully paid out.</td></tr>
+<tr><td><code>8454322287</code></td><td>Nicoreen Test</td><td>Naomi Benjamin</td><td>already paid</td><td>Outbound + inbound legs both settled - fully paid out.</td></tr>
+<tr><td><code>8553916423</code></td><td>May Banks</td><td>Naomi Benjamin</td><td>valid / not yet collected</td><td>Outbound settled, no inbound record in this pull - collectible for at least the next 30 days.</td></tr>
+<tr><td><code>4773916423</code></td><td>May Banks</td><td>Dane Tester</td><td>valid / not yet collected</td><td>Outbound settled, no inbound record in this pull - collectible for at least the next 30 days.</td></tr>
+<tr><td><code>0123243471</code></td><td>Jaelynn Watt</td><td>Red McRaith (external - no GKOne profile)</td><td>valid / not yet collected</td><td>Outbound settled; recipient isn't a GKOne customer, so no inbound leg exists in our data by design.</td></tr>
+<tr><td><code>1160897583</code></td><td>Jaelynn Watt</td><td>Christopher Witherspoon (external - no GKOne profile)</td><td>valid / not yet collected</td><td>Outbound settled; recipient isn't a GKOne customer, so no inbound leg exists in our data by design.</td></tr>
+<tr><td><code>7042358185</code></td><td>N/A</td><td>Naomi Benjamin</td><td>invalid format (422 "MTCN INVALID")</td><td>Real observed failure - an actual inbound validation attempt against this MTCN returned WU code U0102 (MTCN INVALID). Sender identity wasn't captured in this record. Unlike the synthetic rows below, this shows a normal-looking 10-digit MTCN can still be rejected as invalid by WU.</td></tr>
+<tr><td><code>0221925872</code></td><td>N/A</td><td>N/A</td><td><span class="tag-label">SYNTHETIC</span> receiver name mismatch (422)</td><td>Doesn't belong to any test user in this package. Validate it against any test user's identity to deliberately draw a receiver-name-mismatch error.</td></tr>
+<tr><td><code>0000000000</code></td><td>N/A</td><td>N/A</td><td><span class="tag-label">SYNTHETIC</span> invalid format (422 "MTCN INVALID")</td><td>Not tied to any real transaction - use for format-validation testing.</td></tr>
+<tr><td><code>0000000001</code></td><td>N/A</td><td>N/A</td><td><span class="tag-label">SYNTHETIC</span> not found</td><td>Well-formed but unknown - use for a clean "unknown MTCN" negative case.</td></tr>
+</tbody>
+</table>
+
+<blockquote><p><strong>Caution:</strong> if you validate the same MTCN twice within a 15-minute window, expect the second call to come back <code>record locked to another terminal</code>, regardless of what the first call returned (mismatch or otherwise). Avoid repeat validation calls against the same MTCN within that window.</p></blockquote>
+</div>
+
+</body>
+</html>

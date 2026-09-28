@@ -1,0 +1,751 @@
+# Customer Account Management — Milestone 1 Test Cases
+
+**Milestone 1:** Customer duplicate account detection / account recovery
+
+Generated: 2026-06-12
+Source: domain-knowledge.md, test-patterns.md, market scope section
+
+---
+
+## Capability Coverage
+
+| M1 Capability | Test Cases |
+|---------------|------------|
+| Ondato webhook extension (+ non-JM check) | TC 1, 14, 15, 16 |
+| Conflict detection engine | TC 12, 14, 14b, 19 |
+| Duplicate account notifications (email + in-app banner) | TC 1, 2, 20, 21, 21b |
+| Report account conflict | TC 1–5, 6–10, 11, 13, 17, 18 |
+| Resilient error and failure handling | TC 9, 22, 23 |
+| Duplicate account report progress notifications | TC 24 |
+
+---
+
+## Happy Path
+
+---
+
+TEST CASE 1
+Title: Verify that a Target user can successfully report a MergeRequested conflict when providing matching email and phone credentials
+
+Tags: Customer Account Management, Milestone 1, Mobile, KYC, Duplicate Detection
+
+Pre Conditions:
+The following should be true before proceeding:
+• User has a JM account that has just completed Ondato KYC
+• Backend has set kycStatus = TRN_DUPLICATED (TRN matches an existing account)
+• User is on Home v2 screen
+• The existing account's email and phone are known for test data
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Observe Home v2 screen after kycStatus is set to TRN_DUPLICATED | Info tile displayed: "Account conflict detected — An existing account is linked to your TRN. Tap to resolve." |
+| 2. | Tap the info tile | Identity Conflict Onboarding Screen displayed: "We've found an account linked to your TRN" with "Get started" button |
+| 3. | Tap "Get started" | "Is this your account?" screen displayed showing masked email / phone / TRN of conflicting account |
+| 4. | Select "Yes, recover this account" | Email input field displayed |
+| 5. | Enter the correct email address matching the existing account | Validation passes (no error) |
+| 6. | Enter the correct phone number matching the existing account | Validation passes (no error) |
+| 7. | Complete step-up re-authentication | Re-authentication succeeds |
+| 8. | Observe confirmation screen | Confirmation banner displayed: "Your identity is being verified — Hang on, while we review and verify your ID documents." User remains logged in (session not terminated) |
+| 9. | Navigate to Home v2 | Tile text changes to "Your identity is being verified" and is tappable |
+
+Post Conditions:
+The following should be true after test completion:
+• reportConflict(MergeRequested) has been submitted to backend
+• Both Target and Existing accounts are in TRN_DUPLICATED state and gated from KYC-required actions (Existing was gated at detection; state persists post-report)
+• Target user's current session remains active (not force-logged-out)
+• Conflict appears on admin panel under "New" tab
+
+---
+
+TEST CASE 2
+Title: Verify that a Target user can successfully report NotMyAccount when they do not recognise the conflicting account
+
+Tags: Customer Account Management, Milestone 1, Mobile, KYC, Duplicate Detection
+
+Pre Conditions:
+The following should be true before proceeding:
+• User has a JM account that has just completed Ondato KYC
+• Backend has set kycStatus = TRN_DUPLICATED (TRN matches an existing account)
+• User is on Home v2 screen
+• The existing account's email and phone are known for test data
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Observe Home v2 screen after kycStatus is set to TRN_DUPLICATED | Info tile displayed: "Account conflict detected — An existing account is linked to your TRN. Tap to resolve." |
+| 2. | Tap the info tile | Identity Conflict Onboarding Screen displayed: "We've found an account linked to your TRN" with "Get started" button |
+| 3. | Tap "Get started" | "Is this your account?" screen displayed showing masked email / phone / TRN of conflicting account |
+| 4. | Select "No, this is not me" | "Submitted a report?" confirmation sheet displayed |
+| 5. | Confirm in the sheet | Step-up re-authentication triggered |
+| 6. | Complete step-up re-authentication | Re-authentication succeeds |
+| 7. | Observe confirmation screen | Message displayed: "Your account is under review — you'll hear back within 1–2 business days" |
+| 8. | Navigate to Home v2 | Tile text shows "Your report is under review" and is tappable |
+| 9. | Tap the tile | Message displayed: "you'll hear back within 1–2 business days" |
+
+Post Conditions:
+The following should be true after test completion:
+• reportConflict(NotMyAccount) has been submitted to backend
+• Both Target and Existing accounts are in TRN_DUPLICATED state and gated from KYC-required actions
+• Target user's current session remains active (not force-logged-out)
+• Conflict appears on admin panel under "New" tab
+
+---
+
+## Alternate Valid Paths
+
+---
+
+TEST CASE 3
+Title: Verify that a Target user can access the conflict flow via deep link (/merge-request)
+
+Tags: Customer Account Management, Milestone 1, Mobile, Deep Link
+
+Pre Conditions:
+The following should be true before proceeding:
+• User has a JM account with kycStatus = TRN_DUPLICATED
+• User has received the email notification with deep link
+• User taps the `/merge-request` deep link
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Tap the /merge-request deep link from email notification | App opens to the conflict flow with "Yes, recover this account" pre-seeded as primary CTA |
+| 2. | Proceed through the flow (enter matching email, phone, step-up auth) | Flow completes successfully — same as standard Path A |
+
+Post Conditions:
+The following should be true after test completion:
+• MergeRequested report submitted successfully
+• Both accounts suspended
+
+---
+
+TEST CASE 4
+Title: Verify that a Target user can access the conflict flow via deep link (/not-my-account)
+
+Tags: Customer Account Management, Milestone 1, Mobile, Deep Link
+
+Pre Conditions:
+The following should be true before proceeding:
+• User has a JM account with kycStatus = TRN_DUPLICATED
+• User has received the email notification with deep link
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Tap the /not-my-account deep link from email notification | App opens to the conflict flow with "No, this is not me" pre-seeded as primary CTA |
+| 2. | Proceed through the flow (confirm, step-up auth) | Flow completes successfully — same as standard Path B |
+
+Post Conditions:
+The following should be true after test completion:
+• NotMyAccount report submitted successfully
+• Both accounts suspended
+
+---
+
+TEST CASE 5
+Title: Verify that a Target user can abandon the conflict flow and restart it later
+
+Tags: Customer Account Management, Milestone 1, Mobile, Duplicate Detection
+
+Pre Conditions:
+The following should be true before proceeding:
+• User has a JM account with kycStatus = TRN_DUPLICATED
+• User has started the conflict reporting flow (tapped tile, reached onboarding screen)
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Navigate away from the conflict flow before submitting (e.g. press back, close app) | Flow is abandoned — no report submitted |
+| 2. | Return to Home v2 | Info tile still shows "Account conflict detected — An existing account is linked to your TRN. Tap to resolve." |
+| 3. | Tap the tile again | Identity Conflict Onboarding Screen displayed — flow restarts from beginning |
+
+Post Conditions:
+The following should be true after test completion:
+• No reportConflict request was made
+• Account state unchanged from pre-flow state — both accounts remain in TRN_DUPLICATED (set at detection), no additional changes applied
+• User can restart the flow
+
+---
+
+## Negative / Error Cases
+
+---
+
+TEST CASE 6
+Title: Verify that a Target user cannot proceed with recovery when email does not match the existing account
+
+Tags: Customer Account Management, Milestone 1, Mobile, Negative, Validation
+
+Pre Conditions:
+The following should be true before proceeding:
+• User has a JM account with kycStatus = TRN_DUPLICATED
+• User is on the email validation step of Path A (MergeRequested)
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Enter an email address that does NOT match the existing account on file | Inline error displayed: "Email doesn't match the previous account on file." |
+| 2. | Attempt to proceed to phone validation step | User is blocked — cannot proceed until email matches |
+
+Post Conditions:
+The following should be true after test completion:
+• No report submitted
+• User remains on email validation step
+• Account state unchanged — both accounts remain in TRN_DUPLICATED as set at detection
+
+---
+
+TEST CASE 7
+Title: Verify that a Target user cannot proceed with recovery when phone does not match the existing account
+
+Tags: Customer Account Management, Milestone 1, Mobile, Negative, Validation
+
+Pre Conditions:
+The following should be true before proceeding:
+• User has a JM account with kycStatus = TRN_DUPLICATED
+• User has successfully passed email validation (email matches)
+• User is on the phone validation step
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Enter a phone number that does NOT match the existing account on file | Inline error displayed: "Phone number doesn't match the previous account on file." |
+| 2. | Attempt to proceed to step-up re-authentication | User is blocked — cannot proceed until phone matches |
+
+Post Conditions:
+The following should be true after test completion:
+• No report submitted
+• User remains on phone validation step
+
+---
+
+TEST CASE 8
+Title: Verify that recovery validation rejects a valid email/phone pair from an unrelated account
+
+Tags: Customer Account Management, Milestone 1, Mobile, Negative, Security, Validation
+
+Pre Conditions:
+The following should be true before proceeding:
+• User has a JM account with kycStatus = TRN_DUPLICATED
+• A third unrelated account exists with known email and phone
+• User is on the email validation step of Path A
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Enter the email address from the unrelated third account (valid format, real account, but NOT the conflicting account) | Inline error displayed: "Email doesn't match the previous account on file." |
+| 2. | Enter the correct email, then enter the phone from the unrelated third account | Inline error displayed: "Phone number doesn't match the previous account on file." |
+
+Post Conditions:
+The following should be true after test completion:
+• Validation is pair-specific to the conflicting account only
+• No report submitted
+
+---
+
+TEST CASE 9
+Title: Verify that a Target user sees a retry option when reportConflict submission fails
+
+Tags: Customer Account Management, Milestone 1, Mobile, Negative, Error Handling
+
+Pre Conditions:
+The following should be true before proceeding:
+• User has completed all validation steps (email match, phone match, step-up auth)
+• Network error or timeout will occur on reportConflict submission (simulate via proxy/mock)
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Submit the conflict report (trigger network failure) | Failure screen displayed: "Something went wrong. Please try again." with retry option |
+| 2. | Tap retry on the same screen | Report is resubmitted without restarting the entire flow |
+| 3. | Allow network to succeed on retry | Report submitted successfully — confirmation screen shown |
+
+Post Conditions:
+The following should be true after test completion:
+• User did not have to re-enter email/phone or redo step-up auth
+• Report was submitted on retry
+
+---
+
+TEST CASE 10
+Title: Verify that a Target user cannot submit a second conflict report after successfully submitting one
+
+Tags: Customer Account Management, Milestone 1, Mobile, Negative, Duplicate Detection
+
+Pre Conditions:
+The following should be true before proceeding:
+• User has a JM account with kycStatus = TRN_DUPLICATED
+• User has already successfully submitted a conflict report (MergeRequested or NotMyAccount)
+• User's session is still active
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Navigate to Home v2 | Status tile displayed (either "Your identity is being verified" or "Your report is under review") — NOT the original onboarding tile |
+| 2. | Attempt to access the conflict reporting flow | The onboarding flow is not accessible — `reportedAs` is non-null, so user sees the status screen only |
+
+Post Conditions:
+The following should be true after test completion:
+• Only one report exists in the system for this conflict
+• User sees the appropriate status tile based on their report type
+
+---
+
+## Edge Cases — Suspension & Session Behaviour
+
+---
+
+TEST CASE 11
+Title: Verify that a Target user in TRN_DUPLICATED state can log back in but is blocked from KYC-gated actions
+
+Tags: Customer Account Management, Milestone 1, Mobile, TRN_DUPLICATED, KYC, Session
+
+Pre Conditions:
+The following should be true before proceeding:
+• User has submitted a conflict report (either MergeRequested or NotMyAccount)
+• User's session has ended (logged out or session killed)
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Attempt to log back in with the same credentials | Login succeeds — TRN_DUPLICATED status does not block login |
+| 2. | Navigate to Home v2 | Status tile displayed (either "Your identity is being verified" or "Your report is under review") |
+| 3. | Attempt a KYC-gated action (e.g. send money, outbound, P2P) | "Your account is under review" screen displayed: "We're reviewing your report regarding a possible duplicate account. You'll hear back from us within 1–2 business days." with Continue button |
+| 4. | Tap Continue | Screen dismissed — user returned to previous screen |
+| 5. | Attempt a non-KYC-gated action | Action succeeds — non-KYC features are accessible |
+
+Post Conditions:
+The following should be true after test completion:
+• Users can log back in and access the app in TRN_DUPLICATED state
+• KYC-gated actions show the "Your account is under review" gate screen
+• Non-KYC-gated actions remain accessible
+
+---
+
+TEST CASE 12
+Title: Verify that the Existing account holder sees the under-review tile and is gated from KYC actions at the point of detection
+
+Tags: Customer Account Management, Milestone 1, Mobile, Existing User, Detection
+
+Pre Conditions:
+The following should be true before proceeding:
+• Account A (Existing) is an active JM account with completed KYC
+• Account B (Target) has completed Ondato KYC with the same TRN — detection has fired and kycStatus = TRN_DUPLICATED has been set on both accounts
+• Target has NOT yet filed a conflict report
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Log in as the Existing account holder (Account A) | Login succeeds |
+| 2. | Navigate to Home v2 | "Account under review" tile displayed |
+| 3. | Tap the tile | Screen shown: "We're reviewing your account — Another GK One account matches yours… we'll contact you if anything is needed" with "Got it" button |
+| 4. | Tap "Got it" | Screen dismissed |
+| 5. | Attempt a KYC-gated action (e.g. send money, outbound) | "Your account is under review" gate screen displayed: "We're reviewing your report regarding a possible duplicate account. You'll hear back from us within 1–2 business days." |
+| 6. | Attempt a non-KYC-gated action | Action succeeds |
+
+Post Conditions:
+The following should be true after test completion:
+• Existing account has kycStatus = TRN_DUPLICATED from the point of detection
+• KYC-gated actions show the gate screen
+• Login and non-KYC features remain accessible
+
+---
+
+TEST CASE 13
+Title: Verify that a Target user in TRN_DUPLICATED state (pre-report) can still perform non-KYC-gated transactions
+
+Tags: Customer Account Management, Milestone 1, Mobile, TRN_DUPLICATED, Non-KYC
+
+Pre Conditions:
+The following should be true before proceeding:
+• User has a JM account with kycStatus = TRN_DUPLICATED
+• User has NOT yet filed a conflict report
+• User is logged in
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Attempt a non-KYC-gated action (e.g. bill payment, top up) | Action succeeds — user is not blocked |
+| 2. | Attempt a KYC-gated action (e.g. inbound, outbound, p2p) | "Your account is under review" gate screen displayed: "We're reviewing your report regarding a possible duplicate account. You'll hear back from us within 1–2 business days." with Continue button.
+
+Post Conditions:
+The following should be true after test completion:
+• User can use non-KYC features while in TRN_DUPLICATED (pre-report) state
+• KYC-gated features are inaccessible with relevant messaging
+
+---
+
+TEST CASE 14
+Title: Verify that detection fires regardless of the Existing account's KYC status (including rejected KYC)
+
+Tags: Customer Account Management, Milestone 1, Mobile, Detection, Edge Case
+
+Pre Conditions:
+The following should be true before proceeding:
+• Account A (Existing) has KycStatus = 5 (rejected) with a TRN on file
+• Account B (Target) completes Ondato KYC with the same TRN
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Account B completes Ondato KYC with matching TRN | Backend sets kycStatus = TRN_DUPLICATED on Account B |
+| 2. | Log in as Account B and navigate to Home v2 | Info tile displayed: "Account conflict detected" — detection fired despite Account A having rejected KYC |
+
+Post Conditions:
+The following should be true after test completion:
+• Duplicate detection triggers regardless of the Existing account's KYC status
+• Conflict is available for admin review
+
+---
+
+TEST CASE 14b
+Title: Verify that both Target and Existing accounts are set to TRN_DUPLICATED immediately at the point of detection before any conflict report is filed
+
+Tags: Customer Account Management, Milestone 1, Detection, Edge Case, TRN_DUPLICATED
+
+Pre Conditions:
+The following should be true before proceeding:
+• Account A (Existing) is an active JM account with completed KYC (kycStatus = 1)
+• Account B (Target) is a new JM account about to complete Ondato KYC with the same TRN
+• Neither account is currently in TRN_DUPLICATED state
+• Admin panel access available for verification
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Account B completes Ondato KYC with matching TRN | Detection fires — backend processes the duplicate |
+| 2. | Immediately check Account B's kycStatus (via admin panel or backend query) | kycStatus = TRN_DUPLICATED on Account B (Target) |
+| 3. | Immediately check Account A's kycStatus (via admin panel or backend query) | kycStatus = TRN_DUPLICATED on Account A (Existing) — set at the same point of detection, not deferred to report submission |
+| 4. | Confirm no conflict report has been filed yet (Target has not interacted with the flow) | reportedAs is null for this conflict — both accounts were flagged before any user action |
+| 5. | Log in as Account A (Existing) and attempt a KYC-gated action | "Your account is under review" gate screen displayed — Existing is already gated from KYC-required actions at detection |
+
+Post Conditions:
+The following should be true after test completion:
+• Both accounts transitioned to TRN_DUPLICATED simultaneously at detection
+• Existing account was gated from KYC actions before the Target filed any report
+• Conflict visible on admin panel with no report yet attached
+
+---
+
+## Market Scope — Non-JM Isolation (Ondato Webhook Extension)
+
+---
+
+TEST CASE 15
+Title: Verify that duplicate detection does NOT fire for non-JM market accounts with matching identifiers
+
+Tags: Customer Account Management, Milestone 1, Market Scope, Non-JM, Regression
+
+Pre Conditions:
+The following should be true before proceeding:
+• EnableIdentityConflictResolution is enabled on the BE (test must run with flag on — regression only manifests when flag is enabled)
+• A non-JM market account exists (e.g. GKONumber market)
+• Another non-JM account completes KYC with a matching identifier for that market
+• Feature is scoped to JM only
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Non-JM user completes Ondato KYC with identifier matching another non-JM account | kycStatus is NOT set to TRN_DUPLICATED |
+| 2. | Log in as the non-JM user and navigate to Home v2 | No "Account conflict detected" tile displayed |
+| 3. | Navigate normally through the app | All features accessible — no conflict UI surfaces |
+
+Post Conditions:
+The following should be true after test completion:
+• Non-JM accounts are completely unaffected by duplicate detection
+• No conflict created on admin panel
+
+---
+
+TEST CASE 16
+Title: Verify that the Home v2 conflict tile and reporting flow are not surfaced to non-JM users
+
+Tags: Customer Account Management, Milestone 1, Market Scope, Non-JM, UI, Regression
+
+Pre Conditions:
+The following should be true before proceeding:
+• EnableIdentityConflictResolution is enabled on the BE (test must run with flag on — regression only manifests when flag is enabled)
+• Non-JM market user account is active and logged in
+• User has completed KYC for their market
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Navigate to Home v2 as a non-JM user | No conflict-related tiles, banners, or notifications displayed |
+| 2. | Attempt to access /merge-request deep link | Deep link does not trigger conflict flow for non-JM user (either no-op or error) |
+| 3. | Attempt to access /not-my-account deep link | Deep link does not trigger conflict flow for non-JM user |
+
+Post Conditions:
+The following should be true after test completion:
+• Non-JM users never see conflict detection UI regardless of their KYC state
+
+---
+
+TEST CASE 16b
+Title: Verify that the CMS check executes correctly for non-JM users on reattempt when EnableIdentityConflictResolution is enabled
+
+Tags: Customer Account Management, Milestone 1, Market Scope, Non-JM, Regression, Feature Flag, CMS
+
+Pre Conditions:
+The following should be true before proceeding:
+• EnableIdentityConflictResolution is enabled on the BE
+• Non-JM tenant user account exists and has completed the Ondato ID verification flow
+• CMS check has run and failed on the first attempt for this user
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Trigger the CMS check reattempt for the non-JM user | CMS check executes — identity conflict resolution logic does not intercept or interfere |
+| 2. | Observe system/backend logs | Identity validation failure is logged correctly through the expected CMS channels |
+| 3. | Check the user's notification channel | Failure notification email is delivered to the user |
+| 4. | Verify the user's account status | kycStatus is NOT set to TRN_DUPLICATED; no conflict appears on admin panel |
+
+Post Conditions:
+The following should be true after test completion:
+• CMS check failure is surfaced correctly (logs + email) regardless of EnableIdentityConflictResolution flag state
+• Non-JM user's flow is completely unaffected by the identity conflict resolution feature
+
+---
+
+## Status-Aware Tile Behaviour
+
+---
+
+TEST CASE 17
+Title: Verify that the MergeRequested status tile is tappable and reopens the review screen
+
+Tags: Customer Account Management, Milestone 1, Mobile, Tile, Status
+
+Pre Conditions:
+The following should be true before proceeding:
+• Target user has submitted a MergeRequested report
+• User's session is still active
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Navigate to Home v2 | Tile shows: "Your identity is being verified" |
+| 2. | Tap the tile | Corresponding review/confirmation screen opens |
+
+Post Conditions:
+The following should be true after test completion:
+• Tile remains tappable and shows the appropriate review screen
+
+---
+
+TEST CASE 18
+Title: Verify that the NotMyAccount status tile is tappable and shows the under-review message
+
+Tags: Customer Account Management, Milestone 1, Mobile, Tile, Status
+
+Pre Conditions:
+The following should be true before proceeding:
+• Target user has submitted a NotMyAccount report
+• User's session is still active
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Navigate to Home v2 | Tile shows: "Your report is under review" |
+| 2. | Tap the tile | Message displayed: "you'll hear back within 1–2 business days" |
+
+Post Conditions:
+The following should be true after test completion:
+• NotMyAccount tile is tappable and surfaces the under-review message on tap
+
+---
+
+## Edge Cases — Detection Engine
+
+---
+
+TEST CASE 19
+Title: Verify that 3+ accounts with the same TRN all appear in the conflict when a report is filed
+
+Tags: Customer Account Management, Milestone 1, Detection, Edge Case, Multi-Account
+
+Pre Conditions:
+The following should be true before proceeding:
+• Three or more JM accounts share the same TRN
+• At least one has filed a conflict report
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Navigate to /identity-conflicts and open the relevant conflict | All conflicting accounts (3+) are displayed in a list — not just a pair |
+| 2. | Verify all accounts are visible | Each account sharing the TRN is shown in the conflict view |
+
+Post Conditions:
+The following should be true after test completion:
+• Admin can see all affected accounts in one conflict view
+• Resolution can address the full set of duplicates
+
+---
+
+## Notifications — Email & In-App
+
+---
+
+TEST CASE 20
+Title: Verify that the Target user receives an email notification with deep link after duplicate detection
+
+Tags: Customer Account Management, Milestone 1, Notifications, Email
+
+Pre Conditions:
+The following should be true before proceeding:
+• Target user's kycStatus has been set to TRN_DUPLICATED
+• Target user has a verified email address on their account
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Check Target user's email inbox (or email delivery logs) | Email notification received regarding the duplicate account detection |
+| 2. | Verify email content | Email mentions the account conflict and includes a call to action |
+| 3. | Verify deep link in email | Email contains a deep link (either /merge-request or /not-my-account) that opens the app to the conflict flow |
+
+Post Conditions:
+The following should be true after test completion:
+• Email delivered successfully to the Target user
+• Deep link in email is functional and opens the correct flow
+
+---
+
+TEST CASE 21
+Title: Verify that the Target user sees an in-app banner/tile notification for duplicate detection on Home v2
+
+Tags: Customer Account Management, Milestone 1, Notifications, In-App Banner
+
+Pre Conditions:
+The following should be true before proceeding:
+• Target user's kycStatus = TRN_DUPLICATED
+• Target user is logged in and navigates to Home v2
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Open app and navigate to Home v2 | Info tile displayed: "Account conflict detected — An existing account is linked to your TRN. Tap to resolve." |
+| 2. | Verify tile is prominent and visible | Tile is not hidden behind other elements; positioned appropriately on Home v2 |
+| 3. | Verify tile is tappable | Tapping opens the Identity Conflict Onboarding Screen |
+
+Post Conditions:
+The following should be true after test completion:
+• In-app notification (tile) is displayed immediately on Home v2 load
+• Tile is the entry point to the conflict resolution flow
+
+---
+
+TEST CASE 21b
+Title: Verify that the Existing account holder receives a suspension email after the Target submits a conflict report
+
+Tags: Customer Account Management, Milestone 1, Notifications, Email, Existing User
+
+Pre Conditions:
+The following should be true before proceeding:
+• A conflict exists between Target and Existing accounts (both in TRN_DUPLICATED state)
+• Target user has just submitted a conflict report (MergeRequested or NotMyAccount)
+• Existing account holder has a verified email address on their account
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Check Existing account holder's email inbox (or email delivery logs) after the Target submits a conflict report | Email notification received |
+| 2. | Verify email body contains the suspension notice | Email states: "To protect your information, your GKOne account has been temporarily suspended while our team completes a review related to a possible identity conflict." |
+| 3. | Verify email body contains the no-action-required message | Email states: "No action is required from you at this time. Our team is handling the review and will reach out if any additional information is needed." |
+| 4. | Verify email body contains the support contact message | Email states: "If you have any questions or concerns in the meantime, please contact our support team." |
+
+Post Conditions:
+The following should be true after test completion:
+• Existing account holder is informed of the suspension via email
+• Email content matches the approved copy exactly
+• Email does not contain any deep links or CTAs to a conflict flow (Existing user is passive)
+
+---
+
+## Resilient Error & Failure Handling
+
+---
+
+TEST CASE 22
+Title: Verify resilient error handling when validate-email endpoint fails during recovery flow
+
+Tags: Customer Account Management, Milestone 1, Error Handling, Resilience
+
+Pre Conditions:
+The following should be true before proceeding:
+• Target user is on the email validation step of Path A (MergeRequested)
+• Network issue or server error will occur on validate-email call (simulate via proxy/mock)
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Enter an email address and trigger validation (with simulated failure) | Error message displayed: "Something went wrong. Please try again." |
+| 2. | Verify user is not kicked out of the flow | User remains on the email validation screen — no restart required |
+| 3. | Restore network/service and re-enter the same email | Validation proceeds normally — match check runs |
+
+Post Conditions:
+The following should be true after test completion:
+• Transient errors do not break the flow or force a restart
+• User can retry in place
+• No report submitted until validation actually passes
+
+---
+
+TEST CASE 23
+Title: Verify resilient error handling when validate-phone endpoint fails during recovery flow
+
+Tags: Customer Account Management, Milestone 1, Error Handling, Resilience
+
+Pre Conditions:
+The following should be true before proceeding:
+• Target user has passed email validation
+• User is on phone validation step
+• Network issue or server error will occur on validate-phone call
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Enter a phone number and trigger validation (with simulated failure) | Error message displayed: "Something went wrong. Please try again." |
+| 2. | Verify user is not kicked out of the flow | User remains on the phone validation screen — progress from email step is preserved |
+| 3. | Restore service and retry | Validation proceeds normally |
+
+Post Conditions:
+The following should be true after test completion:
+• Phone validation failure is handled gracefully
+• User does not lose progress on previously validated email
+• Flow remains recoverable
+
+---
+
+# Summary
+
+**Total Milestone 1 cases: 28**
+
+Breakdown:
+- Happy path: 2 (TC 1, 2)
+- Alternate valid paths: 3 (TC 3, 4, 5)
+- Negative / error cases: 5 (TC 6, 7, 8, 9, 10)
+- Edge cases — suspension & session: 3 (TC 11, 12, 13)
+- Edge cases — detection: 3 (TC 14, 14b, 19)
+- Market scope / non-JM isolation: 4 (TC 15, 16, 20)
+- Status-aware tiles: 2 (TC 17, 18)
+- Notifications (email + in-app): 3 (TC 21, 21b, 22)
+- Resilient error handling: 3 (TC 9, 23, 24)
+- Progress notifications: 2 (TC 25, 26)
+
+## Assumptions
+
+1. "Non-KYC-gated actions" — specific features not listed; test should enumerate which actions are/aren't blocked.
+2. Deep link behaviour for non-JM users (TC 16) — assumed either no-op or error; actual behaviour not confirmed.
+3. Email notification content (TC 21) — exact copy not documented; test verifies delivery and deep link presence.
+5. Existing user suspension email (TC 21b) — exact copy provided; test verifies verbatim content.
+4. Progress notifications (TC 25, 26) — specific content not fully documented; tests verify delivery at key state changes.
+
+## Context applied
+
+- domain-knowledge.md: detection trigger, customer-facing flow (Target + Existing), validation rules, status-aware tiles, deep-links, key technical notes, non-obvious behaviour, market scope
+- test-patterns.md: recovery email/phone pair-specific validation (TC 8), KYC-gated features blocked in TRN_DUPLICATED (TC 13)
+
+---
+
+*Want me to add cases for any specific scenario, or adjust the Pre/Post Conditions on any of these?*

@@ -1,0 +1,350 @@
+[
+    {
+        "testCase": "GKONE_GKONUMBER_VALID",
+        "source": "GKONE",
+        "lookupType": "GKO_NUMBER",
+        "gkoNumber": "SA202405144B1125F10588095535",
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "GKONE_GKONUMBER_VALID_NO_MATCH",
+        "source": "GKONE",
+        "lookupType": "GKO_NUMBER",
+        "gkoNumber": "SA202405144B1125F10588095537",
+        "expectedStatus": 200,
+        "expectEmpty": "true",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "GKONE_GKONUMBER_MISSING",
+        "source": "GKONE",
+        "lookupType": "GKO_NUMBER",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": "'Gko Number' must not be empty."
+    },
+    {
+        "testCase": "GKONE_TRN_JM_VALID",
+        "source": "GKONE",
+        "lookupType": "TRN",
+        "country": "JM",
+        "trn": "134321123",
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "GKONE_TRN_GY_VALID_NO_MATCH",
+        "source": "GKONE",
+        "lookupType": "TRN",
+        "country": "GY",
+        "trn": "134021023",
+        "expectedStatus": 200,
+        "expectEmpty": "true",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "TRN_NOT_9_DIGITS_SHORT",
+        "source": "GKONE",
+        "lookupType": "TRN",
+        "country": "JM",
+        "trn": "12345",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": "'Trn' is not in the correct format."
+    },
+    {
+        "testCase": "TRN_NOT_9_DIGITS_LONG",
+        "source": "GKONE",
+        "lookupType": "TRN",
+        "country": "JM",
+        "trn": "1234567890",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": "'Trn' is not in the correct format."
+    },
+    {
+        "testCase": "TRN_NON_NUMERIC",
+        "source": "GKONE",
+        "lookupType": "TRN",
+        "country": "JM",
+        "trn": "12345ABCD",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": "'Trn' is not in the correct format."
+    },
+    {
+        "testCase": "CMS_TRN_JM_VALID",
+        "source": "CMS",
+        "lookupType": "TRN",
+        "country": "JM",
+        "trn": "764321098",
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "TRN_MISSING_COUNTRY",
+        "source": "CMS",
+        "lookupType": "TRN",
+        "trn": "764321098",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": "'Country' must not be empty."
+    },
+    {
+        "testCase": "TRN_COUNTRY_NO_IDENTIFIER",
+        "source": "CMS",
+        "lookupType": "TRN",
+        "country": "KY",
+        "trn": "764321098",
+        "expectedStatus": 200,
+        "expectEmpty": "true",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "TRN_INVALID_ISO2",
+        "source": "CMS",
+        "lookupType": "TRN",
+        "country": "ZZ",
+        "trn": "764321098",
+        "expectedStatus": 200,
+        "expectEmpty": "true",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "GKONE_IDDOC_VALID_DL",
+        "source": "GKONE",
+        "lookupType": "ID_DOCUMENT",
+        "idDocumentType": "DRIVERS_LICENSE",
+        "idDocumentNumber": "764321120",
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "GKONE_IDDOC_VALID_PP",
+        "source": "GKONE",
+        "lookupType": "ID_DOCUMENT",
+        "idDocumentType": "PASSPORT",
+        "idDocumentNumber": "A4321123",
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "GKONE_IDDOC_VALID_IDCARD",
+        "source": "GKONE",
+        "lookupType": "ID_DOCUMENT",
+        "idDocumentType": "ID_CARD",
+        "idDocumentNumber": "4321122",
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "IDDOC_MISSING_NUMBER",
+        "source": "GKONE",
+        "lookupType": "ID_DOCUMENT",
+        "idDocumentType": "DRIVERS_LICENSE",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": "'Id Document Number' must not be empty."
+    },
+    {
+        "testCase": "IDDOC_MISSING_TYPE",
+        "source": "GKONE",
+        "lookupType": "ID_DOCUMENT",
+        "idDocumentNumber": "4321122",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": "'Id Document Type' must not be empty."
+    },
+    {
+        "testCase": "GKONE_EMAIL_VALID",
+        "source": "GKONE",
+        "lookupType": "EMAIL",
+        "emailAddress": "naomi.qatesting+antea@gmail.com",
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "GKONE_EMAIL_MISSING",
+        "source": "GKONE",
+        "lookupType": "EMAIL",
+        "emailAddress": "",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": "'Email Address' must not be empty."
+    },
+    {
+        "testCase": "GKONE_EMAIL_MAX_LENGTH_VALID",
+        "source": "GKONE",
+        "lookupType": "EMAIL",
+        "emailAddress": "{{email254}}",
+        "expectedStatus": 200,
+        "expectEmpty": "true",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "GKONE_EMAIL_LONG",
+        "source": "GKONE",
+        "lookupType": "EMAIL",
+        "country": "GY",
+        "emailAddress": "{{email255}}",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": "The length of 'Email Address' must be 254 characters or fewer. You entered 255 characters."
+    },
+    {
+        "testCase": "GKONE_EMAIL_NON_EXISTENT",
+        "source": "GKONE",
+        "lookupType": "EMAIL",
+        "emailAddress": "nonexistent.email@example.com",
+        "expectedStatus": 200,
+        "expectEmpty": "true",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "CMS_EMAIL_VALID",
+        "source": "CMS",
+        "lookupType": "EMAIL",
+        "country": "GY",
+        "emailAddress": "tester5@gmail.com",
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "CMS_EMAIL_VALID_COUNTRY_INVALID",
+        "source": "CMS",
+        "lookupType": "EMAIL",
+        "country": "gy",
+        "emailAddress": "tester5@gmail.com",
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "'Country' is not in the correct format."
+    },
+    {
+        "testCase": "CMS_EMAIL_MISSING",
+        "source": "CMS",
+        "lookupType": "EMAIL",
+        "country": "GY",
+        "emailAddress": "",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": "'Email Address' must not be empty."
+    },
+    {
+        "testCase": "CMS_EMAIL_LONG",
+        "source": "CMS",
+        "lookupType": "EMAIL",
+        "country": "GY",
+        "emailAddress": "{{email255}}",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": "The length of 'Email Address' must be 254 characters or fewer. You entered 255 characters."
+    },
+    {
+        "testCase": "CMS_EMAIL_NON_EXISTENT",
+        "source": "CMS",
+        "lookupType": "EMAIL",
+        "country": "TT",
+        "emailAddress": "nonexistent.email@example.com",
+        "expectedStatus": 200,
+        "expectEmpty": "true",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "INVALID_LOOKUP_TYPE",
+        "source": "GKONE",
+        "lookupType": "PHONE",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "SOURCE_MISSING",
+        "lookupType": "GKO_NUMBER",
+        "gkoNumber": "JW20240227F492403C0FA8101023",
+        "country": "JM",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": "Source is required. Source must be a valid value."
+    },
+    {
+        "testCase": "SOURCE_INVALID",
+        "source": "XYZ",
+        "lookupType": "GKO_NUMBER",
+        "gkoNumber": "AD2024061253970CCC8596153748",
+        "expectedStatus": 400,
+        "expectEmpty": "",
+        "expectedDetail": "'XYZ' is not a valid value for 'source'. Allowed values: GKONE, CMS."
+    },
+    {
+        "testCase": "MULTIPLE_IDENTIFIERS_GKO_NUMBER_LOOKUP",
+        "source": "GKONE",
+        "lookupType": "GKO_NUMBER",
+        "gkoNumber": "AD2024061253970CCC8596153748",
+        "country": "GY",
+        "trn": "000000000",
+        "idDocumentType": "ID_CARD",
+        "idDocumentNumber": "Z0000000",
+        "emailAddress": "nonexistent.email@example.com",
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "MULTIPLE_IDENTIFIERS_TRN_LOOKUP",
+        "source": "GKONE",
+        "lookupType": "TRN",
+        "country": "JM",
+        "trn": "124321122",
+        "gkoNumber": "ZZ0000000000000000000000000",
+        "idDocumentType": "PASSPORT",
+        "idDocumentNumber": "Z0000000",
+        "emailAddress": "nonexistent.email@example.com",
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "MULTIPLE_IDENTIFIERS_ID_DOCUMENT_LOOKUP",
+        "source": "GKONE",
+        "lookupType": "ID_DOCUMENT",
+        "idDocumentType": "DRIVERS_LICENSE",
+        "idDocumentNumber": "764321121",
+        "country": "GY",
+        "trn": "000000000",
+        "gkoNumber": "ZZ0000000000000000000000000",
+        "emailAddress": "nonexistent.email@example.com",
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "MULTIPLE_IDENTIFIERS_EMAIL_LOOKUP",
+        "source": "GKONE",
+        "lookupType": "EMAIL",
+        "emailAddress": "naomi.qatesting+antea@gmail.com",
+        "trn": "000000000",
+        "gkoNumber": "ZZ0000000000000000000000000",
+        "idDocumentType": "PASSPORT",
+        "idDocumentNumber": "Z0000000",
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": ""
+    },
+    {
+        "testCase": "NO_LOOKUPTYPE_PROVIDED",
+        "source": "GKONE",
+        "trn": "124321122",
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "Identifier type is required. Identifier type must be a valid value."
+    }
+]

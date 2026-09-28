@@ -1,0 +1,123 @@
+ID,Work Item Type,Title,Preconditions,Test Step,Step Action,Step Expected,Area Path,Assigned To,State,Tags
+,Test Case,Verify that a user who fails the CMS check can retrigger the CMS step and advance to KYC Status 1 after their CMS record is corrected,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account (KY, VG, GY, or TT) — fresh, not yet KYC-verified
+- Test identity available in Ondato sandbox that will pass identity verification
+- CMS configured: user initially fails (e.g. name mismatch), then record corrected to pass before step 6
+- Ability to verify KYC status in the test environment",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Design,eKYC; CMS Retry
+,,,,1,Launch the eKYC flow and complete Ondato with a passing test identity,,,,,
+,,,,2,Confirm the CMS check triggers automatically — no user action required,CMS check is triggered immediately after positive Ondato response,,,,
+,,,,3,Confirm the CMS check fails; confirm the user is set to KYC Status 8,User is at KYC Status 8; flow stops,,,,
+,,,,4,Confirm the Home screen displays the failure state,"Home screen shows the ""We couldn't confirm your identity."" banner with the ""Visit Retail Location"" CTA",,,,
+,,,,5,Tap the CTA — confirm the Documents Required screen opens,"Documents Required screen is shown with the document list and both ""Find a retail location"" and ""Retry ID Verification"" options visible",,,,
+,,,,6,"In the CMS test environment, correct the user's record so it will now pass",,,,,
+,,,,7,"Tap ""Retry ID Verification""","The ""Action Needed"" modal appears with the tenant-configured wording and ""No, go back"" / ""Yes, I have"" options",,,,
+,,,,8,"Tap ""Yes, I have""",,,,,
+,,,,9,Confirm Ondato is NOT re-triggered during the retry,No Ondato SDK session is opened; no Ondato webhook fires,,,,
+,,,,10,Confirm the CMS check passes and the user is set to KYC Status 1,KYC Status 8 → 1; user proceeds into the remainder of the eKYC flow (eKYC completion screen),,,,
+,Test Case,"Verify that tapping ""No, go back"" on the Action Needed modal dismisses the modal without retriggering the CMS check","Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account at KYC Status 8 (CMS check previously failed)
+- User is on the Documents Required screen",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Design,eKYC; CMS Retry
+,,,,1,"Tap ""Retry ID Verification""","The ""Action Needed"" modal appears",,,,
+,,,,2,"Tap ""No, go back""",Modal is dismissed; user is returned to the Documents Required screen,,,,
+,,,,3,Confirm KYC Status remains 8 and no CMS check was triggered,KYC Status unchanged; no CMS call made,,,,
+,Test Case,Verify that a CMS retry that fails again leaves the user at KYC Status 8 with the retry option still available,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account at KYC Status 8
+- CMS record has NOT been corrected (will still fail on retry)",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Design,eKYC; CMS Retry
+,,,,1,Navigate to the Documents Required screen via the Home screen banner,,,,,
+,,,,2,"Tap ""Retry ID Verification"" → confirm modal appears → tap ""Yes, I have""",,,,,
+,,,,3,Confirm the CMS check runs and fails again,,,,,
+,,,,4,Confirm the user remains at KYC Status 8,KYC Status unchanged at 8,,,,
+,,,,5,"Confirm the Home screen banner is still shown and the Documents Required screen is still accessible with ""Retry ID Verification"" available",Retry option is not removed; user is not locked out,,,,
+,Test Case,Verify that the CMS retry does not re-trigger the Ondato identity verification flow,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account at KYC Status 8
+- CMS configured to pass on retry
+- Ability to observe whether Ondato SDK is launched (network log, Ondato sandbox event log, or webhook log)",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Design,eKYC; CMS Retry
+,,,,1,"Navigate to Documents Required screen → tap ""Retry ID Verification"" → tap ""Yes, I have""",,,,,
+,,,,2,Monitor for any Ondato SDK session being opened or any Ondato webhook activity during the retry,No Ondato SDK session is opened; no new Ondato webhook is received,,,,
+,,,,3,Allow the CMS check to complete,Only the CMS lookup executes; KYC Status advances to 1 without Ondato being involved,,,,
+,Test Case,Verify that a CMS check where the user cannot be located in CMS results in KYC Status 8 and the retry path is shown,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account — fresh, not yet KYC-verified
+- Test identity that passes Ondato
+- CMS configured: no matching record exists for the document ID + ISO 2 code combination",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Design,eKYC; CMS Retry
+,,,,1,Complete Ondato with a passing test identity,,,,,
+,,,,2,Confirm the CMS check triggers automatically and fails (user not found),CMS check fails; user set to KYC Status 8,,,,
+,,,,3,"Confirm the Home screen banner is displayed and the Documents Required screen is accessible with ""Retry ID Verification"" present",KYC Status 8; flow stops; retry option available,,,,
+,Test Case,Verify that a CMS check where the user is blocked in CMS results in KYC Status 8 and the retry path is shown,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account — fresh, not yet KYC-verified
+- Test identity that passes Ondato
+- CMS configured: matching record exists but is flagged as blocked",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Design,eKYC; CMS Retry
+,,,,1,Complete Ondato with a passing test identity,,,,,
+,,,,2,Confirm the CMS check triggers automatically and fails (user blocked),CMS check fails; user set to KYC Status 8,,,,
+,,,,3,"Confirm the Documents Required screen is accessible with ""Retry ID Verification"" present",Retry option available; user is not permanently locked out in-app,,,,
+,Test Case,Verify that a CMS check where the name from Ondato does not match the CMS record results in KYC Status 8 and the retry path is shown,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account — fresh, not yet KYC-verified
+- Test identity that passes Ondato and returns a specific name
+- CMS configured: matching record exists but name differs from Ondato-returned name",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Design,eKYC; CMS Retry
+,,,,1,Complete Ondato with a passing test identity (note the name returned),,,,,
+,,,,2,Confirm the CMS check triggers automatically and fails (name mismatch),CMS check fails; user set to KYC Status 8,,,,
+,,,,3,"Confirm the Documents Required screen is accessible with ""Retry ID Verification"" present",Retry option available,,,,
+,Test Case,Verify that a CMS check where the DOB from Ondato does not match the CMS record results in KYC Status 8 and the retry path is shown,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account — fresh, not yet KYC-verified
+- Test identity that passes Ondato and returns a specific DOB
+- CMS configured: matching record exists but DOB differs from Ondato-returned DOB",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Design,eKYC; CMS Retry
+,,,,1,Complete Ondato with a passing test identity (note the DOB returned),,,,,
+,,,,2,Confirm the CMS check triggers automatically and fails (DOB mismatch),CMS check fails; user set to KYC Status 8,,,,
+,,,,3,"Confirm the Documents Required screen is accessible with ""Retry ID Verification"" present",Retry option available,,,,
+,Test Case,Verify that a user set to KYC Status 5 (REJECTED) due to a GKONumber conflict is not offered the CMS retry option,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account — fresh, not yet KYC-verified
+- Test identity that passes Ondato
+- CMS configured: matched CMS user's GKONumber already belongs to a different user in the GKOne DB",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Design,eKYC; CMS Retry
+,,,,1,Complete Ondato with a passing test identity,,,,,
+,,,,2,Confirm the CMS check triggers automatically,,,,,
+,,,,3,Confirm the GKONumber conflict is detected; conflicting (second) user is set to KYC Status 5 (REJECTED),User is at KYC Status 5,,,,
+,,,,4,"Check whether the Home screen or any subsequent screen offers a ""Retry ID Verification"" option",No retry option is presented; no path forward available in-app — full stop,,,,
+,Test Case,Verify that the Action Needed modal wording reflects the correct resolution path for the tenant (retail location vs CSC),"Pre Conditions:
+The following should be true before proceeding:
+- Two test accounts in markets with different configured resolution paths (one retail-location market, one CSC market)
+- Each account at KYC Status 8",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Design,eKYC; CMS Retry
+,,,,1,"On the retail-location market account: navigate to Documents Required → tap ""Retry ID Verification""; note the Action Needed modal wording",,,,,
+,,,,2,On the CSC market account: repeat the same steps; note the Action Needed modal wording,,,,,
+,,,,3,Compare the two modal messages,"Modal wording differs between markets per tenant configuration; neither market shows the other's wording; both modals show ""No, go back"" and ""Yes, I have"" regardless of wording variant",,,,
+,Test Case,Verify that a JM market user who completes Ondato is not subjected to a CMS check and sees no CMS failure states,"Pre Conditions:
+The following should be true before proceeding:
+- JM market account, not yet KYC-verified
+- Test identity that passes Ondato",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Design,eKYC; CMS Retry
+,,,,1,Complete the Ondato identity verification step on the JM account,,,,,
+,,,,2,"Confirm the flow does not pause for a CMS check and no ""We couldn't confirm your identity."" banner appears",No CMS check triggered; no KYC Status 8 set,,,,
+,,,,3,Confirm the user proceeds directly to the eKYC completion screen,No Documents Required screen or retry option shown; user moves straight from Ondato to eKYC completion,,,,
+,Test Case,"Verify that the CMS retry behaviour is consistent across all non-JM markets (KY, VG, GY, TT)","Pre Conditions:
+The following should be true before proceeding:
+- One account per market: KY, VG, GY, TT — each at KYC Status 8
+- Each CMS record corrected to pass before running",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Design,eKYC; CMS Retry
+,,,,1,"For each market (KY, VG, GY, TT): from the Home screen banner → Documents Required → tap ""Retry ID Verification"" → confirm modal → tap ""Yes, I have""",,,,,
+,,,,2,Confirm the CMS check runs in each market and each account advances to KYC Status 1,"Behaviour is identical across KY, VG, GY, TT; no market-specific variation in the retry path or outcome",,,,
+,,,,3,Confirm the eKYC flow continues for each market after the successful retry,Each market proceeds into the eKYC completion screen,,,,
+,Test Case,Verify that an email notification is sent to the user when the CMS check fails,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account — fresh, not yet KYC-verified
+- Test identity that passes Ondato
+- CMS configured to fail (e.g. user not found or name mismatch)
+- Access to the email inbox associated with the test account",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Ready,CMS Retry; eKYC
+,,,,1,Complete Ondato with a passing test identity,,,,,
+,,,,2,Confirm the CMS check triggers automatically and fails,CMS check fails; KycStatus transitions to 8,,,,
+,,,,3,Open the email inbox for the test account,,,,,
+,,,,4,Confirm an email notification was received,"An email is present informing the user that their identity verification could not be completed, and directing them to visit a retail location or contact CSC",,,,
+,,,,5,Confirm the email is not sent a second time if the CMS check has not been retried,No duplicate emails received; email is triggered once per CMS check failure event,,,,
+,Test Case,Verify that the employment details screen is not shown when the selected employment status does not require it,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account that has passed Ondato and CMS check
+- User is on the employment status screen in the eKYC completion flow",,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Design,
+,,,,1,"On the employment status screen, select Unemployed",,,,,
+,,,,2,Tap Continue,"The employment details screen (Employer/School Name, address, industry, etc.) is not shown; user proceeds directly to the next step of the eKYC flow",,,,
+,,,,3,Return to the employment status screen and select Retired,,,,,
+,,,,4,Tap Continue,The employment details screen is not shown; user proceeds directly to the next step of the eKYC flow,,,,
+,,,,5,"Confirm that selecting Employed, Self-Employed, or Student does show the employment details screen (sanity check)","Employment details screen appears only for Employed, Self-Employed, and Student; Unemployed and Retired bypass it",,,,

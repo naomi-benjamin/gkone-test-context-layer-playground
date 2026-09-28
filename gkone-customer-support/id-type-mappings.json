@@ -1,0 +1,32 @@
+{
+    "IdTypeMappings": [
+        {
+            "Id": "a7e474b7-d704-4721-a75f-21af2eb002e3",
+            "UserDocumentIdType": "ID_CARD",
+            "WesternUnionIdType": "M",
+            "num": 5
+        },
+        {
+            "Id": "a186ea35-d976-4b29-aeab-aa4b38f5aa52",
+            "UserDocumentIdType": "PASSPORT",
+            "WesternUnionIdType": "A",
+            "num": 3
+        },
+        {
+            "Id": "300bd4e0-7dd1-4f82-a80b-80d9c061c813",
+            "UserDocumentIdType": "DRIVERS_LICENSE",
+            "WesternUnionIdType": "C",
+            "num": 1
+        },
+        {
+            "Id": "5b6a235d-801e-44d9-b3c2-9ec0ca36ac28",
+            "UserDocumentIdType": "NATIONAL_ID",
+            "WesternUnionIdType": "B"
+        },
+        {
+            "Id": "6d529564-95c0-4e96-ac3c-97afdd8c5e65",
+            "UserDocumentIdType": "VOTERS_ID",
+            "WesternUnionIdType": "M"
+        }
+    ]
+}

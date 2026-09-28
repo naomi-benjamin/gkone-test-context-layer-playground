@@ -1,0 +1,136 @@
+[
+    {
+        "testCase": "FILTER_MISSING_USER_ID",
+        "userId": null,
+        "transactionId": "96f46cc8-c697-de0a-b1b0-8734399b0b47",
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "userId contains an invalid value.",
+        "notes": "userId is a required URL path parameter and is omitted."
+    },
+    {
+        "testCase": "FILTER_MISSING_TRANSACTION_ID",
+        "userId": "e6de4568-175a-4fd5-bd52-f289b2cd4836",
+        "transactionId": null,
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "transactionId contains an invalid value.",
+        "notes": ""
+    },
+    {
+        "testCase": "FILTER_MISSING_USER_ID_AND_TRANSACTION_ID",
+        "userId": null,
+        "transactionId": null,
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "userId, transactionId contains an invalid value.",
+        "notes": ""
+    },
+    {
+        "testCase": "FILTER_USER_ID_AND_TRANSACTION_ID_MISMATCH",
+        "userId": "e6de4568-175a-4fd5-bd52-f289b2cd4836",
+        "transactionId": "aa3dfd32-8668-2367-92f6-4158010a9764",
+        "expectedStatus": 404,
+        "expectEmpty": "false",
+        "expectedDetail": "Record does not exist",
+        "notes": ""    },
+    {
+        "testCase": "FILTER_USER_ID_INVALID_GUID",
+        "userId": "e6de4568-175a-4fd5-bd52-f289b2cd4836f",
+        "transactionId": "aa3dfd32-8668-2367-92f6-4158010a9764",
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "userId contains an invalid value.",
+        "notes": "Invalid userId GUID should fail validation before the transaction lookup is attempted."
+    },
+    {
+        "testCase": "FILTER_TRANSACTION_ID_INVALID_GUID",
+        "userId": "9904b57e-daeb-4044-b70f-edfed432140f",
+        "transactionId": "c675916d-198c-f85c-7b85-7021855a658gs",
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "transactionId contains an invalid value.",
+        "notes": "Malformed transactionId should be rejected with a validation error."
+    },
+    {
+        "testCase": "FILTER_USER_ID_AND_TRANSACTION_ID_BOTH_INVALID",
+        "userId": "e6de4568-175a-4fd5-bd52-f289b2cd4836f",
+        "transactionId": "c675916d-198c-f85c-7b85-7021855a658gs",
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "userId, transactionId contains an invalid value.",
+        "notes": "Both IDs are invalid; the API should reject the request at validation time."
+    },
+    {
+        "testCase": "FILTER_VALID_USER_ID_AND_TRANSACTION_ID",
+        "userId": "9904b57e-daeb-4044-b70f-edfed432140f",
+        "transactionId": "072563fe-1fa1-34b9-c9ba-5164dbe5f533",
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "notes": "Valid pair should return the corresponding transaction result."
+    },
+    {
+        "testCase": "FILTER_VALID_USER_ID_UNKNOWN_TRANSACTION_ID",
+        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "transactionId": "11111111-1111-1111-1111-111111111111",
+        "expectedStatus": 404,
+        "expectEmpty": "true",
+        "expectedDetail": "Record does not exist",
+        "notes": "A valid userId with an unknown transactionId should return no matching records rather than a validation failure."
+    },
+    {
+        "testCase": "FILTER_UNKNOWN_USER_ID_VALID_TRANSACTION_ID",
+        "userId": "11111111-1111-1111-1111-111111111111",
+        "transactionId": "0a0ae301-7bf4-b35a-6dae-4030b47c0dbf",
+        "expectedStatus": 404,
+        "expectEmpty": "true",
+        "expectedDetail": "Record does not exist",
+        "notes": "A valid transactionId belonging to a different user should not match and should return an empty result set."
+    },
+    {
+        "testCase": "FILTER_NULL_USER_ID_VALID_TRANSACTION_ID",
+        "userId": null,
+        "transactionId": "0a0ae301-7bf4-b35a-6dae-4030b47c0dbf",
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "userId contains an invalid value.",
+        "notes": "A null userId should be rejected even when the transactionId is valid."
+    },
+    {
+        "testCase": "FILTER_VALID_USER_ID_NULL_TRANSACTION_ID",
+        "userId": "e6de4568-175a-4fd5-bd52-f289b2cd4836",
+        "transactionId": null,
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "transactionId contains an invalid value.",
+        "notes": "A null transactionId should be rejected even when the userId is valid."
+    },
+    {
+        "testCase": "FILTER_ALPHABETIC_USER_ID",
+        "userId": "abcdefghijklmnopqrstuvwxyz",
+        "transactionId": "0a0ae301-7bf4-b35a-6dae-4030b47c0dbf",
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "userId contains an invalid value.",
+        "notes": "Alphabetic userId should fail GUID validation."
+    },
+    {
+        "testCase": "FILTER_ALPHABETIC_TRANSACTION_ID",
+        "userId": "e6de4568-175a-4fd5-bd52-f289b2cd4836",
+        "transactionId": "abcdefghijklmnopqrstuvwxyz",
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "transactionId contains an invalid value.",
+        "notes": "Alphabetic transactionId should fail GUID validation."
+    },
+    {
+        "testCase": "FILTER_ALPHABETIC_USER_ID_AND_TRANSACTION_ID",
+        "userId": "abcdefghijklmnopqrstuvwxyz",
+        "transactionId": "abcdefghijklmnopqrstuvwxyz",
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "userId, transactionId contains an invalid value.",
+        "notes": "Both alphabetic IDs should be rejected as invalid GUIDs."
+    }
+]

@@ -1,0 +1,346 @@
+"ID","Work Item Type","Title","Preconditions","Test Step","Step Action","Step Expected","Area Path","Assigned To","State","Tags"
+"","Test Case","Verify that completing a successful V2 outbound transaction saves the payee with all required fields when the save toggle is ON","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user in JM or KY market with non-expired ID
+- Fewer than 5 saved payees
+- Access to test account email inbox","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Launch the WU Outbound V2 flow","","","","",""
+"","","","","2","Select destination country, state, and city; enter a valid send amount; select Cash Pickup; tap Get a Quote","Quote is displayed with send amount, fees, and 10-minute countdown","","","",""
+"","","","","3","Tap Proceed with this transfer; answer No to the third-party check; answer No to the PEP check","","","","",""
+"","","","","4","Confirm the save toggle is ON; enter First Name and Last Name; complete remaining steps; authorise payment via the Payment Widget","Transaction completes with MTCN shown in-app or emailed if processing exceeds 2 minutes","","","",""
+"","","","","5","Open the Saved Payee widget","New payee appears under Outbound - Cash with correct recipient details (First Name, Last Name, Country, State, City, Payment Method)","","","",""
+"","Test Case","Verify that a V2 outbound transaction with Direct to Bank saves the payee including bank details","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user with non-expired ID
+- Fewer than 5 saved payees
+- A corridor supporting Direct to Bank available in test environment","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Launch the WU Outbound V2 flow; select a corridor supporting Direct to Bank; select Direct to Bank as payout method; enter a valid amount; tap Get a Quote","Quote displayed","","","",""
+"","","","","2","Proceed through quote review; pass both compliance checks","","","","",""
+"","","","","3","Enter all required recipient fields; confirm save toggle is ON; complete the bank details screen","","","","",""
+"","","","","4","Complete remaining steps; authorise payment via the Payment Widget","Transaction completes with MTCN shown in-app or emailed","","","",""
+"","","","","5","Open the Saved Payee widget and select the new payee","Payee appears under Outbound - D2B; stored record includes all bank detail fields that were entered","","","",""
+"","Test Case","Verify that completing a successful V2 outbound transaction with the save toggle OFF does not create a saved payee","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user with non-expired ID
+- Note current payee count before test","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Launch the WU Outbound V2 flow; proceed to the recipient details screen","","","","",""
+"","","","","2","Locate the save toggle and set it to OFF","","","","",""
+"","","","","3","Complete the transaction and authorise payment","Transaction completes successfully","","","",""
+"","","","","4","Open the Saved Payee widget","No new payee entry; widget count is unchanged from before the test","","","",""
+"","Test Case","Verify that a failed V2 outbound transaction does not save the payee regardless of toggle state","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user with non-expired ID
+- Save toggle ON
+- Note current payee count before test","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Launch the WU Outbound V2 flow with save toggle ON; proceed through all steps to payment authorisation","","","","",""
+"","","","","2","Allow or trigger the transaction to fail","Transaction failure shown in-app or via failure email","","","",""
+"","","","","3","Open the Saved Payee widget","No new payee entry; count unchanged from before the test","","","",""
+"","Test Case","Verify that selecting a saved payee in the V2 flow pre-fills all required recipient fields","Pre Conditions:
+The following should be true before proceeding:
+- At least one Cash Pickup saved payee exists in the widget","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Navigate to the Saved Payee widget and select the Cash Pickup saved payee","","","","",""
+"","","","","2","Observe the recipient details screen","First Name, Last Name, Country, State, and City are all pre-filled; payout method pre-selected as Cash Pickup","","","",""
+"","","","","3","Check the Continue button state","Continue button is enabled without the user re-entering any field","","","",""
+"","Test Case","Verify that selecting a Direct to Bank saved payee in the V2 flow pre-fills all bank detail fields","Pre Conditions:
+The following should be true before proceeding:
+- At least one D2B saved payee with stored bank details exists","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Navigate to the Saved Payee widget and select the D2B saved payee","","","","",""
+"","","","","2","Observe the recipient details screen","All recipient fields pre-filled (First Name, Last Name, Country, State, City); payout method pre-selected as Direct to Bank","","","",""
+"","","","","3","Navigate to the bank details screen","Bank detail fields are pre-filled with stored values; Continue button enabled","","","",""
+"","Test Case","Verify that only Cash Pickup is selectable when a saved payee was created via Cash Pickup in the V2 flow","Pre Conditions:
+The following should be true before proceeding:
+- A Cash Pickup-only saved payee exists","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Select the Cash Pickup saved payee from the widget","","","","",""
+"","","","","2","Observe the available payout methods on the recipient details screen","Only Cash Pickup is selectable; Direct to Bank and Direct to Wallet are not available","","","",""
+"","Test Case","Verify that only Direct to Bank is selectable when a saved payee was created via Direct to Bank in the V2 flow","Pre Conditions:
+The following should be true before proceeding:
+- A Direct to Bank-only saved payee exists","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Select the D2B saved payee from the widget","","","","",""
+"","","","","2","Observe the available payout methods","Only Direct to Bank is selectable; Cash Pickup and Direct to Wallet are not offered","","","",""
+"","Test Case","Verify that saved payees created in the V2 flow appear under the correct category in the Saved Payee widget","Pre Conditions:
+The following should be true before proceeding:
+- At least one Cash Pickup and one D2B saved payee exist","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Open the Saved Payee widget","","","","",""
+"","","","","2","Locate the Cash Pickup saved payee and note its category heading","Payee appears under Outbound - Cash","","","",""
+"","","","","3","Locate the D2B saved payee and note its category heading","Payee appears under Outbound - D2B; no payees appear under P2P or Bill Payment","","","",""
+"","Test Case","Verify that a V2 successful transaction with a successful payee save shows a toast on the final screen confirming the payee was saved","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Fewer than 5 saved payees
+- Save toggle ON
+- Access to email inbox","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Complete a V2 outbound transaction with save toggle ON","","","","",""
+"","","","","2","Before navigating away, observe the final outbound screen","Toast appears confirming payee was saved","","","",""
+"","","","","3","Check the email inbox","Success email received with MTCN; no payee save mention in email","","","",""
+"","Test Case","Verify that when the V2 transaction succeeds but payee save fails a toast appears on the final screen warning the payee was not saved","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Save toggle ON
+- Ability to trigger a save payee back-end failure after a successful transaction
+- Access to email inbox","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Complete a V2 outbound transaction with save toggle ON; trigger a save payee back-end failure","","","","",""
+"","","","","2","Before navigating away, observe the final outbound screen","Toast warning appears indicating payee was NOT saved","","","",""
+"","","","","3","Open the Saved Payee widget","No new payee entry","","","",""
+"","","","","4","Check the email inbox","Success email received with MTCN; payee save failure is not mentioned in email","","","",""
+"","Test Case","Verify that a failed V2 transaction sends only a transaction failure email with no payee save messaging","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Ability to trigger a transaction failure
+- Access to email inbox","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Initiate a V2 outbound transaction with save toggle ON; cause the transaction to fail","","","","",""
+"","","","","2","Check the email inbox","Failure email received for transaction only; message is user-friendly with no internal stage names or error codes","","","",""
+"","","","","3","Confirm no payee save toast appeared","No payee save toast shown; transaction failed before save was attempted","","","",""
+"","Test Case","Verify that the save toggle defaults to ON at the start of each new V2 outbound transaction","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Begin a new V2 outbound transaction; navigate to the recipient details screen","","","","",""
+"","","","","2","Observe the save toggle without touching it","Toggle is ON (enabled) by default; user must actively turn it OFF to skip saving","","","",""
+"","Test Case","Verify that saving a 5th payee succeeds when the account already has 4 saved payees","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Account has exactly 4 saved payees","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Complete a V2 outbound transaction with save toggle ON","Transaction completes successfully","","","",""
+"","","","","2","Open the Saved Payee widget","5th payee saved and appears in widget; no limit-reached message; total count is 5","","","",""
+"","Test Case","Verify that attempting to save a 6th payee when the 5-payee limit is reached surfaces the limit-reached message in the widget","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Account has exactly 5 saved payees
+- Save toggle ON","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Complete a V2 outbound transaction with save toggle ON","Transaction completes successfully","","","",""
+"","","","","2","Open the Saved Payee widget","Limit-reached message displayed; 6th payee is NOT added to the widget","","","",""
+"","Test Case","Verify that deleting a saved payee when at the limit allows a new payee to be saved on the next transaction","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Account has exactly 5 saved payees","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Open the Saved Payee widget; delete one payee and confirm deletion","Count decrements to 4; no limit-reached message","","","",""
+"","","","","2","Complete a V2 outbound transaction with save toggle ON","Transaction completes","","","",""
+"","","","","3","Open the Saved Payee widget","New payee saved; count returns to 5; no limit-reached message","","","",""
+"","Test Case","Verify that the same recipient can be saved twice and creates two separate widget entries with no deduplication","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Fewer than 4 saved payees (to allow two more saves)","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Complete a V2 outbound transaction to Recipient A with save toggle ON","Transaction completes; payee saved","","","",""
+"","","","","2","Complete a second V2 outbound transaction to the same Recipient A with save toggle ON","Transaction completes; second save triggered","","","",""
+"","","","","3","Open the Saved Payee widget","Two separate entries exist for Recipient A; both consume limit slots; no deduplication warning or merge","","","",""
+"","Test Case","Verify that the saved payee nickname can be edited and the widget reflects the updated name","Pre Conditions:
+The following should be true before proceeding:
+- At least one saved payee with a nickname exists","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Open the Saved Payee widget; access management options for a saved payee; edit the nickname and save the change","","","","",""
+"","","","","2","Return to the widget","Updated nickname is displayed; all other fields (name, country, etc.) remain unchanged","","","",""
+"","Test Case","Verify that no fields other than the nickname can be edited for a saved payee","Pre Conditions:
+The following should be true before proceeding:
+- At least one saved payee exists","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Open the Saved Payee widget; access management options for a saved payee","","","","",""
+"","","","","2","Attempt to modify First Name, Last Name, Country, State, City, or bank details","No field other than nickname is editable; all recipient detail fields are read-only; no Save or Update button present for non-nickname fields","","","",""
+"","Test Case","Verify that deleting a saved payee removes it from the widget and frees the limit slot","Pre Conditions:
+The following should be true before proceeding:
+- At least one saved payee exists
+- Note current payee count","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Open the Saved Payee widget; select the delete option for a payee and confirm deletion","Payee is removed immediately; count decrements by 1","","","",""
+"","","","","2","Confirm the deleted payee is no longer visible or selectable","Deleted payee does not appear in widget; limit slot freed","","","",""
+"","Test Case","Verify that saved payee PII fields do not appear in debug logs or analytics after a V2 save payee operation","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Test environment with debug logging accessible","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2"
+"","","","","1","Complete a V2 outbound transaction with save toggle ON","Transaction completes; save payee operation runs","","","",""
+"","","","","2","Check device debug logs for PII fields (name, address, bank or wallet details)","PII fields are not present in plaintext; if present they are masked or tokenised","","","",""
+"","","","","3","Check any accessible analytics events for the same PII fields","No PII in plaintext in analytics events","","","",""
+"","Test Case","Verify that completing a successful V3 outbound transaction in a minimal-field corridor saves the payee with name and payout method only","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user with non-expired ID
+- Fewer than 5 saved payees
+- A corridor requiring only name fields (no address) confirmed available in test environment","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Launch the V3 outbound flow; select the minimal-field corridor; enter a valid amount and payout method; tap Get a Quote","Quote displayed","","","",""
+"","","","","2","On the recipient details screen, confirm only name fields are shown and the save toggle is ON","No address or postal code fields visible","","","",""
+"","","","","3","Enter First Name and Last Name; complete remaining steps; authorise payment","Transaction completes with MTCN shown in-app or emailed","","","",""
+"","","","","4","Open the Saved Payee widget; inspect stored fields for the new payee","Payee saved under correct category; stored fields include name, country, state, city, and payout method only; no address fields stored","","","",""
+"","Test Case","Verify that completing a successful V3 outbound transaction in a corridor that requires address fields saves the payee including all address fields","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user with non-expired ID
+- Fewer than 5 saved payees
+- A corridor requiring Address Line 1 confirmed available in test environment","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Launch the V3 outbound flow; select the address-required corridor","","","","",""
+"","","","","2","On the recipient details screen, confirm address fields are shown and save toggle is ON; enter all required fields including address","Address fields visible per field template","","","",""
+"","","","","3","Complete remaining steps; authorise payment","Transaction completes with MTCN shown in-app or emailed","","","",""
+"","","","","4","Open the Saved Payee widget; inspect stored fields for the new payee","Payee saved; stored record includes address data matching what was entered","","","",""
+"","Test Case","Verify that completing a successful V3 outbound transaction with the save toggle OFF does not create a saved payee","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Note current payee count before test","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Launch the V3 outbound flow; proceed to the recipient details screen","","","","",""
+"","","","","2","Locate the Securely save for future use toggle and set it to OFF","","","","",""
+"","","","","3","Complete the transaction and authorise payment","Transaction completes successfully","","","",""
+"","","","","4","Open the Saved Payee widget","No new payee entry; count unchanged","","","",""
+"","Test Case","Verify that a failed V3 outbound transaction does not save the payee regardless of toggle state","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Save toggle ON
+- Note current payee count before test","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Launch the V3 outbound flow with save toggle ON; proceed through all steps to payment authorisation","","","","",""
+"","","","","2","Allow or trigger the transaction to fail","Transaction failure shown in-app or via failure email","","","",""
+"","","","","3","Open the Saved Payee widget","No new payee entry; count unchanged","","","",""
+"","Test Case","Verify that the Securely save for future use toggle defaults to ON on the V3 recipient details screen for each new transaction","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Begin a new V3 outbound flow; complete the quote screen; proceed to the recipient details screen","","","","",""
+"","","","","2","Observe the Securely save for future use toggle without touching it","Toggle is ON (enabled) by default; user must actively turn it OFF to skip saving","","","",""
+"","Test Case","Verify that selecting a saved payee in the V3 flow pre-fills only the fields required by the current corridor field template","Pre Conditions:
+The following should be true before proceeding:
+- A saved payee exists from a minimal-field corridor (name only stored)","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Select the minimal-field saved payee from the widget for a new transaction in the same corridor","","","","",""
+"","","","","2","Observe the recipient details screen","First Name and Last Name are pre-filled; no address or postal code fields shown; payout method pre-selected","","","",""
+"","","","","3","Check the Continue button","Continue button enabled without additional input","","","",""
+"","Test Case","Verify that selecting a saved payee with stored address in a V3 corridor that requires address pre-fills the address fields","Pre Conditions:
+The following should be true before proceeding:
+- A saved payee exists that was created with stored address data
+- Target corridor also requires address","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Select the saved payee (with stored address) from the widget for a new transaction in an address-required corridor","","","","",""
+"","","","","2","Observe the recipient details screen","All fields pre-filled including Address Line 1; Continue button enabled if all template requirements are met","","","",""
+"","Test Case","Verify that selecting a saved payee in a V3 corridor that does not require address does not display the address field even when the stored record contains address data","Pre Conditions:
+The following should be true before proceeding:
+- A saved payee exists with stored address data
+- Target corridor does NOT require address fields","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Select the saved payee (with stored address) from the widget for a new transaction in the non-address corridor","","","","",""
+"","","","","2","Observe the recipient details screen","Address field is not shown; only template-required fields visible; name and payout method pre-filled","","","",""
+"","Test Case","Verify that selecting a saved payee without stored address in a V3 corridor that requires address leaves the address field empty and blocks Continue","Pre Conditions:
+The following should be true before proceeding:
+- A saved payee exists from a minimal-field corridor (no address stored)
+- Target corridor requires Address Line 1","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Select the minimal-field saved payee from the widget for a new transaction in the address-required corridor","","","","",""
+"","","","","2","Observe the recipient details screen","Name fields are pre-filled; Address Line 1 is shown but empty","","","",""
+"","","","","3","Check the Continue button","Continue button disabled until address is entered; no crash or error","","","",""
+"","Test Case","Verify that selecting a D2B saved payee in V3 pre-fills bank detail fields on the recipient details screen","Pre Conditions:
+The following should be true before proceeding:
+- A D2B saved payee with stored bank details exists
+- Target corridor supports Direct to Bank","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Select the D2B saved payee from the widget for a new transaction","","","","",""
+"","","","","2","Observe the recipient details screen","Recipient fields pre-filled; payout method pre-selected as Direct to Bank","","","",""
+"","","","","3","Observe the bank details screen","Bank detail fields pre-filled with stored values; Continue button enabled","","","",""
+"","Test Case","Verify that a V3 saved payee created with international name fields pre-fills First Name and Last Name correctly on reuse","Pre Conditions:
+The following should be true before proceeding:
+- A saved payee exists created with the Latin American toggle OFF (First Name and Last Name stored; Middle Name if corridor required it)","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Select the saved payee from the widget; ensure the Latin American Name Format toggle is OFF on the recipient details screen","","","","",""
+"","","","","2","Observe the name fields","First Name and Last Name pre-filled with stored values; Middle Name pre-filled if stored; no Latin American name fields shown","","","",""
+"","Test Case","Verify that a V3 saved payee created with Latin American name fields pre-fills Given Name, Maternal Name, and Paternal Name when the Latin American toggle is ON on reuse","Pre Conditions:
+The following should be true before proceeding:
+- A saved payee exists created with the Latin American toggle ON (Given Name, Maternal Name, Paternal Name stored)","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Select the saved payee from the widget; toggle ON the Latin American Name Format toggle on the recipient details screen","","","","",""
+"","","","","2","Observe the name fields","Given Name, Maternal Name, and Paternal Name pre-filled with stored values; international name fields not shown while toggle is ON","","","",""
+"","Test Case","Verify that selecting a Latin American mode saved payee with the toggle OFF results in empty international name fields and no data bleed","Pre Conditions:
+The following should be true before proceeding:
+- A saved payee exists created with the Latin American toggle ON (Given, Maternal, and Paternal names stored)","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2; Outbound V3"
+"","","","","1","Select the saved payee from the widget; ensure the Latin American Name Format toggle is OFF","","","","",""
+"","","","","2","Observe the First Name and Last Name fields","Fields shown (toggle OFF = international mode) but NOT populated; no Latin American name values appear in international fields","","","",""
+"","","","","3","Check the Continue button","Continue disabled; user must enter First Name and Last Name","","","",""
+"","Test Case","Verify that only Cash Pickup is selectable when a V3 saved payee was created via Cash Pickup","Pre Conditions:
+The following should be true before proceeding:
+- A Cash Pickup saved payee exists created in V3","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Select the Cash Pickup saved payee from the widget","","","","",""
+"","","","","2","Observe the available payout methods","Only Cash Pickup is selectable; Direct to Bank and Direct to Wallet are not offered","","","",""
+"","Test Case","Verify that only Direct to Bank is selectable when a V3 saved payee was created via Direct to Bank","Pre Conditions:
+The following should be true before proceeding:
+- A Direct to Bank saved payee exists created in V3","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Select the D2B saved payee from the widget","","","","",""
+"","","","","2","Observe the available payout methods","Only Direct to Bank is selectable; Cash Pickup and Direct to Wallet are not offered","","","",""
+"","Test Case","Verify that a V3 successful transaction with a successful payee save shows a toast on the final screen confirming the payee was saved","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Fewer than 5 saved payees
+- Save toggle ON
+- Access to email inbox","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Complete a V3 outbound transaction with save toggle ON","","","","",""
+"","","","","2","Before navigating away, observe the final outbound screen","Toast appears confirming payee was saved","","","",""
+"","","","","3","Check the email inbox","Success email received with MTCN; no payee save mention in email","","","",""
+"","Test Case","Verify that when the V3 transaction succeeds but payee save fails a toast appears on the final screen warning the payee was not saved","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Save toggle ON
+- Ability to trigger a save payee back-end failure
+- Access to email inbox","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Complete a V3 outbound transaction with save toggle ON; trigger a save payee back-end failure","","","","",""
+"","","","","2","Before navigating away, observe the final outbound screen","Toast warning appears indicating payee was NOT saved","","","",""
+"","","","","3","Open the Saved Payee widget","No new payee entry","","","",""
+"","","","","4","Check the email inbox","Success email received with MTCN; payee save failure is not mentioned in email","","","",""
+"","Test Case","Verify that a failed V3 transaction sends only a transaction failure email and no payee save messaging","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Ability to trigger a transaction failure
+- Access to email inbox","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Initiate a V3 outbound transaction with save toggle ON; cause the transaction to fail","","","","",""
+"","","","","2","Check the email inbox","Failure email received for transaction only; message is user-friendly with no internal stage names or error codes","","","",""
+"","","","","3","Confirm no payee save toast appeared","No payee save toast shown; transaction failed before save was attempted","","","",""
+"","Test Case","Verify that the 5-payee limit applies to V3 savings and the limit-reached message appears on the 6th save attempt","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Account has exactly 5 saved payees
+- Save toggle ON","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Complete a V3 outbound transaction with save toggle ON","Transaction completes successfully","","","",""
+"","","","","2","Open the Saved Payee widget","Limit-reached message displayed; 6th payee is NOT added","","","",""
+"","Test Case","Verify that in a minimal-field corridor only name and payout method are saved and a subsequent transaction using this payee completes without address input","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- A minimal-field corridor (name only required) confirmed available in test environment","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2; Outbound V3"
+"","","","","1","Complete a V3 transaction in the minimal-field corridor with save toggle ON; open the Saved Payee widget and inspect the stored payee","Stored record contains name, payout method only; no address fields","","","",""
+"","","","","2","Select the saved payee for a new transaction in the same corridor","","","","",""
+"","","","","3","Observe the recipient details screen and attempt to continue","Only name fields shown and pre-filled; no address fields; Continue button enabled immediately","","","",""
+"","Test Case","Verify that Postal Code is stored and correctly pre-fills on reuse when the corridor field template requires it","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- A corridor requiring Postal Code confirmed available in test environment","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2; Outbound V3"
+"","","","","1","Complete a V3 transaction in the postal-code-required corridor with a valid postal code; save toggle ON","Transaction completes; payee saved","","","",""
+"","","","","2","Select the saved payee for a new transaction in the same corridor","","","","",""
+"","","","","3","Observe the Postal Code field","Postal code pre-filled with the stored value in the correct format; Continue enabled if all other required fields satisfied","","","",""
+"","Test Case","Verify that Middle Name is stored when required by the field template and pre-fills correctly on reuse in the same corridor","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- A corridor whose template includes Middle Name confirmed available in test environment","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2; Outbound V3"
+"","","","","1","Complete a V3 transaction in the Middle Name corridor with a Middle Name value entered; save toggle ON","Transaction completes; payee saved","","","",""
+"","","","","2","Select the saved payee for a new transaction in the same corridor","","","","",""
+"","","","","3","Observe the Middle Name field","Middle Name pre-filled with the stored value","","","",""
+"","Test Case","Verify that the nickname of a V3 saved payee can be edited and the updated value is reflected in the widget","Pre Conditions:
+The following should be true before proceeding:
+- At least one V3-created saved payee with a nickname exists","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Open the Saved Payee widget; access management options for the V3 payee; edit the nickname and save the change","","","","",""
+"","","","","2","Return to the widget","Updated nickname displayed; all other stored fields unchanged","","","",""
+"","Test Case","Verify that deleting a V3 saved payee removes it from the widget and frees the limit slot","Pre Conditions:
+The following should be true before proceeding:
+- At least one V3-created saved payee exists
+- Note current payee count","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Open the Saved Payee widget; select the delete option for the V3 payee and confirm deletion","Payee removed immediately; count decrements by 1","","","",""
+"","","","","2","Confirm the deleted payee is no longer visible or selectable","Deleted payee does not appear; limit slot freed","","","",""
+"","Test Case","Verify that saved payee PII fields do not appear in debug logs or analytics after a V3 save payee operation","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Test environment with debug logging accessible
+- Corridor that captures address fields","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Complete a V3 outbound transaction in an address-required corridor with save toggle ON","Transaction completes; save payee operation runs","","","",""
+"","","","","2","Check device debug logs for PII fields (name, address, bank or wallet details)","PII fields are not present in plaintext; if present they are masked or tokenised","","","",""
+"","","","","3","Check any accessible analytics events for the same PII fields","No PII in plaintext in analytics events","","","",""
+"","Test Case","Verify that when a payee save fails after a successful transaction the save failure is communicated via toast on the final screen and the widget accurately reflects the failed state","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Access to email inbox
+- Ability to trigger a save payee back-end failure after a successful transaction","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2; Outbound V3"
+"","","","","1","Complete an outbound transaction with save toggle ON; trigger a save payee back-end failure","","","","",""
+"","","","","2","Before navigating away from the final outbound screen, observe any toast notifications","Toast warning appears indicating payee was NOT saved","","","",""
+"","","","","3","Open the Saved Payee widget","No new payee entry","","","",""
+"","","","","4","Check the email inbox","Success email received with MTCN; payee save failure is not communicated in email; no retry path in app","","","",""
+"","Test Case","Verify that selecting a saved payee whose stored payout method is no longer available for the corridor is handled gracefully","Pre Conditions:
+The following should be true before proceeding:
+- A saved payee exists whose stored payout method is now excluded or removed for that corridor
+- Requires corridor configuration change in test environment","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2; Outbound V3"
+"","","","","1","Open the Saved Payee widget and select the affected payee","","","","",""
+"","","","","2","Observe the payout method state on the recipient details screen","App does not crash or hang; clear message shown that the stored payout method is unavailable","","","",""
+"","Test Case","Verify the Saved Payee widget behavior when the account has no saved payees","Pre Conditions:
+The following should be true before proceeding:
+- Account has zero saved payees (never saved or all deleted)","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2; Outbound V3"
+"","","","","1","Navigate to the Saved Payee widget on the transaction page","","","","",""
+"","","","","2","Observe the widget state","Widget either displays a clear empty state message or is hidden entirely; no crash or unexpected UI state","","","",""
+"","Test Case","Verify that a user who completes 5 transactions without disabling the default-ON toggle reaches the 5-payee limit and sees the limit-reached message on the 6th transaction","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 user
+- Account starting from 0 saved payees","","","","GKOne\Remittances_old2","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V2; Outbound V3"
+"","","","","1","Complete 5 separate outbound transactions without disabling the save toggle (leave it ON at default each time)","","","","",""
+"","","","","2","After each transaction open the widget and verify the count","After 5 transactions: count is 5; all payees appear; no limit-reached message","","","",""
+"","","","","3","Initiate a 6th outbound transaction with toggle ON; allow the transaction to complete","Transaction completes successfully","","","",""
+"","","","","4","Open the Saved Payee widget","Limit-reached message displayed; 6th payee is not added","","","",""

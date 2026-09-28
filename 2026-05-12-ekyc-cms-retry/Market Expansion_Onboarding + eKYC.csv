@@ -1,0 +1,216 @@
+ID,Work Item Type,Title,Preconditions,Test Step,Step Action,Step Expected,Area Path,Assigned To,State,Tags
+28859,Test Case,Verify that a user is able to do ondato in GY tenant,,,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Design,
+,,,,1,Login with a GY tenant account that has not yet completed eKYC,Home screen displayed,,,,
+,,,,2,Tap Complete registration and proceed to the Ondato step,Ondato SDK launches,,,,
+,,,,3,Complete the Ondato identity verification flow using a passing test identity,Ondato verification is successful; KycStatus transitions to 4 (Pending to be processed); user is returned to home screen while CMS check runs,,,,
+28860,Test Case,Verify that a user cannot proceed with onboarding if they do not pass ondato,,,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Design,
+,,,,1,Login with a non-JM account that has not yet completed eKYC,Home screen displayed,,,
+,,,,2,Tap Complete registration and proceed to the Ondato step,Ondato SDK launches,,,,
+,,,,3,Complete the Ondato flow using a test identity configured to fail verification,Ondato returns a failure result; KycStatus is not advanced; the eKYC flow does not proceed to the CMS check or eKYC completion screen,,,,
+28861,Test Case,Verify that a user cannot proceed with onboarding if they do not pass the CMS check,,,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Design,
+,,,,1,Login with a non-JM account configured to pass Ondato but fail the CMS check,Home screen displayed,,,,
+,,,,2,Complete the Ondato flow,Ondato passes; KycStatus transitions to 4 (Pending to be processed),,,,
+,,,,3,Wait for the CMS check to run automatically,CMS check fails; KycStatus transitions from 4 to 8,,,,
+,,,,4,Observe the home screen,We couldn't confirm your identity. banner displayed; user cannot proceed into the eKYC completion screen; Documents Required screen accessible via the CTA,,,,
+28862,Test Case,"Verify that if the user's address has missing elements, the user is unable to proceed in KYC flow",,,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Design,
+,,,,1,"Login with a non-JM account configured to pass Ondato and pass the CMS check, but where the CMS address record has one or more missing required fields",Home screen displayed,,,,
+,,,,2,Complete Ondato and proceed through the CMS check,CMS check passes; user proceeds to eKYC completion screen,,,,
+,,,,3,Proceed to the address screen,Address fields that are present are pre-populated from CMS; fields with missing data are empty or flagged,,,,
+,,,,4,Attempt to tap Continue without completing the missing address fields,Continue button is disabled or an inline validation error is shown; user cannot proceed until the address is complete,,,,
+28863,Test Case,"Verify that if the user's address is complete, the user is able to proceed in the KYC flow",,,,,GKOne\Market Expansion,,Design,
+,,,,1,"Login with a non-JM account configured to pass Ondato and CMS check, with a complete address in CMS",Home screen displayed,,,,
+,,,,2,Complete Ondato and proceed through the CMS check to the eKYC completion screen,CMS check passes; eKYC completion screen accessible,,,,
+,,,,3,Proceed to the address screen and confirm all address fields are populated,All required address fields are pre-populated from CMS,,,,
+,,,,4,Tap Continue,User is able to proceed to the next step of the KYC flow,,,,
+28864,Test Case,Verify that the user cannot edit their address,,,,,GKOne\Market Expansion,,Design,
+,,,,1,Login with a non-JM account that has passed Ondato and CMS check; proceed to the address screen on the eKYC completion screen,Address fields are displayed pre-populated with CMS data,,,,
+,,,,2,Attempt to tap into and modify any address field,Address fields are read-only; no editing is possible; the values cannot be changed by the user,,,,
+28865,Test Case,Verify that the user cannot complete the KYC flow without providing their employment information when required,,,,,GKOne\Market Expansion,,Design,
+,,,,1,Login with a non-JM account that has passed Ondato and CMS check; proceed through the eKYC flow to the employment status screen,Employment status screen is displayed (non-JM only),,,,
+,,,,2,"Select an employment status that triggers the employment details screen (Employed, Self-Employed, or Student)","Employment details screen is displayed with fields: Employer/School Name, Employer Address Line 1, Employer Address Line 2 (optional), Employer City, Employer State, Employer Postal Code, Employment Industry, Occupational Level, Employer Country",,,,
+,,,,3,Leave all required fields empty and attempt to tap Continue,Continue button is disabled; user cannot proceed without completing required employment fields,,,,
+,,,,4,Fill in all required fields and tap Continue,User is able to proceed to the next step of the KYC flow,,,,
+28866,Test Case,Verify that the user cannot edit their nationality,,,,,GKOne\Market Expansion,,Design,
+,,,,1,Login with a non-JM account that has passed Ondato and CMS check; proceed to the eKYC completion screen,Nationality field is displayed pre-populated with data from CMS,,,,
+,,,,2,Attempt to tap into and modify the nationality field,Nationality field is read-only; the value cannot be changed by the user,,,,
+28867,Test Case,Verify that the user cannot complete the KYC flow without providing the requested personal details,,,,,GKOne\Market Expansion,,Design,
+,,,,1,Login with a non-JM account that has passed Ondato and CMS check; proceed to the eKYC completion screen,"eKYC completion screen displayed with user-provided fields (Country of Birth, Occupation, and any others required by the market)",,,,
+,,,,2,Leave one or more required user-provided fields empty and attempt to tap Continue,Continue button is disabled; user cannot proceed until all required fields are filled,,,,
+28868,Test Case,Verify that when the user has completed onboarding that they are not assigned a GKOne card,,,,,GKOne\Market Expansion,,Design,
+,,,,1,Login with a non-JM account; complete the full eKYC and onboarding flow through to completion,eKYC flow completes; KycStatus is set to 1,,,,
+,,,,2,Check the user's account for a GKOne prepaid card assignment,No prepaid card is assigned; card creation is not part of the non-JM onboarding flow,,,,
+28871,Test Case,Verify that a user's address is retrieved from CMS,,,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Ready,
+,,,,1,Login to the application,User is logged in; home screen is displayed,,,,
+,,,,2,Tap Complete registration,eKYC flow is initiated; Ondato SDK launches,,,,
+,,,,3,Complete the Ondato verification flow and review the captured data screen,Personal information returned by Ondato is displayed for review,,,,
+,,,,4,Proceed to the address screen,Address fields are pre-populated with data retrieved from CMS; fields are read-only - the user cannot edit them,,,,
+28872,Test Case,Verify that a message is displayed for a locked address during e-KYC,,,,,GKOne\Market Expansion,,Ready,
+,,,,1,Login to the application,User is logged in; home screen is displayed,,,,
+,,,,2,Tap Complete registration,eKYC flow is initiated; Ondato SDK launches,,,,
+,,,,3,Complete the Ondato verification flow and review the captured data screen,Personal information returned by Ondato is displayed for review,,,,
+,,,,4,Proceed to the address screen,Address fields are pre-populated from CMS; a message is displayed informing the customer that if the address is incorrect they must update it in store; fields are read-only,,,,
+28873,Test Case,Verify that an error message is displayed when address cannot be populated,,,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Ready,
+,,,,1,Login to the application,User is logged in; home screen is displayed,,,,
+,,,,2,Tap Complete registration,eKYC flow is initiated; Ondato SDK launches,,,,
+,,,,3,Complete the Ondato verification flow and review the captured data screen,Personal information returned by Ondato is displayed for review,,,,
+,,,,4,Proceed to the address screen,An error message is displayed; the customer is given instructions to contact support; address fields are not pre-populated,,,,
+28874,Test Case,Verify that a user's nationality is populated based on data from CMS,,,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Ready,
+,,,,1,Login to the application,User is logged in; home screen is displayed,,,,
+,,,,2,Tap Complete registration,eKYC flow is initiated; Ondato SDK launches,,,,
+,,,,3,Complete the Ondato verification flow and review the captured data screen,Personal information returned by Ondato is displayed for review,,,,
+,,,,4,Proceed past the address screen,Address data is shown from CMS; continue past this screen,,,,
+,,,,5,Identify the nationality field on the eKYC completion screen,Nationality field is pre-populated with the value retrieved from CMS; the field is read-only - the user cannot edit it,,,,
+28876,Test Case,Verify that a user who is not in CMS is unable to pass the CMS check,,,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Ready,
+,,,,1,Login to the application,User is logged in; home screen is displayed,,,,
+,,,,2,Navigate to the KYC flow and tap Complete registration,eKYC flow entry point is accessible,,,,
+,,,,3,Initiate and complete the Ondato flow,Ondato verification is successful; KycStatus transitions to 4 (Pending to be processed),,,,
+,,,,4,Wait for the CMS check to run automatically,CMS check is performed; user is not found in CMS; KycStatus transitions from 4 to 8,,,,
+,,,,5,Observe the home screen,We couldn't confirm your identity. banner is displayed; user is directed to contact CSC or visit a retail location; KycStatus remains 8,,,,
+28877,Test Case,Verify that a user who cannot be found in CMS is informed to visit retail,,,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Ready,
+,,,,1,Login to the application,User is logged in; home screen is displayed,,,,
+,,,,2,Navigate to the KYC flow and tap Complete registration,eKYC flow entry point is accessible,,,,
+,,,,3,Begin and complete the Ondato flow,Ondato verification is successful,,,,
+,,,,4,Observe the state immediately after Ondato completes,KycStatus = 4 (Pending to be processed); user is navigated to the home screen while CMS check runs in the background,,,,
+,,,,5,Wait for the CMS check to complete,User passes Ondato but fails the CMS check (user not found in CMS); KycStatus transitions from 4 to 8,,,,
+,,,,6,Refresh or observe the home screen,We couldn't confirm your identity. banner is displayed; user is directed to visit a retail location; Documents Required screen is accessible via the banner CTA,,,,
+28936,Test Case,Verify that a user who has a valid ID that is found in CMS passes the CMS check,,,,,GKOne\Market Expansion,,Design,kehli
+,,,,1,"Login with a non-JM account configured to pass Ondato; CMS record exists, is not blocked, and name and DOB match the Ondato-returned values",Home screen displayed,,,,
+,,,,2,Complete the Ondato flow,Ondato passes; KycStatus transitions to 4 (Pending to be processed),,,,
+,,,,3,Wait for the CMS check to run automatically,CMS check passes; KycStatus transitions from 4 to 1; user proceeds into the eKYC completion screen,,,,
+28937,Test Case,Verify that a user is able to do ondato in KY tenant,,,,,GKOne\Market Expansion,,Design,kehli
+,,,,1,Login with a KY tenant account that has not yet completed eKYC,Home screen displayed,,,,
+,,,,2,Tap Complete registration and proceed to the Ondato step,Ondato SDK launches,,,,
+,,,,3,Complete the Ondato identity verification flow using a passing test identity,Ondato verification is successful; KycStatus transitions to 4 (Pending to be processed); user is returned to home screen while CMS check runs,,,,
+29646,Test Case,Verify that only one GK ONE User Profile can be linked to a single CMS Customer Profile,,,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Design,
+,,,,1,"Set up two separate GKOne accounts in the same non-JM market, both with test identities whose document ID + ISO 2 code will resolve to the same CMS Customer Profile",Both accounts exist and are at the pre-eKYC stage,,,,
+,,,,2,Complete the Ondato flow and CMS check on the first account,First account passes; KycStatus set to 1,,,,
+,,,,3,Complete the Ondato flow on the second account - CMS check will detect the GKONumber already belongs to the first account,CMS check detects the GKONumber conflict; second account is set to KycStatus 5 (REJECTED); first account is unaffected,,,,
+29653,Test Case,Verify that the user's country of birth is being pulled from CMS,,,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Design,
+,,,,1,Login with a non-JM account that has passed Ondato and CMS check; proceed to the eKYC completion screen,eKYC completion screen displayed,,,,
+,,,,2,Identify the Country of Birth field,Country of Birth is pre-populated with the value from the user's CMS record; the field is read-only - the user cannot edit it,,,,
+31533,Test Case,Verify that a user is able to do ondato in TT tenant,,,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Design,
+,,,,1,Login with a TT tenant account that has not yet completed eKYC,Home screen displayed,,,,
+,,,,2,Tap Complete registration and proceed to the Ondato step,Ondato SDK launches,,,,
+,,,,3,Complete the Ondato identity verification flow using a passing test identity,Ondato verification is successful; KycStatus transitions to 4 (Pending to be processed); user is returned to home screen while CMS check runs,,,,
+34173,Test Case,Verify that a user who fails the CMS check can retrigger the CMS step and advance to KYC Status 1 after their CMS record is corrected,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account (KY, VG, GY, or TT) — fresh, not yet KYC-verified
+- Test identity available in Ondato sandbox that will pass identity verification
+- CMS configured: user initially fails (e.g. name mismatch), then record corrected to pass before step 6
+- Ability to verify KYC status in the test environment",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Ready,CMS Retry; eKYC
+,,,,1,Launch the eKYC flow and complete Ondato with a passing test identity,,,,,
+,,,,2,Confirm the CMS check triggers automatically — no user action required,CMS check is triggered immediately after positive Ondato response,,,,
+,,,,3,Confirm the CMS check fails; confirm the user is set to KYC Status 8,User is at KYC Status 8; flow stops,,,,
+,,,,4,Confirm the Home screen displays the failure state,"Home screen shows the ""We couldn't confirm your identity."" banner with the ""Visit Retail Location"" CTA",,,,
+,,,,5,Tap the CTA — confirm the Documents Required screen opens,"Documents Required screen is shown with the document list and both ""Find a retail location"" and ""Retry ID Verification"" options visible",,,,
+,,,,6,"In the CMS test environment, correct the user's record so it will now pass",,,,,
+,,,,7,"Tap ""Retry ID Verification""","The ""Action Needed"" modal appears with the tenant-configured wording and ""No, go back"" / ""Yes, I have"" options",,,,
+,,,,8,"Tap ""Yes, I have""",,,,,
+,,,,9,Confirm Ondato is NOT re-triggered during the retry,No Ondato SDK session is opened; no Ondato webhook fires,,,,
+,,,,10,Confirm the CMS check passes and the user is set to KYC Status 1,KYC Status 8 → 1; user proceeds into the remainder of the eKYC flow (eKYC completion screen),,,,
+34174,Test Case,"Verify that tapping ""No, go back"" on the Action Needed modal dismisses the modal without retriggering the CMS check","Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account at KYC Status 8 (CMS check previously failed)
+- User is on the Documents Required screen",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Ready,CMS Retry; eKYC
+,,,,1,"Tap ""Retry ID Verification""","The ""Action Needed"" modal appears",,,,
+,,,,2,"Tap ""No, go back""",Modal is dismissed; user is returned to the Documents Required screen,,,,
+,,,,3,Confirm KYC Status remains 8 and no CMS check was triggered,KYC Status unchanged; no CMS call made,,,,
+34175,Test Case,Verify that a CMS retry that fails again leaves the user at KYC Status 8 with the retry option still available,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account at KYC Status 8
+- CMS record has NOT been corrected (will still fail on retry)",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Ready,CMS Retry; eKYC
+,,,,1,Navigate to the Documents Required screen via the Home screen banner,,,,,
+,,,,2,"Tap ""Retry ID Verification"" — confirm modal appears — tap ""Yes, I have""",,,,,
+,,,,3,Confirm the CMS check runs and fails again,,,,,
+,,,,4,Confirm the user remains at KYC Status 8,KYC Status unchanged at 8,,,,
+,,,,5,"Confirm the Home screen banner is still shown and the Documents Required screen is still accessible with ""Retry ID Verification"" available",Retry option is not removed; user is not locked out,,,,
+34176,Test Case,Verify that the CMS retry does not re-trigger the Ondato identity verification flow,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account at KYC Status 8
+- CMS configured to pass on retry
+- Ability to observe whether Ondato SDK is launched (network log, Ondato sandbox event log, or webhook log)",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Ready,CMS Retry; eKYC
+,,,,1,"Navigate to Documents Required screen → tap ""Retry ID Verification"" → tap ""Yes, I have""",,,,,
+,,,,2,Monitor for any Ondato SDK session being opened or any Ondato webhook activity during the retry,No Ondato SDK session is opened; no new Ondato webhook is received,,,,
+,,,,3,Allow the CMS check to complete,Only the CMS lookup executes; KYC Status advances to 1 without Ondato being involved,,,,
+34177,Test Case,Verify that a CMS check where the user cannot be located in CMS results in KYC Status 8 and the retry path is shown,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account — fresh, not yet KYC-verified
+- Test identity that passes Ondato
+- CMS configured: no matching record exists for the document ID + ISO 2 code combination",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Ready,CMS Retry; eKYC
+,,,,1,Complete Ondato with a passing test identity,,,,,
+,,,,2,Confirm the CMS check triggers automatically and fails (user not found),CMS check fails; user set to KYC Status 8,,,,
+,,,,3,"Confirm the Home screen banner is displayed and the Documents Required screen is accessible with ""Retry ID Verification"" present",KYC Status 8; flow stops; retry option available,,,,
+34178,Test Case,Verify that a CMS check where the user is blocked in CMS results in KYC Status 8 and the retry path is shown,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account — fresh, not yet KYC-verified
+- Test identity that passes Ondato
+- CMS configured: matching record exists but is flagged as blocked",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Ready,CMS Retry; eKYC
+,,,,1,Complete Ondato with a passing test identity,,,,,
+,,,,2,Confirm the CMS check triggers automatically and fails (user blocked),CMS check fails; user set to KYC Status 8,,,,
+,,,,3,"Confirm the Documents Required screen is accessible with ""Retry ID Verification"" present",Retry option available; user is not permanently locked out in-app,,,,
+34179,Test Case,Verify that a CMS check where the name from Ondato does not match the CMS record results in KYC Status 8 and the retry path is shown,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account — fresh, not yet KYC-verified
+- Test identity that passes Ondato and returns a specific name
+- CMS configured: matching record exists but name differs from Ondato-returned name",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Ready,CMS Retry; eKYC
+,,,,1,Complete Ondato with a passing test identity (note the name returned),,,,,
+,,,,2,Confirm the CMS check triggers automatically and fails (name mismatch),CMS check fails; user set to KYC Status 8,,,,
+,,,,3,"Confirm the Documents Required screen is accessible with ""Retry ID Verification"" present",Retry option available,,,,
+34180,Test Case,Verify that a CMS check where the DOB from Ondato does not match the CMS record results in KYC Status 8 and the retry path is shown,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account — fresh, not yet KYC-verified
+- Test identity that passes Ondato and returns a specific DOB
+- CMS configured: matching record exists but DOB differs from Ondato-returned DOB",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Ready,CMS Retry; eKYC
+,,,,1,Complete Ondato with a passing test identity (note the DOB returned),,,,,
+,,,,2,Confirm the CMS check triggers automatically and fails (DOB mismatch),CMS check fails; user set to KYC Status 8,,,,
+,,,,3,"Confirm the Documents Required screen is accessible with ""Retry ID Verification"" present",Retry option available,,,,
+34181,Test Case,Verify that a user set to KYC Status 5 (REJECTED) due to a GKONumber conflict is not offered the CMS retry option,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account — fresh, not yet KYC-verified
+- Test identity that passes Ondato
+- CMS configured: matched CMS user's GKONumber already belongs to a different user in the GKOne DB",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Ready,CMS Retry; eKYC
+,,,,1,Complete Ondato with a passing test identity,,,,,
+,,,,2,Confirm the CMS check triggers automatically,,,,,
+,,,,3,Confirm the GKONumber conflict is detected; conflicting (second) user is set to KYC Status 5 (REJECTED),User is at KYC Status 5,,,,
+,,,,4,"Check whether the Home screen or any subsequent screen offers a ""Retry ID Verification"" option",No retry option is presented; no path forward available in-app — full stop,,,,
+34182,Test Case,Verify that the Action Needed modal wording reflects the correct resolution path for the tenant (retail location vs CSC),"Pre Conditions:
+The following should be true before proceeding:
+- Two test accounts in markets with different configured resolution paths (one retail-location market, one CSC market)
+- Each account at KYC Status 8",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Ready,CMS Retry; eKYC
+,,,,1,"On the retail-location market account: navigate to Documents Required — tap ""Retry ID Verification""; note the Action Needed modal wording",,,,,
+,,,,2,On the CSC market account: repeat the same steps; note the Action Needed modal wording,,,,,
+,,,,3,Compare the two modal messages,"Modal wording differs between markets per tenant configuration; neither market shows the other's wording; both modals show ""No, go back"" and ""Yes, I have"" regardless of wording variant",,,,
+34183,Test Case,Verify that a JM market user who completes Ondato is not subjected to a CMS check and sees no CMS failure states,"Pre Conditions:
+The following should be true before proceeding:
+- JM market account, not yet KYC-verified
+- Test identity that passes Ondato",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Ready,CMS Retry; eKYC
+,,,,1,Complete the Ondato identity verification step on the JM account,,,,,
+,,,,2,"Confirm the flow does not pause for a CMS check and no ""We couldn't confirm your identity."" banner appears",No CMS check triggered; no KYC Status 8 set,,,,
+,,,,3,Confirm the user proceeds directly to the eKYC completion screen,No Documents Required screen or retry option shown; user moves straight from Ondato to eKYC completion,,,,
+34184,Test Case,"Verify that the CMS retry behaviour is consistent across all non-JM markets (KY, VG, GY, TT)","Pre Conditions:
+The following should be true before proceeding:
+- One account per market: KY, VG, GY, TT — each at KYC Status 8
+- Each CMS record corrected to pass before running",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Ready,CMS Retry; eKYC
+,,,,1,"For each market (KY, VG, GY, TT): from the Home screen banner — Documents Required — tap ""Retry ID Verification"" — confirm modal — tap ""Yes, I have""",,,,,
+,,,,2,Confirm the CMS check runs in each market and each account advances to KYC Status 1,"Behaviour is identical across KY, VG, GY, TT; no market-specific variation in the retry path or outcome",,,,
+,,,,3,Confirm the eKYC flow continues for each market after the successful retry,Each market proceeds into the eKYC completion screen,,,,
+,Test Case,Verify that an email notification is sent to the user when the CMS check fails,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account — fresh, not yet KYC-verified
+- Test identity that passes Ondato
+- CMS configured to fail (e.g. user not found or name mismatch)
+- Access to the email inbox associated with the test account",,,,GKOne\Remittances,Naomi Silvera <naomi.silvera@gkco.com>,Design,CMS Retry; eKYC
+,,,,1,Complete Ondato with a passing test identity,,,,,
+,,,,2,Confirm the CMS check triggers automatically and fails,CMS check fails; KycStatus transitions to 8,,,,
+,,,,3,Open the email inbox for the test account,,,,,
+,,,,4,Confirm an email notification was received,"An email is present informing the user that their identity verification could not be completed, and directing them to visit a retail location or contact CSC",,,,
+,,,,5,Confirm the email is not sent a second time if the CMS check has not been retried,No duplicate emails received; email is triggered once per CMS check failure event,,,,
+,Test Case,Verify that the employment details screen is not shown when the selected employment status does not require it,"Pre Conditions:
+The following should be true before proceeding:
+- Non-JM market account that has passed Ondato and CMS check
+- User is on the employment status screen in the eKYC completion flow",,,,GKOne\Market Expansion,Naomi Silvera <naomi.silvera@gkco.com>,Design,
+,,,,1,"On the employment status screen, select Unemployed",,,,,
+,,,,2,Tap Continue,"The employment details screen (Employer/School Name, address, industry, etc.) is not shown; user proceeds directly to the next step of the eKYC flow",,,,
+,,,,3,Return to the employment status screen and select Retired,,,,,
+,,,,4,Tap Continue,The employment details screen is not shown; user proceeds directly to the next step of the eKYC flow,,,,
+,,,,5,"Confirm that selecting Employed, Self-Employed, or Student does show the employment details screen (sanity check)","Employment details screen appears only for Employed, Self-Employed, and Student; Unemployed and Retired bypass it",,,,

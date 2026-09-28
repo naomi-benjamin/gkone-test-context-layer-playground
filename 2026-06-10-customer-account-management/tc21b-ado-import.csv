@@ -1,0 +1,14 @@
+﻿ID,Work Item Type,Title,Preconditions,Postconditions,Test Step,Step Action,Step Expected,Area Path,Assigned To,State,Tags
+,Test Case,Verify that the Existing account holder receives a suspension email after the Target submits a conflict report,"Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists between Target and Existing accounts (both in TRN_DUPLICATED state)
+- Target user has just submitted a conflict report (MergeRequested or NotMyAccount)
+- Existing account holder has a verified email address on their account","Post Conditions:
+The following should be true after test completion:
+- Existing account holder is informed of the suspension via email
+- Email content matches the approved copy exactly
+- Email does not contain any deep links or CTAs to a conflict flow (Existing user is passive)",,,,GKOne\Support,Naomi Silvera <naomi.silvera@gkco.com>,Design,Customer Account Management; Milestone 1; Notifications; Email; Existing User
+,,,,,1,Check Existing account holder's email inbox (or email delivery logs) after the Target submits a conflict report,Email notification received,,,,
+,,,,,2,Verify email body contains the suspension notice,"Email states: ""To protect your information, your GKOne account has been temporarily suspended while our team completes a review related to a possible identity conflict.""",,,,
+,,,,,3,Verify email body contains the no-action-required message,"Email states: ""No action is required from you at this time. Our team is handling the review and will reach out if any additional information is needed.""",,,,
+,,,,,4,Verify email body contains the support contact message,"Email states: ""If you have any questions or concerns in the meantime, please contact our support team.""",,,,

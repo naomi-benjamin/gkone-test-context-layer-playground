@@ -1,0 +1,11 @@
+﻿"ID","Work Item Type","Title","Preconditions","Postconditions","Test Step","Step Action","Step Expected","Area Path","Assigned To","State","Tags"
+"","Test Case","Verify that the Pending Operations tab is not accessible to non-admin users","Pre Conditions:
+The following should be true before proceeding:
+- At least one pending operation exists in the system
+- A non-admin user account is available (a user without admin panel access)","Post Conditions:
+The following should be true after test completion:
+- The Pending Operations tab is gated to admin panel access only
+- No operation or audit trail data is visible outside the admin panel","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2; Admin; Audit Trail; Negative; Access Control; Identity Conflicts"
+"","","","","","1","Log in as a non-admin user","Login succeeds","","","",""
+"","","","","","2","Attempt to navigate to the Pending Operations tab in the admin panel","Access denied — the Pending Operations tab is not accessible to non-admin users","","","",""
+"","","","","","3","Verify no operation details (operation type, maker name, checker name, comments, audit history) are surfaced anywhere in the customer-facing app","No pending operation or audit trail data is exposed — this information is purely internal to the admin panel","","","",""

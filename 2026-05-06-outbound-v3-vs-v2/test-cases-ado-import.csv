@@ -1,0 +1,330 @@
+"ID","Work Item Type","Title","Preconditions","Test Step","Step Action","Step Expected","Area Path","Assigned To","State","Tags"
+"","Test Case","Verify that a KYC Tier 0 user cannot access the outbound flow","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 0 account","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Navigate to the outbound flow entry point","Feature is not accessible; no path into the flow","","","",""
+"","Test Case","Verify that a KYC Tier 1 user with an expired ID cannot access the outbound flow","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, expired ID","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Navigate to the outbound flow entry point","Feature is blocked at the eligibility check; expired ID is surfaced as the reason","","","",""
+"","Test Case","Verify that a user in a non-live market cannot access the outbound flow","Pre Conditions:
+The following should be true before proceeding:
+- Account in a non-live market (not JM or KY)","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Navigate to the outbound flow entry point","Feature is not accessible for this market","","","",""
+"","Test Case","Verify that entering a valid send amount returns a quote with the receive amount calculated","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow","","","","",""
+"","","","","3","Select destination country, state, city, and payout method","","","","",""
+"","","","","4","Enter a valid send amount","","","","",""
+"","","","","5","Tap Get Quote","Quote displayed; receive amount shown alongside send amount; exchange rate, fees, and 10-minute countdown present","","","",""
+"","Test Case","Verify that entering a valid receive amount returns a quote with the send amount calculated","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow","","","","",""
+"","","","","3","Select destination country, state, city, and payout method","","","","",""
+"","","","","4","Switch to the receive amount input and enter a valid receive amount","","","","",""
+"","","","","5","Tap Get Quote","Quote displayed; send amount calculated from the entered receive amount; review screen expresses quote in sender currency with receive amount shown alongside","","","",""
+"","Test Case","Verify that switching between send and receive input immediately clears the other field","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow","","","","",""
+"","","","","3","Select destination country, state, city, and payout method","","","","",""
+"","","","","4","Enter a send amount","","","","",""
+"","","","","5","Switch focus to the receive amount field","Send amount field is immediately cleared","","","",""
+"","","","","6","Enter a receive amount; switch back to the send amount field","Receive amount field is immediately cleared","","","",""
+"","Test Case","Verify that a send amount below the corridor minimum shows an inline error","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Confirm current JM/KY minimum send limits before running (JM: 1,000 JMD; KY: 5 KYD — configurable)","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow","","","","",""
+"","","","","3","Select destination country, state, city, and payout method","","","","",""
+"","","","","4","Enter a send amount below the corridor minimum","","","","",""
+"","","","","5","Tap Get Quote","Quote request made; inline error displayed adjacent to the send amount field; user cannot proceed","","","",""
+"","","","","6","Verify the error message is user-friendly","No internal error codes or raw WU response strings visible","","","",""
+"","Test Case","Verify that a send amount above the corridor maximum shows an inline error","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Confirm current JM/KY maximum send limits before running (JM: 150,000 JMD; KY: 830 KYD — configurable)","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow","","","","",""
+"","","","","3","Select destination country, state, city, and payout method","","","","",""
+"","","","","4","Enter a send amount above the corridor maximum","","","","",""
+"","","","","5","Tap Get Quote","Inline error adjacent to send field; user cannot proceed; error message is user-friendly","","","",""
+"","Test Case","Verify that a receive amount below the corridor minimum shows an inline error on the receive field","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Receive-side minimum for the target corridor confirmed with dev/WU config","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow","","","","",""
+"","","","","3","Select destination country, state, city, and payout method","","","","",""
+"","","","","4","Switch to receive amount input; enter an amount below the corridor receive minimum","","","","",""
+"","","","","5","Tap Get Quote","Inline error adjacent to the receive amount field (not the send field); user cannot proceed; error message is user-friendly","","","",""
+"","Test Case","Verify that a receive amount above the corridor maximum shows an inline error on the receive field","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Receive-side maximum for the target corridor confirmed with dev/WU config","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow","","","","",""
+"","","","","3","Select destination country, state, city, and payout method","","","","",""
+"","","","","4","Switch to receive amount input; enter an amount above the corridor receive maximum","","","","",""
+"","","","","5","Tap Get Quote","Inline error adjacent to receive field; user cannot proceed; error is user-friendly","","","",""
+"","Test Case","Verify that an intra-corridor selection disables receive amount input","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- A destination country that creates an intra-corridor match with the sender's market","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow","","","","",""
+"","","","","3","Select a destination country that matches the sender's market (intra-corridor)","","","","",""
+"","","","","4","Observe the amount input area","Only send amount input is available; receive amount input is not shown or is disabled; no dual currency toggle presented","","","",""
+"","Test Case","Verify that country selection establishes the corridor and the field template is reflected on the recipient details screen","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow","","","","",""
+"","","","","3","Select a destination country; complete state, city, payout method, and a valid amount; tap Get Quote","","","","",""
+"","","","","4","Proceed through quote review, third-party check, and PEP check to the recipient details screen","Fields on the recipient details screen match the WU field template for the selected corridor and payout method","","","",""
+"","Test Case","Verify that the quote screen always shows country, state, and city regardless of corridor","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow","","","","",""
+"","","","","3","Select several different destination countries in turn","Country, state, and city fields are always present and required; no fields appear or disappear on the quote screen based on corridor selection","","","",""
+"","Test Case","Verify that a payout method excluded by GKOne config is not shown as an option for that corridor","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- A corridor with a known GKOne excluded destination confirmed with dev (e.g. JM to GY excludes Direct to Wallet; JM to CA excludes Direct to Bank)","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow","","","","",""
+"","","","","3","Select the destination country with the known exclusion","","","","",""
+"","","","","4","Observe the available payout methods","The excluded payout method is not shown; remaining payout methods are available","","","",""
+"","Test Case","Verify that the quote review screen shows a consistent fee breakdown","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow; complete the quote screen with a valid amount; tap Get Quote","","","","",""
+"","","","","3","On the review screen, note convenience fee, WU fee, tax, exchange rate, estimated total, and estimated arrival","All line items present; total is arithmetically consistent with the listed fees; exchange rate and amounts are consistent","","","",""
+"","Test Case","Verify that the review screen always expresses the quote in sender currency","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow; complete the quote screen using receive amount input; tap Get Quote","","","","",""
+"","","","","3","Review the quote screen","Quote is expressed in sender currency; receive amount shown alongside but is not the primary figure","","","",""
+"","Test Case","Verify that the quote timer expiry blocks progression","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow; reach the review quote screen","","","","",""
+"","","","","3","Allow the 10:00 timer to count down to 0:00","App blocks progression or surfaces an expiry error; user is invited to start a new quote; stale quote cannot be submitted","","","",""
+"","Test Case","Verify that answering Yes to the third-party check exits the user from the flow","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Quote screen completed and submitted; quote review proceeded past; third-party check screen reached","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Select Yes on the third-party check screen","User exits the flow with an error message; no path to continue","","","",""
+"","Test Case","Verify that answering No to the third-party check allows the user to proceed","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Third-party check screen reached","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Select No on the third-party check screen","User proceeds to the PEP check","","","",""
+"","Test Case","Verify that answering Yes to the PEP check exits the user from the flow","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Third-party check answered No; PEP check screen reached","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Select Yes on the PEP check screen","User exits the flow with an error message; no path to continue","","","",""
+"","Test Case","Verify that answering No to the PEP check allows the user to proceed","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- PEP check screen reached","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Select No on the PEP check screen","User proceeds to the recipient details screen","","","",""
+"","Test Case","Verify that a corridor requiring no additional fields shows only name fields","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- A corridor where the field template does not require address or postal code fields","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Complete the quote screen for the target corridor; proceed through checks to the recipient details screen","Only the name fields for the current toggle state are shown; no Address Line 1, Address Line 2, or Postal Code fields present","","","",""
+"","Test Case","Verify that a corridor requiring address fields shows them as required","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- A corridor where the field template requires address fields (e.g. US corridor)","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Complete the quote screen for the target corridor; proceed through checks to the recipient details screen","Address Line 1, Address Line 2, and Postal Code are present and marked required","","","",""
+"","","","","3","Attempt to tap Continue with address fields empty","Continue button remains disabled","","","",""
+"","Test Case","Verify that the Latin American Name Format toggle is always present and defaults to OFF","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Complete the quote screen for any corridor; proceed through checks to the recipient details screen","Latin American Name Format toggle is visible; default state is OFF (international mode)","","","",""
+"","Test Case","Verify that international mode (toggle OFF) shows correct name fields per corridor","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Recipient details screen reached; toggle in default (OFF) state","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Complete the quote screen; proceed through checks to the recipient details screen","","","","",""
+"","","","","3","Confirm toggle is OFF","First Name and Last Name shown and required; Middle Name shown only if the field template requires it for this corridor","","","",""
+"","Test Case","Verify that Latin American mode (toggle ON) replaces international name fields","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Complete the quote screen; proceed through checks to the recipient details screen","","","","",""
+"","","","","3","Confirm First Name and Last Name are present (toggle OFF)","","","","",""
+"","","","","4","Switch the toggle ON","First Name and Last Name disappear; Given Name, Maternal Name, and Paternal Name appear; both sets do not appear simultaneously","","","",""
+"","","","","5","Switch the toggle back OFF","International name fields reappear; Latin American fields disappear","","","",""
+"","Test Case","Verify that switching the toggle clears name fields entered in the replaced set","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Complete the quote screen; proceed through checks to the recipient details screen","","","","",""
+"","","","","3","With toggle OFF, partially fill First Name and Last Name","","","","",""
+"","","","","4","Switch the toggle ON","International fields replaced; First Name and Last Name values are cleared","","","",""
+"","","","","5","Fill Given Name, Maternal Name, Paternal Name; switch back OFF","International fields shown empty; Latin American values are cleared","","","",""
+"","Test Case","Verify that address fields are not affected by toggle switches","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- A corridor requiring address fields","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Complete the quote screen for the target corridor; proceed through checks to the recipient details screen","","","","",""
+"","","","","3","Fill address fields","","","","",""
+"","","","","4","Switch the Latin American Name Format toggle ON, then back OFF","Address Line 1, Address Line 2, and Postal Code values are preserved across both toggle switches","","","",""
+"","Test Case","Verify that the Continue button remains disabled until all required fields are filled","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- A corridor requiring address fields","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Complete the quote screen for the target corridor; proceed through checks to the recipient details screen","","","","",""
+"","","","","3","Leave at least one required field empty","Continue button is disabled","","","",""
+"","","","","4","Fill all required fields for the current toggle state including address fields","Continue button becomes enabled","","","",""
+"","Test Case","Verify that a field template fetch failure after country selection is handled gracefully","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Ability to simulate WU field template unavailability for a specific corridor in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Launch the outbound flow; select a destination country for which the field template will fail","Observe and document — does the app show a specific error or hang? Does it allow the user to retry or go back? Capture exact behaviour.","","","",""
+"","Test Case","Verify that relationship and purpose of transaction fields are required","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Recipient details completed; transaction metadata screen reached","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Leave relationship and purpose of transaction empty","Cannot proceed; fields are required","","","",""
+"","","","","2","Fill both fields and proceed","Flow continues","","","",""
+"","Test Case","Verify that source of funds is shown only for corridors that require it","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- One corridor that requires source of funds; one that does not (confirm with dev/WU field template)","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Complete the flow for the corridor that requires source of funds through to the metadata screen","Source of funds field is present and required","","","",""
+"","","","","3","Repeat for the corridor that does not require it","Source of funds field is absent","","","",""
+"","Test Case","Verify the happy path — processing completes within 2 minutes","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Cash Pickup (MIM) corridor confirmed stable","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Complete the full outbound flow through payment authorisation","","","","",""
+"","","","","3","Wait up to 2 minutes for processing","MTCN displayed in-app; success email with MTCN received; transaction appears in transaction history with correct status and amount","","","",""
+"","Test Case","Verify the FE polling timeout path — processing exceeds 2 minutes","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Ability to simulate or trigger a processing delay beyond 2 minutes (confirm test environment method with dev)","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Complete the full outbound flow through payment authorisation","","","","",""
+"","","","","3","Allow the frontend polling to reach the 2-minute timeout","Pending screen shown in-app informing user the MTCN will be sent by email; no MTCN shown in-app","","","",""
+"","","","","4","Check the email inbox once processing completes","Success email with MTCN received","","","",""
+"","Test Case","Verify that a pre-payment processing failure blocks the transaction without charging the user","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Ability to trigger a pre-payment stage failure in the test environment (confirm method with dev)","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Trigger a failure at a pre-payment stage; proceed through the flow","Transaction fails; user sees an error in-app; no payment is taken; no MTCN generated","","","",""
+"","Test Case","Verify that a post-payment processing failure shows an error and triggers the recovery process","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Ability to trigger a post-payment stage failure in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Trigger a failure at the WU API confirm stage; proceed through the flow","Error shown in-app; failure email received; no MTCN generated; payment deducted (back-office recovery is out of scope — do not reverse manually)","","","",""
+"","Test Case","Verify that a REMOTE_SERVICE_CREATE failure delivers both a failure email and an MTCN error email","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment
+- Ability to trigger a REMOTE_SERVICE_CREATE failure in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Trigger a REMOTE_SERVICE_CREATE failure; proceed through the flow","Error shown in-app; failure email received; MTCN error email also received (two separate emails)","","","",""
+"","Test Case","Verify that success and failure email content is user-friendly with no internal identifiers","Pre Conditions:
+The following should be true before proceeding:
+- KYC Tier 1 account, non-expired ID
+- JM or KY market
+- Known stable corridor confirmed working in the test environment","","","","GKOne\Remittances","Naomi Silvera <naomi.silvera@gkco.com>","Design","Outbound V3"
+"","","","","1","Login","","","","",""
+"","","","","2","Complete a successful outbound transaction; open the success email","Email contains MTCN; no internal stage names, system identifiers, or WU error codes","","","",""
+"","","","","3","Trigger a failure; open the failure email","User-friendly failure message; no raw error codes or internal stage names","","","",""

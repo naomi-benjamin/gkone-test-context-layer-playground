@@ -1,0 +1,247 @@
+"ID","Work Item Type","Title","Preconditions","Postconditions","Test Step","Step Action","Step Expected","Area Path","Assigned To","State","Tags"
+"","Test Case","Verify that a maker can view a new conflict report showing side-by-side account comparison","Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists in the system (Target filed a MergeRequested or NotMyAccount report)
+- Maker user is logged into the admin panel with maker permissions
+- The conflict is in the ""New"" tab","Post Conditions:
+The following should be true after test completion:
+- Maker can identify both accounts involved in the conflict
+- Conflict remains in ""New"" tab (no action taken)","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;Identity Conflicts"
+"","","","","","1","Navigate to User Management → Identity Conflicts","Identity Conflicts page loads with tabs: New; Waiting for Approval; Finished","","","",""
+"","","","","","2","Select the ""New"" tab","List of unactioned conflicts displayed","","","",""
+"","","","","","3","Open the conflict detail","Side-by-side comparison displayed showing: conflicted user vs existing user","","","",""
+"","","","","","4","Verify fields displayed for both accounts","Name, Email, TRN, Country, and Status are shown for each account","","","",""
+"","Test Case","Verify that a maker can see the conflict resolution decision tree with Edit User and Merge options","Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists in the ""New"" tab
+- Maker is viewing the conflict detail","Post Conditions:
+The following should be true after test completion:
+- Both resolution paths are accessible from the conflict detail view
+- No operation created until maker completes the flow","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;Identity Conflicts"
+"","","","","","1","Open a conflict from the ""New"" tab","Conflict detail view displayed with resolution options","","","",""
+"","","","","","2","Observe available resolution paths","Two options are available: ""Edit a user"" and ""Merge accounts""","","","",""
+"","","","","","3","Select ""Edit a user""","Maker is prompted to select which account to act on (conflicted user or existing user) and which action (Reset KYC, Suspend, Archive)","","","",""
+"","Test Case","Verify that a maker can view conflicts under all three tabs (New; Waiting for Approval; Finished)","Pre Conditions:
+The following should be true before proceeding:
+- At least one conflict exists in each tab state (New, Waiting for Approval, Finished)
+- Maker is logged into admin panel","Post Conditions:
+The following should be true after test completion:
+- All three tabs are functional and display conflicts in the appropriate state","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;Identity Conflicts"
+"","","","","","1","Navigate to User Management → Identity Conflicts","Page loads","","","",""
+"","","","","","2","Select ""New"" tab","Conflicts with no operations submitted are listed","","","",""
+"","","","","","3","Select ""Waiting for Approval"" tab","Conflicts with a PENDING operation are listed","","","",""
+"","","","","","4","Select ""Finished"" tab","Conflicts that have been resolved (approved/completed or rejected) are listed","","","",""
+"","Test Case","Verify that a maker can successfully propose a merge operation when the pre-flight check passes","Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists in the ""New"" tab
+- Neither account has wallet or transaction history on the existing account (pre-flight check will pass)
+- Maker is logged into admin panel with maker permissions","Post Conditions:
+The following should be true after test completion:
+- A PENDING operation exists with payload containing reportId, resolvedInFavorOfUserId (winner), and losingUserId (loser)
+- Conflict has moved from ""New"" to ""Waiting for Approval""
+- No merge has executed yet — awaiting checker approval","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;   Merge; Identity Conflicts"
+"","","","","","1","Open the conflict detail and select ""Merge accounts""","Merge flow initiated — maker is prompted to select the winner","","","",""
+"","","","","","2","Select the winner account (account to keep)","Pre-flight check runs automatically","","","",""
+"","","","","","3","Observe pre-flight check result","Check passes — no error 1005. Maker can proceed to review and submit","","","",""
+"","","","","","4","Enter resolution notes (minimum 5 characters, e.g. ""TRN verified — merging accounts"")","Notes accepted","","","",""
+"","","","","","5","Submit the merge proposal","Operation created with type: id-conflict-resolution-merge-user, status: PENDING, priority: HIGH","","","",""
+"","","","","","6","Navigate to ""Waiting for Approval"" tab","The conflict now appears under ""Waiting for Approval""","","","",""
+"","Test Case","Verify that a maker is blocked from proposing a merge when pre-flight error 1005 is triggered","Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists in the ""New"" tab
+- The existing account has wallet AND transaction history (triggers error 1005)
+- Maker is logged into admin panel","Post Conditions:
+The following should be true after test completion:
+- No merge operation created
+- Conflict remains in ""New"" tab
+- Maker is guided to consider an alternative action (archive)","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;   Merge; Negative; Identity Conflicts"
+"","","","","","1","Open the conflict detail and select ""Merge accounts""","Merge flow initiated","","","",""
+"","","","","","2","Select the winner account","Pre-flight check runs automatically","","","",""
+"","","","","","3","Observe pre-flight check result","Error 1005 displayed — merge is blocked. Remediation guidance shown: suggest archiving the loser instead","","","",""
+"","","","","","4","Attempt to proceed with merge submission","Submission is blocked — cannot create a merge operation","","","",""
+"","Test Case","Verify that a merge is permissible even when the new/target account has transaction history and the existing account does not","Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists in the ""New"" tab
+- The new/conflicted account has wallet and transaction history
+- The existing account does NOT have wallet or transaction history
+- Maker is logged into admin panel","Post Conditions:
+The following should be true after test completion:
+- PENDING merge operation created — pre-flight check only evaluates the existing account, not the target
+- Conflict moves to ""Waiting for Approval""","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;   Merge; Edge Case; Identity Conflicts"
+"","","","","","1","Open the conflict detail and select ""Merge accounts""","Merge flow initiated","","","",""
+"","","","","","2","Select the winner account","Pre-flight check runs automatically","","","",""
+"","","","","","3","Observe pre-flight check result","Check passes — error 1005 is NOT triggered (only fires for existing account with history)","","","",""
+"","","","","","4","Enter resolution notes and submit","Merge operation created successfully","","","",""
+"","Test Case","Verify that a maker can propose a Reset KYC action on a selected account with a reason","Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists in the ""New"" tab
+- Maker is logged into admin panel with maker permissions","Post Conditions:
+The following should be true after test completion:
+- PENDING Reset KYC operation created on the selected account
+- Conflict moves to ""Waiting for Approval"" tab
+- No KYC reset has executed yet — awaiting checker approval
+- Once approved: user's KYC status resets to 0 (KycStatus zero) — user must re-enter the Ondato KYC flow","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;   Reset KYC; Identity Conflicts"
+"","","","","","1","Open the conflict detail and select ""Edit a user""","Maker is prompted to select which account to act on","","","",""
+"","","","","","2","Select the account to act on (e.g. the conflicted/target user)","Action options displayed: Reset KYC, Suspend, Archive","","","",""
+"","","","","","3","Select ""Reset KYC""","Reason input field displayed","","","",""
+"","","","","","4","Enter a reason for the action","Reason accepted","","","",""
+"","","","","","5","Submit the operation","Operation submitted and awaits checker approval (status: PENDING)","","","",""
+"","Test Case","Verify that a maker cannot propose a Reset KYC action without providing a reason","Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists in the ""New"" tab
+- Maker is logged into admin panel with maker permissions","Post Conditions:
+The following should be true after test completion:
+- No operation created
+- Conflict remains in ""New"" tab
+- Maker must provide a reason before the system accepts the proposal","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;   Reset KYC; Negative; Validation; Identity Conflicts"
+"","","","","","1","Open the conflict detail and select ""Edit a user""","Maker is prompted to select which account to act on","","","",""
+"","","","","","2","Select the account to act on","Action options displayed: Reset KYC, Suspend, Archive","","","",""
+"","","","","","3","Select ""Reset KYC""","Reason input field displayed","","","",""
+"","","","","","4","Leave the reason field empty and attempt to submit","Submission blocked — reason is required","","","",""
+"","Test Case","Verify that a maker can propose a Suspend action on a selected account with a reason","Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists in the ""New"" tab
+- Maker is logged into admin panel with maker permissions","Post Conditions:
+The following should be true after test completion:
+- PENDING Suspend operation created on the selected account
+- Conflict moves to ""Waiting for Approval"" tab
+- Once approved: user's account is locked — user cannot sign in","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;   Suspend; Identity Conflicts"
+"","","","","","1","Open the conflict detail and select ""Edit a user""","Account selection prompt displayed","","","",""
+"","","","","","2","Select the account to act on","Action options displayed: Reset KYC, Suspend, Archive","","","",""
+"","","","","","3","Select ""Suspend""","Reason input field displayed","","","",""
+"","","","","","4","Enter a reason for the suspension","Reason accepted","","","",""
+"","","","","","5","Submit the operation","Operation submitted and awaits checker approval (status: PENDING)","","","",""
+"","Test Case","Verify that a maker cannot propose a Suspend action without providing a reason","Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists in the ""New"" tab
+- Maker is logged into admin panel with maker permissions","Post Conditions:
+The following should be true after test completion:
+- No operation created
+- Conflict remains in ""New"" tab
+- Maker must provide a reason before the system accepts the proposal","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;   Suspend; Negative; Validation; Identity Conflicts"
+"","","","","","1","Open the conflict detail and select ""Edit a user""","Account selection prompt displayed","","","",""
+"","","","","","2","Select the account to act on","Action options displayed: Reset KYC, Suspend, Archive","","","",""
+"","","","","","3","Select ""Suspend""","Reason input field displayed","","","",""
+"","","","","","4","Leave the reason field empty and attempt to submit","Submission blocked — reason is required","","","",""
+"","Test Case","Verify that a suspended user cannot sign in and that suspension is reversible","Pre Conditions:
+The following should be true before proceeding:
+- Admin has proposed Suspend on an account and checker has approved
+- The suspended user was previously able to log in","Post Conditions:
+The following should be true after test completion:
+- Suspend prevents sign-in (not just KYC-gated actions — full login blocked)
+- Suspension is reversible by admin action
+- Data and account status are intact after unsuspension","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;  Suspend; State Transition; Identity Conflicts"
+"","","","","","1","Attempt to log in as the suspended user","Login fails — account is locked; user cannot sign in","","","",""
+"","","","","","2","Admin reverses the suspension (via Search Users or appropriate admin action)","Suspension lifted","","","",""
+"","","","","","3","Attempt to log in as the previously suspended user","Login succeeds — account is accessible again","","","",""
+"","Test Case","Verify that a maker can propose an Archive action on a selected account with a reason","Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists in the ""New"" tab
+- Maker is logged into admin panel with maker permissions","Post Conditions:
+The following should be true after test completion:
+- PENDING Archive operation created on the selected account
+- Conflict moves to ""Waiting for Approval"" tab
+- Once approved: account is soft-deleted — data retained but not accessible to the user; irreversible","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;   Archive; Identity Conflicts"
+"","","","","","1","Open the conflict detail and select ""Edit a user""","Account selection prompt displayed","","","",""
+"","","","","","2","Select the account to act on","Action options displayed: Reset KYC, Suspend, Archive","","","",""
+"","","","","","3","Select ""Archive""","Reason input field displayed","","","",""
+"","","","","","4","Enter a reason for the archive","Reason accepted","","","",""
+"","","","","","5","Submit the operation","Operation submitted and awaits checker approval (status: PENDING)","","","",""
+"","Test Case","Verify that a maker cannot propose an Archive action without providing a reason","Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists in the ""New"" tab
+- Maker is logged into admin panel with maker permissions","Post Conditions:
+The following should be true after test completion:
+- No operation created
+- Conflict remains in ""New"" tab
+- Maker must provide a reason before the system accepts the proposal","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;   Archive; Negative; Validation; Identity Conflicts"
+"","","","","","1","Open the conflict detail and select ""Edit a user""","Account selection prompt displayed","","","",""
+"","","","","","2","Select the account to act on","Action options displayed: Reset KYC, Suspend, Archive","","","",""
+"","","","","","3","Select ""Archive""","Reason input field displayed","","","",""
+"","","","","","4","Leave the reason field empty and attempt to submit","Submission blocked — reason is required","","","",""
+"","Test Case","Verify that archiving an account does NOT auto-clear TRN_DUPLICATED on the remaining account","Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists between Target and Existing accounts (both in TRN_DUPLICATED)
+- Maker has proposed Archive on one account and checker has approved
+- The remaining (non-archived) account is still in TRN_DUPLICATED state","Post Conditions:
+The following should be true after test completion:
+- Archiving one account does not cascade a state change to the other
+- Admin must take a separate action (e.g. Reset KYC) to unblock the remaining account
+- Archived account is excluded from future TRN duplicate detection","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;  Archive; Edge Case; Identity Conflicts"
+"","","","","","1","Verify the archived account's state after approval","Account is archived (soft-deleted, data retained, not accessible to user)","","","",""
+"","","","","","2","Verify the remaining account's kycStatus","kycStatus is still TRN_DUPLICATED — archive did NOT auto-resolve the duplicate state","","","",""
+"","","","","","3","Log in as the remaining account user","Login succeeds but KYC-gated actions still blocked","","","",""
+"","","","","","4","Admin performs Reset KYC on the remaining account","TRN_DUPLICATED cleared — user can re-enter KYC flow","","","",""
+"","Test Case","Verify that a maker can resubmit a new proposal after a checker rejects the original operation","Pre Conditions:
+The following should be true before proceeding:
+- A conflict had a PENDING operation that was REJECTED by a checker
+- Conflict is in the ""Finished"" tab
+- Maker is logged into admin panel","Post Conditions:
+The following should be true after test completion:
+- New operation exists on the previously-rejected conflict
+- Maker can propose a different action than the one originally rejected
+- Audit trail shows both the original rejection and the new proposal","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;   Resubmit; Identity Conflicts"
+"","","","","","1","Navigate to the ""Finished"" tab and open the rejected conflict","Conflict detail displayed — previous operation shows REJECTED status with checker's rejection comment","","","",""
+"","","","","","2","Initiate a new proposal (resubmit)","Maker can select a new action (Edit User or Merge)","","","",""
+"","","","","","3","Select an action, provide reason/resolution notes, and submit","New PENDING operation created on the same conflict","","","",""
+"","","","","","4","Verify the conflict's tab location","Conflict moves to ""Waiting for Approval"" tab","","","",""
+"","Test Case","Verify that a maker can resubmit with a different action type than the original rejected proposal","Pre Conditions:
+The following should be true before proceeding:
+- A conflict was originally proposed as Merge and was rejected by checker
+- Maker is logged into admin panel","Post Conditions:
+The following should be true after test completion:
+- Resubmit is not limited to the same action type as the original
+- Audit trail shows the full history: original merge proposal → rejection → new archive proposal","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;   Resubmit; Identity Conflicts"
+"","","","","","1","Open the rejected conflict","Previous merge operation visible as REJECTED","","","",""
+"","","","","","2","Initiate a new proposal","Resolution options displayed (Edit User / Merge)","","","",""
+"","","","","","3","Select ""Edit a user"" → Archive (different from original Merge)","Reason field displayed","","","",""
+"","","","","","4","Enter reason and submit","New PENDING Archive operation created on the same conflict","","","",""
+"","Test Case","Verify that the audit trail shows complete operation history for a conflict with multiple operations","Pre Conditions:
+The following should be true before proceeding:
+- A conflict exists that has gone through: proposed → rejected → resubmitted → approved
+- Maker and checker are different users
+- Admin is logged into the admin panel","Post Conditions:
+The following should be true after test completion:
+- Full operation history is preserved and visible
+- Maker and checker identities are recorded for each operation","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;  Audit Trail; Identity Conflicts"
+"","","","","","1","Open the conflict detail and navigate to the audit trail / operation details","Audit trail displayed","","","",""
+"","","","","","2","Verify the first operation entry","Shows: operation type (original), status (REJECTED), maker name, date, checker name, rejection comment","","","",""
+"","","","","","3","Verify the second operation entry","Shows: operation type (resubmit), status (APPROVED), maker name, date, checker name","","","",""
+"","","","","","4","Verify prior operations are listed","Both operations visible as ""prior operations on that conflict""","","","",""
+"","Test Case","Verify that the audit trail is visible to admins via operation details","Pre Conditions:
+The following should be true before proceeding:
+- A conflict with at least one completed operation exists
+- Admin user is logged into the admin panel","Post Conditions:
+The following should be true after test completion:
+- Audit trail is accessible from operation details
+- All required audit fields are captured and displayed","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;  Audit Trail; Identity Conflicts"
+"","","","","","1","Navigate to the conflict and open operation details","Audit trail visible showing: operation type, status, maker name and date, checker name and comments, prior operations","","","",""
+"","","","","","2","Verify all fields are populated","No blank fields where data should exist (maker name, dates, operation type all populated)","","","",""
+"","Test Case","Verify that an admin can kick a user's active session via the Search Users three-dot menu","Pre Conditions:
+The following should be true before proceeding:
+- A user is currently logged in with an active session on mobile
+- Admin is logged into the admin panel","Post Conditions:
+The following should be true after test completion:
+- User's active session is immediately terminated
+- User must log in again to access the app
+- No conflict or maker/checker flow is required — this is a standalone action
+- Account state (KYC status, data) is unchanged — only the session was terminated","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;  Search Users; Session Invalidation"
+"","","","","","1","Navigate to User Management → Search Users","Search Users page loads","","","",""
+"","","","","","2","Search for the target user by TRN, name, email, phone, or Gwyn","User appears in the search results list","","","",""
+"","","","","","3","Click the three-dot menu on the user's list entry","Menu options displayed: Suspend user, Reset user's KYC, Kick active session","","","",""
+"","","","","","4","Select ""Kick active session""","Confirmation that the session has been invalidated","","","",""
+"","","","","","5","Verify on the mobile device: user attempts any action in the app","User is force-logged-out — session is no longer valid; user must re-authenticate","","","",""
+"","Test Case","Verify that standalone Suspend and Reset KYC actions are available from Search Users independently of any conflict","Pre Conditions:
+The following should be true before proceeding:
+- A user exists who is NOT involved in any active conflict
+- Admin is logged into the admin panel","Post Conditions:
+The following should be true after test completion:
+- Standalone actions do not require a conflict to exist
+- Standalone actions do not go through the maker/checker approval flow
+- Actions take effect immediately without checker approval","","","","GKOne\Support","Naomi Silvera <naomi.silvera@gkco.com>","Design","Customer Account Management; Milestone 2;  Search Users; Standalone Actions"
+"","","","","","1","Navigate to User Management → Search Users","Search Users page loads","","","",""
+"","","","","","2","Search for the user","User appears in search results","","","",""
+"","","","","","3","Click the three-dot menu on the user's list entry","Menu options displayed: Suspend user, Reset user's KYC, Kick active session","","","",""
+"","","","","","4","Select ""Suspend user""","User's account is suspended — user cannot sign in","","","",""
+"","","","","","5","Return to Search Users and find the same user","User still appears (not removed from search)","","","",""
+"","","","","","6","Select ""Reset user's KYC"" via three-dot menu","User's KYC status reset to 0 — user must re-verify","","","",""
