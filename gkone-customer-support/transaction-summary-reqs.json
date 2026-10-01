@@ -1,0 +1,341 @@
+[
+    {
+        "testCase": "SUMMARY_MTCN_SHARED_OUTBOUND_LEG",
+        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "gkoNumber": null,
+        "taxIdentificationNumber": "129299260",
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": [ 
+            { 
+                "key": "MTCN", 
+                "value": "3582633200" 
+            } 
+        ],
+        "journeyTypes": [ 
+            "remittance.outbound" 
+        ],
+        "statuses": [ 
+            "SETTLED" 
+        ],
+        "dateFrom": "2026-09-30T00:00:00Z",
+        "dateTo": "2026-10-01T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": [
+            "quote-attempt",
+            "western-union-outbound",
+            "outbound-quote-creation",
+            "outbound-order-creation",
+            "gpc",
+            "card",
+            "capture",
+            "debit"
+        ]
+    },
+    {
+        "testCase": "SUMMARY_MTCN_SHARED_INBOUND_LEG",
+        "userId": "1b6031d9-9367-4418-82cd-bd840aa1a8a1",
+        "gkoNumber": null,
+        "taxIdentificationNumber": "444321136",
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": [ 
+            { 
+                "key": "MTCN", 
+                "value": "3582633200" 
+            } 
+        ],
+        "journeyTypes": [ 
+            "remittance.inbound" 
+        ],
+        "statuses": [ 
+            "SETTLED" 
+        ],
+        "dateFrom": "2026-09-30T00:00:00Z",
+        "dateTo": "2026-10-01T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": [
+            "western-union-inbound",
+            "inbound-order-validation",
+            "wallet",
+            "gpc"
+        ]
+    },
+    {
+        "testCase": "SUMMARY_ORDERID_BILL_PAYMENT",
+        "userId": "b9c7117b-2719-4ec8-a4b8-9ecde8d17ea7",
+        "gkoNumber": null,
+        "taxIdentificationNumber": null,
+        "emailAddress": "jaleckiie22@gmail.com",
+        "phoneNumber": null,
+        "references": [ 
+            {
+                "key": "orderId",
+                "value": "2b13de76-9648-474f-8c83-813be92cbf5f"
+            } 
+        ],
+        "journeyTypes": [ 
+            "bill-payment" 
+        ],
+        "statuses": [ 
+            "FAILED" 
+        ],
+        "dateFrom": "2026-09-01T00:00:00Z",
+        "dateTo": "2026-09-30T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": [
+            "bill-payment",
+            "settle",
+            "failed",
+            "uw"
+        ]
+    },
+    {
+        "testCase": "SUMMARY_MTCN_LOWERCASE_KEY",
+        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "gkoNumber": null,
+        "taxIdentificationNumber": "129299260",
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": [
+            {
+                "key": "mtcn",
+                "value": "3582633200"
+            }
+        ],
+        "journeyTypes": [
+            "remittance.outbound"
+        ],
+        "statuses": [
+            "SETTLED"
+        ],
+        "dateFrom": "2026-09-30T00:00:00Z",
+        "dateTo": "2026-10-01T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": null
+    },
+    {
+        "testCase": "SUMMARY_DATE_RANGE_OVER_90_DAYS",
+        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "gkoNumber": null,
+        "taxIdentificationNumber": null,
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": null,
+        "journeyTypes": null,
+        "statuses": null,
+        "dateFrom": "2026-01-01T00:00:00Z",
+        "dateTo": "2026-06-01T00:00:00Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": null
+    },
+    {
+        "testCase": "SUMMARY_DATE_TO_MORE_THAN_1_DAY_FUTURE",
+        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "gkoNumber": null,
+        "taxIdentificationNumber": null,
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": null,
+        "journeyTypes": null,
+        "statuses": null,
+        "dateFrom": "2026-12-01T00:00:00Z",
+        "dateTo": "2027-01-01T00:00:00Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "DateTo: dateTo must not be more than 86400 seconds after the current UTC time.",
+        "expectedTags": null
+    },
+    {
+        "testCase": "SUMMARY_DATE_FROM_BEFORE_2020_FLOOR",
+        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "gkoNumber": null,
+        "taxIdentificationNumber": null,
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": null,
+        "journeyTypes": null,
+        "statuses": null,
+        "dateFrom": "2019-12-31T23:59:59Z",
+        "dateTo": "2020-01-15T00:00:00Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": null
+    },
+    {
+        "testCase": "SUMMARY_DATE_FROM_AFTER_DATE_TO",
+        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "gkoNumber": null,
+        "taxIdentificationNumber": null,
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": null,
+        "journeyTypes": null,
+        "statuses": null,
+        "dateFrom": "2026-09-30T23:59:59Z",
+        "dateTo": "2026-09-01T00:00:00Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": null
+    },
+    {
+        "testCase": "SUMMARY_DATE_MALFORMED_NOT_ISO8601",
+        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "gkoNumber": null,
+        "taxIdentificationNumber": null,
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": null,
+        "journeyTypes": null,
+        "statuses": null,
+        "dateFrom": "30-09-2026",
+        "dateTo": "2026-10-01T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": null
+    },
+    {
+        "testCase": "SUMMARY_USERID_INVALID_GUID",
+        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff-bad",
+        "gkoNumber": null,
+        "taxIdentificationNumber": null,
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": null,
+        "journeyTypes": null,
+        "statuses": null,
+        "dateFrom": "2026-09-01T00:00:00Z",
+        "dateTo": "2026-09-30T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "userId contains an invalid value.",
+        "expectedTags": null
+    },
+    {
+        "testCase": "SUMMARY_USERID_VALID_FORMAT_NO_MATCH",
+        "userId": "00000000-0000-0000-0000-000000000000",
+        "gkoNumber": null,
+        "taxIdentificationNumber": null,
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": null,
+        "journeyTypes": null,
+        "statuses": null,
+        "dateFrom": "2026-09-01T00:00:00Z",
+        "dateTo": "2026-09-30T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 400,
+        "expectEmpty": "true",
+        "expectedDetail": "userId contains an invalid value.",
+        "expectedTags": null
+    },
+    {
+        "testCase": "SUMMARY_GKONUMBER_VALID_ZERO_TRANSACTIONS",
+        "userId": "5b70cd94-6d35-4c46-b1f9-331bce6328db",
+        "gkoNumber": "XR2024061891F577476F7C151108",
+        "taxIdentificationNumber": null,
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": null,
+        "journeyTypes": null,
+        "statuses": null,
+        "dateFrom": "2026-07-04T00:00:00Z",
+        "dateTo": "2026-10-01T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 200,
+        "expectEmpty": "true",
+        "expectedDetail": "",
+        "expectedTags": null
+    },
+    {
+        "testCase": "SUMMARY_STATUS_LOWERCASE_NORMALIZED",
+        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "gkoNumber": null,
+        "taxIdentificationNumber": "129299260",
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": [
+            {
+                "key": "MTCN",
+                "value": "3582633200"
+            }
+        ],
+        "journeyTypes": [
+            "remittance.outbound"
+        ],
+        "statuses": [
+            "settled"
+        ],
+        "dateFrom": "2026-09-30T00:00:00Z",
+        "dateTo": "2026-10-01T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": [
+            "quote-attempt",
+            "western-union-outbound",
+            "outbound-quote-creation",
+            "outbound-order-creation",
+            "gpc",
+            "card",
+            "capture",
+            "debit"
+        ]
+    },
+    {
+        "testCase": "SUMMARY_LIMIT_OVER_MAX",
+        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "gkoNumber": null,
+        "taxIdentificationNumber": null,
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": null,
+        "journeyTypes": null,
+        "statuses": null,
+        "dateFrom": "2026-09-01T00:00:00Z",
+        "dateTo": "2026-09-30T23:59:59Z",
+        "limit": 31,
+        "offset": 0,
+        "expectedStatus": 400,
+        "expectEmpty": "false",
+        "expectedDetail": "Limit: 'Limit' must be between 1 and 30. You entered 31.",
+        "expectedTags": null
+    }
+]
