@@ -141,7 +141,7 @@
         "phoneNumber": "+18764321131",
         "references": [
             {
-                "key": "QuoteId",
+                "key": "quote_id",
                 "value": "0c8eee64-1a9e-4493-8806-d8b9beb0db83"
             }
         ],
@@ -396,7 +396,7 @@
         "phoneNumber": null,
         "references": [
             {
-                "key": "QuoteId",
+                "key": "quote_id",
                 "value": "0c8eee64-1a9e-4493-8806-d8b9beb0db83"
             }
         ],
@@ -420,11 +420,11 @@
         "phoneNumber": null,
         "references": [
             {
-                "key": "MTCN",
+                "key": "mtcn",
                 "value": "6073514951"
             },
             {
-                "key": "TransactionId",
+                "key": "transaction_id",
                 "value": "2626686073514951"
             }
         ],

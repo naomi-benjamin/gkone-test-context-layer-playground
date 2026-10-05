@@ -1,15 +1,15 @@
 [
     {
-        "testCase": "SUMMARY_MTCN_SHARED_OUTBOUND_LEG",
-        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "testCase": "SUMMARY_RELATED_JOURNEYS_FAILED_COLLECTION_SAME_SENDER",
+        "userId": "b30f5296-0329-438f-8e57-3080534c8123",
         "gkoNumber": null,
-        "taxIdentificationNumber": "129299260",
+        "taxIdentificationNumber": null,
         "emailAddress": null,
         "phoneNumber": null,
         "references": [
             {
                 "key": "mtcn",
-                "value": "3582633200"
+                "value": "3333928661"
             }
         ],
         "journeyTypes": [
@@ -18,8 +18,8 @@
         "statuses": [
             "SETTLED"
         ],
-        "dateFrom": "2026-09-30T00:00:00Z",
-        "dateTo": "2026-10-01T23:59:59Z",
+        "dateFrom": "2026-10-05T00:00:00Z",
+        "dateTo": "2026-10-05T23:59:59Z",
         "limit": 20,
         "offset": 0,
         "expectedStatus": 200,
@@ -28,20 +28,59 @@
         "expectedTags": [
             "western-union-outbound"
         ],
-        "expectedPaymentOutcome": "PAID",
-        "expectedDeliveryOutcome": "DELIVERED"
+        "expectedPaymentOutcome": null,
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": [
+            {
+                "relation": "COLLECTION",
+                "journeyType": "remittance.inbound"
+            }
+        ]
     },
     {
-        "testCase": "SUMMARY_MTCN_SHARED_INBOUND_LEG",
-        "userId": "1b6031d9-9367-4418-82cd-bd840aa1a8a1",
+        "testCase": "SUMMARY_RELATED_JOURNEYS_EXCLUDES_DIFFERENT_USER_OUTBOUND",
+        "userId": "b30f5296-0329-438f-8e57-3080534c8123",
         "gkoNumber": null,
-        "taxIdentificationNumber": "444321136",
+        "taxIdentificationNumber": null,
         "emailAddress": null,
         "phoneNumber": null,
         "references": [
             {
                 "key": "mtcn",
-                "value": "3582633200"
+                "value": "3654338841"
+            }
+        ],
+        "journeyTypes": [
+            "remittance.outbound"
+        ],
+        "statuses": [
+            "SETTLED"
+        ],
+        "dateFrom": "2026-10-05T00:00:00Z",
+        "dateTo": "2026-10-05T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": [
+            "western-union-outbound"
+        ],
+        "expectedPaymentOutcome": null,
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": []
+    },
+    {
+        "testCase": "SUMMARY_RELATED_JOURNEYS_EXCLUDES_DIFFERENT_USER_INBOUND",
+        "userId": "e6de4568-175a-4fd5-bd52-f289b2cd4836",
+        "gkoNumber": null,
+        "taxIdentificationNumber": "134321123",
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": [
+            {
+                "key": "mtcn",
+                "value": "3654338841"
             }
         ],
         "journeyTypes": [
@@ -50,8 +89,8 @@
         "statuses": [
             "SETTLED"
         ],
-        "dateFrom": "2026-09-30T00:00:00Z",
-        "dateTo": "2026-10-01T23:59:59Z",
+        "dateFrom": "2026-10-05T00:00:00Z",
+        "dateTo": "2026-10-05T23:59:59Z",
         "limit": 20,
         "offset": 0,
         "expectedStatus": 200,
@@ -63,78 +102,46 @@
             "gpc"
         ],
         "expectedPaymentOutcome": null,
-        "expectedDeliveryOutcome": null
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": []
     },
     {
-        "testCase": "SUMMARY_ORDERID_BILL_PAYMENT",
-        "userId": "b9c7117b-2719-4ec8-a4b8-9ecde8d17ea7",
+        "testCase": "SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR",
+        "userId": "e6de4568-175a-4fd5-bd52-f289b2cd4836",
         "gkoNumber": null,
-        "taxIdentificationNumber": null,
-        "emailAddress": "jaleckiie22@gmail.com",
-        "phoneNumber": null,
-        "references": [
-            {
-                "key": "order_id",
-                "value": "2b13de76-9648-474f-8c83-813be92cbf5f"
-            }
-        ],
-        "journeyTypes": [
-            "bill-payment"
-        ],
-        "statuses": [
-            "FAILED"
-        ],
-        "dateFrom": "2026-09-01T00:00:00Z",
-        "dateTo": "2026-09-30T23:59:59Z",
-        "limit": 20,
-        "offset": 0,
-        "expectedStatus": 200,
-        "expectEmpty": "false",
-        "expectedDetail": "",
-        "expectedTags": [
-            "bill-payment",
-            "settle",
-            "failed",
-            "uw"
-        ],
-        "expectedPaymentOutcome": null,
-        "expectedDeliveryOutcome": null
-    },
-    {
-        "testCase": "SUMMARY_MTCN_LEGACY_UPPERCASE_KEY",
-        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
-        "gkoNumber": null,
-        "taxIdentificationNumber": "129299260",
+        "taxIdentificationNumber": "134321123",
         "emailAddress": null,
         "phoneNumber": null,
         "references": [
             {
-                "key": "MTCN",
-                "value": "3582633200"
+                "key": "mtcn",
+                "value": "0000000000"
             }
         ],
         "journeyTypes": [
-            "remittance.outbound"
+            "remittance.inbound"
         ],
         "statuses": [
-            "SETTLED"
+            "FAILED"
         ],
-        "dateFrom": "2026-09-30T00:00:00Z",
-        "dateTo": "2026-10-01T23:59:59Z",
+        "dateFrom": "2026-10-05T00:00:00Z",
+        "dateTo": "2026-10-05T23:59:59Z",
         "limit": 20,
         "offset": 0,
         "expectedStatus": 200,
         "expectEmpty": "false",
         "expectedDetail": "",
         "expectedTags": [
-            "western-union-outbound"
+            "western-union-inbound",
+            "inbound-order-validation"
         ],
-        "expectedPaymentOutcome": "PAID",
-        "expectedDeliveryOutcome": "DELIVERED"
+        "expectedPaymentOutcome": null,
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
     },
     {
         "testCase": "SUMMARY_DATE_RANGE_OVER_90_DAYS",
-        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "userId": "b30f5296-0329-438f-8e57-3080534c8123",
         "gkoNumber": null,
         "taxIdentificationNumber": null,
         "emailAddress": null,
@@ -151,11 +158,12 @@
         "expectedDetail": "",
         "expectedTags": null,
         "expectedPaymentOutcome": null,
-        "expectedDeliveryOutcome": null
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
     },
     {
         "testCase": "SUMMARY_DATE_TO_MORE_THAN_1_DAY_FUTURE",
-        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "userId": "b30f5296-0329-438f-8e57-3080534c8123",
         "gkoNumber": null,
         "taxIdentificationNumber": null,
         "emailAddress": null,
@@ -172,11 +180,12 @@
         "expectedDetail": "DateTo: dateTo must not be more than 86400 seconds after the current UTC time.",
         "expectedTags": null,
         "expectedPaymentOutcome": null,
-        "expectedDeliveryOutcome": null
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
     },
     {
         "testCase": "SUMMARY_DATE_FROM_BEFORE_2020_FLOOR",
-        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "userId": "b30f5296-0329-438f-8e57-3080534c8123",
         "gkoNumber": null,
         "taxIdentificationNumber": null,
         "emailAddress": null,
@@ -193,11 +202,12 @@
         "expectedDetail": "",
         "expectedTags": null,
         "expectedPaymentOutcome": null,
-        "expectedDeliveryOutcome": null
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
     },
     {
         "testCase": "SUMMARY_DATE_FROM_AFTER_DATE_TO",
-        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "userId": "b30f5296-0329-438f-8e57-3080534c8123",
         "gkoNumber": null,
         "taxIdentificationNumber": null,
         "emailAddress": null,
@@ -214,11 +224,12 @@
         "expectedDetail": "",
         "expectedTags": null,
         "expectedPaymentOutcome": null,
-        "expectedDeliveryOutcome": null
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
     },
     {
         "testCase": "SUMMARY_DATE_MALFORMED_NOT_ISO8601",
-        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "userId": "b30f5296-0329-438f-8e57-3080534c8123",
         "gkoNumber": null,
         "taxIdentificationNumber": null,
         "emailAddress": null,
@@ -235,11 +246,12 @@
         "expectedDetail": "",
         "expectedTags": null,
         "expectedPaymentOutcome": null,
-        "expectedDeliveryOutcome": null
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
     },
     {
         "testCase": "SUMMARY_USERID_INVALID_GUID",
-        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff-bad",
+        "userId": "b30f5296-0329-438f-8e57-3080534c8123-bad",
         "gkoNumber": null,
         "taxIdentificationNumber": null,
         "emailAddress": null,
@@ -256,7 +268,8 @@
         "expectedDetail": "userId contains an invalid value.",
         "expectedTags": null,
         "expectedPaymentOutcome": null,
-        "expectedDeliveryOutcome": null
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
     },
     {
         "testCase": "SUMMARY_USERID_VALID_FORMAT_NO_MATCH",
@@ -277,64 +290,12 @@
         "expectedDetail": "userId contains an invalid value.",
         "expectedTags": null,
         "expectedPaymentOutcome": null,
-        "expectedDeliveryOutcome": null
-    },
-    {
-        "testCase": "SUMMARY_GKONUMBER_VALID_ZERO_TRANSACTIONS",
-        "userId": "5b70cd94-6d35-4c46-b1f9-331bce6328db",
-        "gkoNumber": "XR2024061891F577476F7C151108",
-        "taxIdentificationNumber": null,
-        "emailAddress": null,
-        "phoneNumber": null,
-        "references": null,
-        "journeyTypes": null,
-        "statuses": null,
-        "dateFrom": "2026-07-04T00:00:00Z",
-        "dateTo": "2026-10-01T23:59:59Z",
-        "limit": 20,
-        "offset": 0,
-        "expectedStatus": 200,
-        "expectEmpty": "true",
-        "expectedDetail": "",
-        "expectedTags": null,
-        "expectedPaymentOutcome": null,
-        "expectedDeliveryOutcome": null
-    },
-    {
-        "testCase": "SUMMARY_STATUS_LOWERCASE_NORMALIZED",
-        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
-        "gkoNumber": null,
-        "taxIdentificationNumber": "129299260",
-        "emailAddress": null,
-        "phoneNumber": null,
-        "references": [
-            {
-                "key": "mtcn",
-                "value": "3582633200"
-            }
-        ],
-        "journeyTypes": [
-            "remittance.outbound"
-        ],
-        "statuses": [
-            "settled"
-        ],
-        "dateFrom": "2026-09-30T00:00:00Z",
-        "dateTo": "2026-10-01T23:59:59Z",
-        "limit": 20,
-        "offset": 0,
-        "expectedStatus": 200,
-        "expectEmpty": "false",
-        "expectedDetail": "",
-        "expectedTags": [
-            "western-union-outbound"
-        ],
-        "expectedPaymentOutcome": "PAID",
-        "expectedDeliveryOutcome": "DELIVERED"
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
     },
     {
         "testCase": "SUMMARY_LIMIT_OVER_MAX",
-        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
+        "userId": "b30f5296-0329-438f-8e57-3080534c8123",
         "gkoNumber": null,
         "taxIdentificationNumber": null,
         "emailAddress": null,
@@ -351,52 +312,20 @@
         "expectedDetail": "Limit: 'Limit' must be between 1 and 30. You entered 31.",
         "expectedTags": null,
         "expectedPaymentOutcome": null,
-        "expectedDeliveryOutcome": null
-    },
-    {
-        "testCase": "SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR",
-        "userId": "a0b358f3-646a-4889-b2aa-5eb92e1f0aff",
-        "gkoNumber": null,
-        "taxIdentificationNumber": null,
-        "emailAddress": null,
-        "phoneNumber": null,
-        "references": [
-            {
-                "key": "mtcn",
-                "value": "0000000000"
-            }
-        ],
-        "journeyTypes": [
-            "remittance.inbound"
-        ],
-        "statuses": [
-            "FAILED"
-        ],
-        "dateFrom": "2026-10-01T00:00:00Z",
-        "dateTo": "2026-10-02T23:59:59Z",
-        "limit": 20,
-        "offset": 0,
-        "expectedStatus": 200,
-        "expectEmpty": "false",
-        "expectedDetail": "",
-        "expectedTags": [
-            "western-union-inbound",
-            "inbound-order-validation"
-        ],
-        "expectedPaymentOutcome": "NOT_APPLICABLE",
-        "expectedDeliveryOutcome": "NOT_APPLICABLE"
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
     },
     {
         "testCase": "SUMMARY_OUTBOUND_CONFIRM_FAILED_UNAUTHORIZED",
-        "userId": "b7568fe3-b52f-4f6f-880e-5609db6be78e",
+        "userId": "1054ef58-2e2b-40f9-ab31-f39fe97ee6a5",
         "gkoNumber": null,
-        "taxIdentificationNumber": "584321151",
+        "taxIdentificationNumber": "124321122",
         "emailAddress": null,
         "phoneNumber": null,
         "references": [
             {
                 "key": "order_id",
-                "value": "158a5c4e-6237-4542-8745-9db30319afb0"
+                "value": "73528203-93c9-478c-92a8-0cd8e6a0d972"
             }
         ],
         "journeyTypes": [
@@ -405,8 +334,8 @@
         "statuses": [
             "FAILED"
         ],
-        "dateFrom": "2026-10-01T00:00:00Z",
-        "dateTo": "2026-10-02T23:59:59Z",
+        "dateFrom": "2026-10-05T00:00:00Z",
+        "dateTo": "2026-10-05T23:59:59Z",
         "limit": 20,
         "offset": 0,
         "expectedStatus": 200,
@@ -417,6 +346,163 @@
             "remote-service-pre-create"
         ],
         "expectedPaymentOutcome": "PAID",
-        "expectedDeliveryOutcome": "NOT_DELIVERED"
+        "expectedDeliveryOutcome": "NOT_DELIVERED",
+        "expectedRelatedJourneys": null
+    },
+    {
+        "testCase": "SUMMARY_MTCN_SHARED_OUTBOUND_LEG",
+        "userId": "b30f5296-0329-438f-8e57-3080534c8123",
+        "gkoNumber": null,
+        "taxIdentificationNumber": null,
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": [
+            {
+                "key": "mtcn",
+                "value": "3654338841"
+            }
+        ],
+        "journeyTypes": [
+            "remittance.outbound"
+        ],
+        "statuses": [
+            "SETTLED"
+        ],
+        "dateFrom": "2026-10-05T00:00:00Z",
+        "dateTo": "2026-10-05T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": [
+            "western-union-outbound"
+        ],
+        "expectedPaymentOutcome": null,
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
+    },
+    {
+        "testCase": "SUMMARY_MTCN_SHARED_INBOUND_LEG",
+        "userId": "e6de4568-175a-4fd5-bd52-f289b2cd4836",
+        "gkoNumber": null,
+        "taxIdentificationNumber": "134321123",
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": [
+            {
+                "key": "mtcn",
+                "value": "3654338841"
+            }
+        ],
+        "journeyTypes": [
+            "remittance.inbound"
+        ],
+        "statuses": [
+            "SETTLED"
+        ],
+        "dateFrom": "2026-10-05T00:00:00Z",
+        "dateTo": "2026-10-05T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": [
+            "western-union-inbound",
+            "wallet",
+            "gpc"
+        ],
+        "expectedPaymentOutcome": null,
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
+    },
+    {
+        "testCase": "SUMMARY_MTCN_LEGACY_UPPERCASE_KEY",
+        "userId": "b30f5296-0329-438f-8e57-3080534c8123",
+        "gkoNumber": null,
+        "taxIdentificationNumber": null,
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": [
+            {
+                "key": "MTCN",
+                "value": "3654338841"
+            }
+        ],
+        "journeyTypes": [
+            "remittance.outbound"
+        ],
+        "statuses": [
+            "SETTLED"
+        ],
+        "dateFrom": "2026-10-05T00:00:00Z",
+        "dateTo": "2026-10-05T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": [
+            "western-union-outbound"
+        ],
+        "expectedPaymentOutcome": null,
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
+    },
+    {
+        "testCase": "SUMMARY_STATUS_LOWERCASE_NORMALIZED",
+        "userId": "b30f5296-0329-438f-8e57-3080534c8123",
+        "gkoNumber": null,
+        "taxIdentificationNumber": null,
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": [
+            {
+                "key": "mtcn",
+                "value": "3654338841"
+            }
+        ],
+        "journeyTypes": [
+            "remittance.outbound"
+        ],
+        "statuses": [
+            "settled"
+        ],
+        "dateFrom": "2026-10-05T00:00:00Z",
+        "dateTo": "2026-10-05T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 200,
+        "expectEmpty": "false",
+        "expectedDetail": "",
+        "expectedTags": [
+            "western-union-outbound"
+        ],
+        "expectedPaymentOutcome": null,
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
+    },
+    {
+        "testCase": "SUMMARY_USERID_VALID_ZERO_TRANSACTIONS",
+        "userId": "061c269e-d865-47ce-bef1-ab4df80e5f53",
+        "gkoNumber": null,
+        "taxIdentificationNumber": null,
+        "emailAddress": null,
+        "phoneNumber": null,
+        "references": null,
+        "journeyTypes": null,
+        "statuses": null,
+        "dateFrom": "2026-10-01T00:00:00Z",
+        "dateTo": "2026-10-05T23:59:59Z",
+        "limit": 20,
+        "offset": 0,
+        "expectedStatus": 200,
+        "expectEmpty": "true",
+        "expectedDetail": "",
+        "expectedTags": null,
+        "expectedPaymentOutcome": null,
+        "expectedDeliveryOutcome": null,
+        "expectedRelatedJourneys": null
     }
 ]

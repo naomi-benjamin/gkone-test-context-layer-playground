@@ -65,7 +65,7 @@
         "relationship": "Family",
         "expectedStatus": 400,
         "expectEmpty": "false",
-        "expectedDetail": "'Trn' is required."
+        "expectedDetail": "TRN is required"
     },
     {
         "testCase": "VALIDATE_TRN_NOT_9_DIGITS_SHORT",

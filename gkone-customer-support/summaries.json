@@ -1,0 +1,405 @@
+{
+	"id": "c66b232c-38aa-43d7-aa59-2df4e504a388",
+	"name": "[QA] Internal",
+	"timestamp": "2026-10-02T20:31:52.067Z",
+	"collection_id": "19799427-facbf730-ca2f-4593-b1b7-a11576b7e4ed",
+	"folder_id": "19799427-c4375b28-e0e2-4459-a042-c72921a27e7d",
+	"environment_id": "19799427-c8f48554-b6b4-4e96-a39c-0eadcfb598a3",
+	"totalPass": 57,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2026-10-02T20:31:47.939Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "2dc2a73e-9a59-42e4-9656-22373acbcc06",
+			"name": "Get Transaction Journey",
+			"url": "https://app-orders-api-001-dev.azurewebsites.net/api/v1/users/a0b358f3-646a-4889-b2aa-5eb92e1f0aff/Transactions/summaries/filter",
+			"time": 1423,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] Status code is 200": true,
+				"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] Result set is non-empty": true,
+				"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] A step in the journey contains the requested reference(s)": true,
+				"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] Results have the requested journeyType": true,
+				"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] Results have the requested rolled-up status": true,
+				"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] tags[] exactly matches expectedTags": true
+			},
+			"testPassFailCounts": {
+				"[SUMMARY_MTCN_SHARED_OUTBOUND_LEG] Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_SHARED_OUTBOUND_LEG] Result set is non-empty": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_SHARED_OUTBOUND_LEG] A step in the journey contains the requested reference(s)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_SHARED_OUTBOUND_LEG] Results have the requested journeyType": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_SHARED_OUTBOUND_LEG] Results have the requested rolled-up status": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_SHARED_OUTBOUND_LEG] tags[] exactly matches expectedTags": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_SHARED_INBOUND_LEG] Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_SHARED_INBOUND_LEG] Result set is non-empty": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_SHARED_INBOUND_LEG] A step in the journey contains the requested reference(s)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_SHARED_INBOUND_LEG] Results have the requested journeyType": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_SHARED_INBOUND_LEG] Results have the requested rolled-up status": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_SHARED_INBOUND_LEG] tags[] exactly matches expectedTags": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_ORDERID_BILL_PAYMENT] Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_ORDERID_BILL_PAYMENT] Result set is non-empty": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_ORDERID_BILL_PAYMENT] A step in the journey contains the requested reference(s)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_ORDERID_BILL_PAYMENT] Results have the requested journeyType": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_ORDERID_BILL_PAYMENT] Results have the requested rolled-up status": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_ORDERID_BILL_PAYMENT] tags[] exactly matches expectedTags": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_LEGACY_UPPERCASE_KEY] Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_LEGACY_UPPERCASE_KEY] Result set is non-empty": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_LEGACY_UPPERCASE_KEY] A step in the journey contains the requested reference(s)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_LEGACY_UPPERCASE_KEY] Results have the requested journeyType": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_LEGACY_UPPERCASE_KEY] Results have the requested rolled-up status": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_LEGACY_UPPERCASE_KEY] tags[] exactly matches expectedTags": {
+					"pass": 0,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_RANGE_OVER_90_DAYS] Status code is 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_RANGE_OVER_90_DAYS] Error response has a message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_RANGE_OVER_90_DAYS] Error response detail matches expected": {
+					"pass": 0,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_TO_MORE_THAN_1_DAY_FUTURE] Status code is 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_TO_MORE_THAN_1_DAY_FUTURE] Error response has a message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_TO_MORE_THAN_1_DAY_FUTURE] Error response detail matches expected": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_FROM_BEFORE_2020_FLOOR] Status code is 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_FROM_BEFORE_2020_FLOOR] Error response has a message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_FROM_BEFORE_2020_FLOOR] Error response detail matches expected": {
+					"pass": 0,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_FROM_AFTER_DATE_TO] Status code is 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_FROM_AFTER_DATE_TO] Error response has a message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_FROM_AFTER_DATE_TO] Error response detail matches expected": {
+					"pass": 0,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_MALFORMED_NOT_ISO8601] Status code is 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_MALFORMED_NOT_ISO8601] Error response has a message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_DATE_MALFORMED_NOT_ISO8601] Error response detail matches expected": {
+					"pass": 0,
+					"fail": 0
+				},
+				"[SUMMARY_USERID_INVALID_GUID] Status code is 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_USERID_INVALID_GUID] Error response has a message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_USERID_INVALID_GUID] Error response detail matches expected": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_USERID_VALID_FORMAT_NO_MATCH] Status code is 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_USERID_VALID_FORMAT_NO_MATCH] Error response has a message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_USERID_VALID_FORMAT_NO_MATCH] Error response detail matches expected": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_GKONUMBER_VALID_ZERO_TRANSACTIONS] Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_GKONUMBER_VALID_ZERO_TRANSACTIONS] Result set is empty": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_STATUS_LOWERCASE_NORMALIZED] Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_STATUS_LOWERCASE_NORMALIZED] Result set is non-empty": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_STATUS_LOWERCASE_NORMALIZED] A step in the journey contains the requested reference(s)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_STATUS_LOWERCASE_NORMALIZED] Results have the requested journeyType": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_STATUS_LOWERCASE_NORMALIZED] Results have the requested rolled-up status": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_STATUS_LOWERCASE_NORMALIZED] tags[] exactly matches expectedTags": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_LIMIT_OVER_MAX] Status code is 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_LIMIT_OVER_MAX] Error response has a message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_LIMIT_OVER_MAX] Error response detail matches expected": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] Result set is non-empty": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] A step in the journey contains the requested reference(s)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] Results have the requested journeyType": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] Results have the requested rolled-up status": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] tags[] exactly matches expectedTags": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				508,
+				139,
+				128,
+				160,
+				79,
+				146,
+				82,
+				86,
+				81,
+				86,
+				78,
+				103,
+				132,
+				81,
+				1423
+			],
+			"allTests": [
+				{
+					"[SUMMARY_MTCN_SHARED_OUTBOUND_LEG] Status code is 200": true,
+					"[SUMMARY_MTCN_SHARED_OUTBOUND_LEG] Result set is non-empty": true,
+					"[SUMMARY_MTCN_SHARED_OUTBOUND_LEG] A step in the journey contains the requested reference(s)": true,
+					"[SUMMARY_MTCN_SHARED_OUTBOUND_LEG] Results have the requested journeyType": true,
+					"[SUMMARY_MTCN_SHARED_OUTBOUND_LEG] Results have the requested rolled-up status": true,
+					"[SUMMARY_MTCN_SHARED_OUTBOUND_LEG] tags[] exactly matches expectedTags": true
+				},
+				{
+					"[SUMMARY_MTCN_SHARED_INBOUND_LEG] Status code is 200": true,
+					"[SUMMARY_MTCN_SHARED_INBOUND_LEG] Result set is non-empty": true,
+					"[SUMMARY_MTCN_SHARED_INBOUND_LEG] A step in the journey contains the requested reference(s)": true,
+					"[SUMMARY_MTCN_SHARED_INBOUND_LEG] Results have the requested journeyType": true,
+					"[SUMMARY_MTCN_SHARED_INBOUND_LEG] Results have the requested rolled-up status": true,
+					"[SUMMARY_MTCN_SHARED_INBOUND_LEG] tags[] exactly matches expectedTags": true
+				},
+				{
+					"[SUMMARY_ORDERID_BILL_PAYMENT] Status code is 200": true,
+					"[SUMMARY_ORDERID_BILL_PAYMENT] Result set is non-empty": true,
+					"[SUMMARY_ORDERID_BILL_PAYMENT] A step in the journey contains the requested reference(s)": true,
+					"[SUMMARY_ORDERID_BILL_PAYMENT] Results have the requested journeyType": true,
+					"[SUMMARY_ORDERID_BILL_PAYMENT] Results have the requested rolled-up status": true,
+					"[SUMMARY_ORDERID_BILL_PAYMENT] tags[] exactly matches expectedTags": true
+				},
+				{
+					"[SUMMARY_MTCN_LEGACY_UPPERCASE_KEY] Status code is 200": true,
+					"[SUMMARY_MTCN_LEGACY_UPPERCASE_KEY] Result set is non-empty": true,
+					"[SUMMARY_MTCN_LEGACY_UPPERCASE_KEY] A step in the journey contains the requested reference(s)": true,
+					"[SUMMARY_MTCN_LEGACY_UPPERCASE_KEY] Results have the requested journeyType": true,
+					"[SUMMARY_MTCN_LEGACY_UPPERCASE_KEY] Results have the requested rolled-up status": true,
+					"[SUMMARY_MTCN_LEGACY_UPPERCASE_KEY] tags[] exactly matches expectedTags": false
+				},
+				{
+					"[SUMMARY_DATE_RANGE_OVER_90_DAYS] Status code is 400": true,
+					"[SUMMARY_DATE_RANGE_OVER_90_DAYS] Error response has a message": true,
+					"[SUMMARY_DATE_RANGE_OVER_90_DAYS] Error response detail matches expected": false
+				},
+				{
+					"[SUMMARY_DATE_TO_MORE_THAN_1_DAY_FUTURE] Status code is 400": true,
+					"[SUMMARY_DATE_TO_MORE_THAN_1_DAY_FUTURE] Error response has a message": true,
+					"[SUMMARY_DATE_TO_MORE_THAN_1_DAY_FUTURE] Error response detail matches expected": true
+				},
+				{
+					"[SUMMARY_DATE_FROM_BEFORE_2020_FLOOR] Status code is 400": true,
+					"[SUMMARY_DATE_FROM_BEFORE_2020_FLOOR] Error response has a message": true,
+					"[SUMMARY_DATE_FROM_BEFORE_2020_FLOOR] Error response detail matches expected": false
+				},
+				{
+					"[SUMMARY_DATE_FROM_AFTER_DATE_TO] Status code is 400": true,
+					"[SUMMARY_DATE_FROM_AFTER_DATE_TO] Error response has a message": true,
+					"[SUMMARY_DATE_FROM_AFTER_DATE_TO] Error response detail matches expected": false
+				},
+				{
+					"[SUMMARY_DATE_MALFORMED_NOT_ISO8601] Status code is 400": true,
+					"[SUMMARY_DATE_MALFORMED_NOT_ISO8601] Error response has a message": true,
+					"[SUMMARY_DATE_MALFORMED_NOT_ISO8601] Error response detail matches expected": false
+				},
+				{
+					"[SUMMARY_USERID_INVALID_GUID] Status code is 400": true,
+					"[SUMMARY_USERID_INVALID_GUID] Error response has a message": true,
+					"[SUMMARY_USERID_INVALID_GUID] Error response detail matches expected": true
+				},
+				{
+					"[SUMMARY_USERID_VALID_FORMAT_NO_MATCH] Status code is 400": true,
+					"[SUMMARY_USERID_VALID_FORMAT_NO_MATCH] Error response has a message": true,
+					"[SUMMARY_USERID_VALID_FORMAT_NO_MATCH] Error response detail matches expected": true
+				},
+				{
+					"[SUMMARY_GKONUMBER_VALID_ZERO_TRANSACTIONS] Status code is 200": true,
+					"[SUMMARY_GKONUMBER_VALID_ZERO_TRANSACTIONS] Result set is empty": true
+				},
+				{
+					"[SUMMARY_STATUS_LOWERCASE_NORMALIZED] Status code is 200": true,
+					"[SUMMARY_STATUS_LOWERCASE_NORMALIZED] Result set is non-empty": true,
+					"[SUMMARY_STATUS_LOWERCASE_NORMALIZED] A step in the journey contains the requested reference(s)": true,
+					"[SUMMARY_STATUS_LOWERCASE_NORMALIZED] Results have the requested journeyType": true,
+					"[SUMMARY_STATUS_LOWERCASE_NORMALIZED] Results have the requested rolled-up status": true,
+					"[SUMMARY_STATUS_LOWERCASE_NORMALIZED] tags[] exactly matches expectedTags": true
+				},
+				{
+					"[SUMMARY_LIMIT_OVER_MAX] Status code is 400": true,
+					"[SUMMARY_LIMIT_OVER_MAX] Error response has a message": true,
+					"[SUMMARY_LIMIT_OVER_MAX] Error response detail matches expected": true
+				},
+				{
+					"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] Status code is 200": true,
+					"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] Result set is non-empty": true,
+					"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] A step in the journey contains the requested reference(s)": true,
+					"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] Results have the requested journeyType": true,
+					"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] Results have the requested rolled-up status": true,
+					"[SUMMARY_MTCN_INVALID_VALUE_INBOUND_ERR] tags[] exactly matches expectedTags": true
+				}
+			]
+		}
+	],
+	"count": 15,
+	"totalTime": 3312,
+	"collection": {
+		"requests": [
+			{
+				"id": "2dc2a73e-9a59-42e4-9656-22373acbcc06",
+				"method": "POST"
+			}
+		]
+	}
+}
