@@ -1,0 +1,91 @@
+{
+    "Id": "14d41257-5159-450c-a5f9-4f41d66fb280",
+    "BankIdentificationNumber": "401201",
+    "BrandFlag": "Visa",
+    "BrandLogoUrl": null,
+    "BrandName": "Visa",
+    "CardHolderName": "Danny Phantom",
+    "Currency": "JMD",
+    "DateTimeCreatedUtc": "2026-08-03T21:49:02.4293928Z",
+    "DateTimeUpdatedUtc": "2026-08-03T21:49:28.6638272Z",
+    "Discriminator": "PaymentMethod",
+    "IsAuthorized": true,
+    "IsBlocked": false,
+    "IsDefault": false,
+    "IsEnabled": true,
+    "IsExpired": false,
+    "IsSoftDeleted": false,
+    "IsTokenised": true,
+    "IsVerified": true,
+    "IssuingBank": "",
+    "Last4CardDigits": "0070",
+    "Nickname": null,
+    "RedirectData": "<!DOCTYPE html><html><head></head><body><form id='powertranz_spi' name='powertranz_spi' action='https://staging.ptranz.com/api/spi/Conductor' method='POST'><input name='SpiToken' id='SpiToken' type='hidden' value='19z19fin01il9mf5qsfiufd6np67qtgawd53huuvd11x2b4002-3plyg9wt7wz'><input name='browserLanguage' id='browserLanguage' type='hidden' value=''><input name='browserWidth' id='browserWidth' type='hidden' value=''><input name='browserHeight' id='browserHeight' type='hidden' value=''><input name='browserTimeZone' id='browserTimeZone' type='hidden' value=''><input name='browserJavaEnabled' id='browserJavaEnabled' type='hidden' value=''><input name='browserJavascriptEnabled' id='browserJavascriptEnabled' type='hidden' value=''><input name='browserColorDepth' id='browserColorDepth' type='hidden' value=''></form><script>function GetBrowserInfo(){const n=window&&window.screen?window.screen.width:'',e=window&&window.screen?window.screen.height:'',w=window&&window.screen?window.screen.colorDepth:'',o=window&&window.navigator?window.navigator.userAgent:'',i=!(!window||!window.navigator)&&navigator.javaEnabled();let a='';return window&&window.navigator&&(a=window.navigator.language?window.navigator.language:window.navigator.browserLanguage),{screenWidth:n,screenHeight:e,colorDepth:w,userAgent:o,timeZoneOffset:(new Date).getTimezoneOffset(),language:a,javaEnabled:i,javascriptEnabled:!0}}</script><script>function GetBrowserInfoAndSubmit(){var e=GetBrowserInfo();document.getElementById('browserLanguage').value=e.language,document.getElementById('browserWidth').value=e.screenWidth,document.getElementById('browserHeight').value=e.screenHeight,document.getElementById('browserTimeZone').value=e.timeZoneOffset,document.getElementById('browserJavaEnabled').value=e.javaEnabled,document.getElementById('browserJavascriptEnabled').value=e.javascriptEnabled,document.getElementById('browserColorDepth').value=e.colorDepth,document.forms[0].submit()}GetBrowserInfoAndSubmit();</script></body></html>",
+    "ThumbnailUrl": null,
+    "Type": "DEBIT_CARD",
+    "WalletId": "64f46dc0-c1ac-4753-ba41-22501f4fad1d",
+    "id": "PaymentMethod|14d41257-5159-450c-a5f9-4f41d66fb280",
+    "BankAccounts": [],
+    "Errors": [],
+    "PreAuthResponse": {
+        "DateTimeCreatedUtc": "2026-08-03T21:49:03.7769831Z",
+        "DateTimeUpdatedUtc": "2026-08-03T21:49:03.7769831Z",
+        "IsAuthorized": true,
+        "RawRedirectData": "<!DOCTYPE html><html><head></head><body><form id='powertranz_spi' name='powertranz_spi' action='https://staging.ptranz.com/api/spi/Conductor' method='POST'><input name='SpiToken' id='SpiToken' type='hidden' value='19z19fin01il9mf5qsfiufd6np67qtgawd53huuvd11x2b4002-3plyg9wt7wz'><input name='browserLanguage' id='browserLanguage' type='hidden' value=''><input name='browserWidth' id='browserWidth' type='hidden' value=''><input name='browserHeight' id='browserHeight' type='hidden' value=''><input name='browserTimeZone' id='browserTimeZone' type='hidden' value=''><input name='browserJavaEnabled' id='browserJavaEnabled' type='hidden' value=''><input name='browserJavascriptEnabled' id='browserJavascriptEnabled' type='hidden' value=''><input name='browserColorDepth' id='browserColorDepth' type='hidden' value=''></form><script>function GetBrowserInfo(){const n=window&&window.screen?window.screen.width:'',e=window&&window.screen?window.screen.height:'',w=window&&window.screen?window.screen.colorDepth:'',o=window&&window.navigator?window.navigator.userAgent:'',i=!(!window||!window.navigator)&&navigator.javaEnabled();let a='';return window&&window.navigator&&(a=window.navigator.language?window.navigator.language:window.navigator.browserLanguage),{screenWidth:n,screenHeight:e,colorDepth:w,userAgent:o,timeZoneOffset:(new Date).getTimezoneOffset(),language:a,javaEnabled:i,javascriptEnabled:!0}}</script><script>function GetBrowserInfoAndSubmit(){var e=GetBrowserInfo();document.getElementById('browserLanguage').value=e.language,document.getElementById('browserWidth').value=e.screenWidth,document.getElementById('browserHeight').value=e.screenHeight,document.getElementById('browserTimeZone').value=e.timeZoneOffset,document.getElementById('browserJavaEnabled').value=e.javaEnabled,document.getElementById('browserJavascriptEnabled').value=e.javascriptEnabled,document.getElementById('browserColorDepth').value=e.colorDepth,document.forms[0].submit()}GetBrowserInfoAndSubmit();</script></body></html>",
+        "RedirectData": "<!DOCTYPE html><html><head></head><body><form id='powertranz_spi' name='powertranz_spi' action='https://staging.ptranz.com/api/spi/Conductor' method='POST'><input name='SpiToken' id='SpiToken' type='hidden' value='19z19fin01il9mf5qsfiufd6np67qtgawd53huuvd11x2b4002-3plyg9wt7wz'><input name='browserLanguage' id='browserLanguage' type='hidden' value=''><input name='browserWidth' id='browserWidth' type='hidden' value=''><input name='browserHeight' id='browserHeight' type='hidden' value=''><input name='browserTimeZone' id='browserTimeZone' type='hidden' value=''><input name='browserJavaEnabled' id='browserJavaEnabled' type='hidden' value=''><input name='browserJavascriptEnabled' id='browserJavascriptEnabled' type='hidden' value=''><input name='browserColorDepth' id='browserColorDepth' type='hidden' value=''></form><script>function GetBrowserInfo(){const n=window&&window.screen?window.screen.width:'',e=window&&window.screen?window.screen.height:'',w=window&&window.screen?window.screen.colorDepth:'',o=window&&window.navigator?window.navigator.userAgent:'',i=!(!window||!window.navigator)&&navigator.javaEnabled();let a='';return window&&window.navigator&&(a=window.navigator.language?window.navigator.language:window.navigator.browserLanguage),{screenWidth:n,screenHeight:e,colorDepth:w,userAgent:o,timeZoneOffset:(new Date).getTimezoneOffset(),language:a,javaEnabled:i,javascriptEnabled:!0}}</script><script>function GetBrowserInfoAndSubmit(){var e=GetBrowserInfo();document.getElementById('browserLanguage').value=e.language,document.getElementById('browserWidth').value=e.screenWidth,document.getElementById('browserHeight').value=e.screenHeight,document.getElementById('browserTimeZone').value=e.timeZoneOffset,document.getElementById('browserJavaEnabled').value=e.javaEnabled,document.getElementById('browserJavascriptEnabled').value=e.javascriptEnabled,document.getElementById('browserColorDepth').value=e.colorDepth,document.forms[0].submit()}GetBrowserInfoAndSubmit();</script></body></html>"
+    },
+    "PrepaidCards": [],
+    "StatusTransitions": [
+        {
+            "Id": "434f0824-720d-488c-b6d6-5b9b22426762",
+            "DateTimeCreatedUtc": "2026-08-03T21:49:02.4293934Z",
+            "DateTimeUpdatedUtc": "2026-08-03T21:49:02.4293934Z",
+            "ReasonCode": "OTHER",
+            "ReasonDescription": "",
+            "State": "PENDING"
+        },
+        {
+            "Id": "2ef70f31-9a96-4883-ae57-b3f5219538b8",
+            "DateTimeCreatedUtc": "2026-08-03T21:49:15.5241635Z",
+            "DateTimeUpdatedUtc": "2026-08-03T21:49:15.5241635Z",
+            "ReasonCode": "OTHER",
+            "ReasonDescription": "Tokenisation Successful",
+            "State": "TOKENISED"
+        },
+        {
+            "Id": "b5ac9905-d363-443d-af45-330327f7beb4",
+            "DateTimeCreatedUtc": "2026-08-03T21:49:28.6638268Z",
+            "DateTimeUpdatedUtc": "2026-08-03T21:49:28.6638268Z",
+            "ReasonCode": "OTHER",
+            "ReasonDescription": "Verification Successfuly",
+            "State": "VERIFIED"
+        }
+    ],
+    "VerificationAmounts": [
+        {
+            "Id": "cb2ee158-5d75-4c3b-9e71-33800da34e1e",
+            "Amount": 4.58,
+            "DateTimeCreatedUtc": "2026-08-03T21:49:03.0160671Z",
+            "DateTimeUpdatedUtc": "2026-08-03T21:49:03.0160671Z",
+            "ExpirationDateUtc": "2026-08-03T22:49:02.9709056Z",
+            "IsFinalAmount": false,
+            "IsUsable": true
+        }
+    ],
+    "VerificationAttempts": [
+        {
+            "Id": "7ab82a26-4f09-4c5a-ae45-9293965f2bbb",
+            "AmountEntered": 4.58,
+            "DateTimeCreatedUtc": "2026-08-03T21:49:28.6148061Z",
+            "DateTimeUpdatedUtc": "2026-08-03T21:49:28.6148061Z",
+            "DateTimeVerifiedUtc": null,
+            "VerificationAmountId": "cb2ee158-5d75-4c3b-9e71-33800da34e1e",
+            "VerificationStatus": "SUCCESSFUL"
+        }
+    ],
+    "_rid": "PDocAOVGBuRYAQAAAAAAAA==",
+    "_self": "dbs/PDocAA==/colls/PDocAOVGBuQ=/docs/PDocAOVGBuRYAQAAAAAAAA==/",
+    "_etag": "\"8900754a-0000-0200-0000-6a710ce80000\"",
+    "_attachments": "attachments/",
+    "_ts": 1785793768
+}

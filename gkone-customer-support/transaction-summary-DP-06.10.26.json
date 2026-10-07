@@ -1,0 +1,358 @@
+{
+    "data": [
+        {
+            "id": "8686ce24-4465-a2ca-0fa5-f4b15f28edc1",
+            "correlationId": "6f98a599-0802-4a14-967d-edee3f3c2df0",
+            "referenceNumber": "7103658309",
+            "classifications": {
+                "activityKind": "TRANSACTION",
+                "productType": "remittance.outbound",
+                "transactionType": "DEBIT",
+                "channel": "MOBILE_APP"
+            },
+            "amounts": {
+                "currency": "JMD",
+                "amount": 2960.0,
+                "totalAmountPaid": null
+            },
+            "status": {
+                "current": "SETTLED",
+                "statusDescription": null,
+                "lastUpdatedUtc": "2026-10-06T19:11:09.5787447Z",
+                "failureReasonCode": null,
+                "providerReasonCode": null,
+                "payment": {
+                    "outcome": "PAID",
+                    "reason": null,
+                    "amount": 3035.0,
+                    "currency": "JMD",
+                    "captureCount": 1,
+                    "stepId": "7260c061-577a-3611-b1b3-0f71720fcf0f",
+                    "lastUpdatedUtc": "2026-10-06T19:10:43.639294Z"
+                },
+                "delivery": {
+                    "outcome": "DELIVERED",
+                    "reason": null,
+                    "expectedActivity": null,
+                    "undeliveredAmount": null,
+                    "currency": null,
+                    "stepId": "8686ce24-4465-a2ca-0fa5-f4b15f28edc1",
+                    "lastUpdatedUtc": "2026-10-06T19:11:09.5787447Z"
+                }
+            },
+            "remediation": null,
+            "references": [
+                {
+                    "key": "remittance_transaction_id",
+                    "value": "6f98a599-0802-4a14-967d-edee3f3c2df0"
+                },
+                {
+                    "key": "quote_id",
+                    "value": "1651b6b0-e9f3-44f5-a6f1-7233759a688a"
+                },
+                {
+                    "key": "order_id",
+                    "value": "162299ec-b5a6-4ece-ad93-004b4b02e4fd"
+                },
+                {
+                    "key": "payment_method_id",
+                    "value": "14d41257-5159-450c-a5f9-4f41d66fb280"
+                },
+                {
+                    "key": "wu_order_id",
+                    "value": "2627987103658309"
+                },
+                {
+                    "key": "mtcn",
+                    "value": "7103658309"
+                }
+            ],
+            "parties": {
+                "initiator": {
+                    "firstName": "DANNY",
+                    "lastName": "PHANTOM",
+                    "emailAddress": "naomi.qatesting+danny@gmail.com",
+                    "role": "SENDER"
+                },
+                "beneficiary": {
+                    "firstName": "MAY",
+                    "lastName": "BANKA",
+                    "emailAddress": null,
+                    "role": "RECIPIENT"
+                }
+            },
+            "tags": [
+                "western-union-outbound"
+            ],
+            "audit": {
+                "createdUtc": "2026-10-06T19:11:09.7665125Z",
+                "updatedUtc": "2026-10-06T19:11:09.7665125Z",
+                "createdBy": "System",
+                "dateTimeProcessedUtc": "2026-10-06T19:11:05.0792087Z",
+                "dateTimeReceivedUtc": "2026-10-06T19:11:09.736Z"
+            },
+            "journey": {
+                "journeyKey": "order_id:162299ec-b5a6-4ece-ad93-004b4b02e4fd",
+                "groupKey": "order_id:162299ec-b5a6-4ece-ad93-004b4b02e4fd",
+                "journeyType": "remittance.outbound",
+                "firstActivityUtc": "2026-10-06T19:09:23.2738513Z",
+                "lastActivityUtc": "2026-10-06T19:11:09.5787447Z",
+                "stepCount": 7,
+                "failedStepCount": 0,
+                "stepsTruncated": false,
+                "lastFailure": null,
+                "steps": [
+                    {
+                        "id": "bb804596-58a1-3bce-f999-15414d0f807f",
+                        "activityKind": "INQUIRY",
+                        "productType": "remittance.outbound-quote",
+                        "transactionType": null,
+                        "status": "COMPLETED",
+                        "failureReasonCode": null,
+                        "providerReasonCode": null,
+                        "lastUpdatedUtc": "2026-10-06T19:09:23.2738513Z",
+                        "references": [
+                            {
+                                "key": "quote_id",
+                                "value": "1651b6b0-e9f3-44f5-a6f1-7233759a688a"
+                            },
+                            {
+                                "key": "pay_in_method",
+                                "value": "CA"
+                            },
+                            {
+                                "key": "pay_out_method",
+                                "value": "MONEY IN MINUTES"
+                            }
+                        ],
+                        "tags": [
+                            "quote-attempt",
+                            "western-union-outbound",
+                            "outbound-quote-creation"
+                        ]
+                    },
+                    {
+                        "id": "332aaa52-d6e4-0d56-eeeb-219d105ae80b",
+                        "activityKind": "ATTEMPT",
+                        "productType": "remittance.outbound",
+                        "transactionType": "DEBIT",
+                        "status": "COMPLETED",
+                        "failureReasonCode": null,
+                        "providerReasonCode": null,
+                        "lastUpdatedUtc": "2026-10-06T19:09:48.9417976Z",
+                        "references": [
+                            {
+                                "key": "remittance_transaction_id",
+                                "value": "2f8c8331-27fc-42ef-a6c3-a5e6434ca264"
+                            },
+                            {
+                                "key": "quote_id",
+                                "value": "1651b6b0-e9f3-44f5-a6f1-7233759a688a"
+                            },
+                            {
+                                "key": "mtcn",
+                                "value": "temp_4ee12202-6238-46fd-9196-9d7bec62c9df"
+                            }
+                        ],
+                        "tags": [
+                            "western-union-outbound",
+                            "outbound-order-creation"
+                        ]
+                    },
+                    {
+                        "id": "33c4a3a6-072f-df4a-3160-4a85a9f17138",
+                        "activityKind": "ATTEMPT",
+                        "productType": "payment.preauth",
+                        "transactionType": null,
+                        "status": "COMPLETED",
+                        "failureReasonCode": null,
+                        "providerReasonCode": null,
+                        "lastUpdatedUtc": "2026-10-06T19:10:30.5371064Z",
+                        "references": [
+                            {
+                                "key": "order_id",
+                                "value": "162299ec-b5a6-4ece-ad93-004b4b02e4fd"
+                            },
+                            {
+                                "key": "payment_method_id",
+                                "value": "14d41257-5159-450c-a5f9-4f41d66fb280"
+                            },
+                            {
+                                "key": "payment_id",
+                                "value": "e23d5df8-3477-431e-8f89-4929a2f038ce"
+                            }
+                        ],
+                        "tags": [
+                            "fac",
+                            "card",
+                            "preauth"
+                        ]
+                    },
+                    {
+                        "id": "75e3385b-bb23-5303-ec35-55743c842755",
+                        "activityKind": "TRANSACTION",
+                        "productType": "payment.card-charge",
+                        "transactionType": "DEBIT",
+                        "status": "COMPLETED",
+                        "failureReasonCode": null,
+                        "providerReasonCode": null,
+                        "lastUpdatedUtc": "2026-10-06T19:10:40.4895446Z",
+                        "references": [
+                            {
+                                "key": "order_id",
+                                "value": "162299ec-b5a6-4ece-ad93-004b4b02e4fd"
+                            },
+                            {
+                                "key": "payment_method_id",
+                                "value": "14d41257-5159-450c-a5f9-4f41d66fb280"
+                            },
+                            {
+                                "key": "transaction_id",
+                                "value": "e23d5df8-3477-431e-8f89-4929a2f038ce"
+                            },
+                            {
+                                "key": "payment_id",
+                                "value": "e23d5df8-3477-431e-8f89-4929a2f038ce"
+                            },
+                            {
+                                "key": "approval_code",
+                                "value": "123456"
+                            }
+                        ],
+                        "tags": [
+                            "fac",
+                            "card",
+                            "charge",
+                            "debit"
+                        ]
+                    },
+                    {
+                        "id": "7260c061-577a-3611-b1b3-0f71720fcf0f",
+                        "activityKind": "TRANSACTION",
+                        "productType": "payment.card-capture",
+                        "transactionType": "DEBIT",
+                        "status": "COMPLETED",
+                        "failureReasonCode": null,
+                        "providerReasonCode": null,
+                        "lastUpdatedUtc": "2026-10-06T19:10:43.639294Z",
+                        "references": [
+                            {
+                                "key": "order_id",
+                                "value": "162299ec-b5a6-4ece-ad93-004b4b02e4fd"
+                            },
+                            {
+                                "key": "payment_method_id",
+                                "value": "14d41257-5159-450c-a5f9-4f41d66fb280"
+                            },
+                            {
+                                "key": "transaction_id",
+                                "value": "456296c6-cafe-447f-a9da-0410428639bf"
+                            },
+                            {
+                                "key": "payment_id",
+                                "value": "e23d5df8-3477-431e-8f89-4929a2f038ce"
+                            },
+                            {
+                                "key": "approval_code",
+                                "value": "123456"
+                            }
+                        ],
+                        "tags": [
+                            "fac",
+                            "card",
+                            "capture",
+                            "debit"
+                        ]
+                    },
+                    {
+                        "id": "4284e6c1-9521-2027-87bf-ecb7cf589e51",
+                        "activityKind": "ATTEMPT",
+                        "productType": "remittance.outbound",
+                        "transactionType": "DEBIT",
+                        "status": "COMPLETED",
+                        "failureReasonCode": null,
+                        "providerReasonCode": null,
+                        "lastUpdatedUtc": "2026-10-06T19:10:52.9141432Z",
+                        "references": [
+                            {
+                                "key": "remittance_transaction_id",
+                                "value": "6f98a599-0802-4a14-967d-edee3f3c2df0"
+                            },
+                            {
+                                "key": "quote_id",
+                                "value": "1651b6b0-e9f3-44f5-a6f1-7233759a688a"
+                            },
+                            {
+                                "key": "order_id",
+                                "value": "162299ec-b5a6-4ece-ad93-004b4b02e4fd"
+                            },
+                            {
+                                "key": "payment_method_id",
+                                "value": "14d41257-5159-450c-a5f9-4f41d66fb280"
+                            },
+                            {
+                                "key": "mtcn",
+                                "value": "temp_53123717-145a-4a17-8267-d285de9ed2f1"
+                            }
+                        ],
+                        "tags": [
+                            "western-union-outbound",
+                            "outbound-order-creation"
+                        ]
+                    },
+                    {
+                        "id": "8686ce24-4465-a2ca-0fa5-f4b15f28edc1",
+                        "activityKind": "TRANSACTION",
+                        "productType": "remittance.outbound",
+                        "transactionType": "DEBIT",
+                        "status": "SETTLED",
+                        "failureReasonCode": null,
+                        "providerReasonCode": null,
+                        "lastUpdatedUtc": "2026-10-06T19:11:09.5787447Z",
+                        "references": [
+                            {
+                                "key": "remittance_transaction_id",
+                                "value": "6f98a599-0802-4a14-967d-edee3f3c2df0"
+                            },
+                            {
+                                "key": "quote_id",
+                                "value": "1651b6b0-e9f3-44f5-a6f1-7233759a688a"
+                            },
+                            {
+                                "key": "order_id",
+                                "value": "162299ec-b5a6-4ece-ad93-004b4b02e4fd"
+                            },
+                            {
+                                "key": "payment_method_id",
+                                "value": "14d41257-5159-450c-a5f9-4f41d66fb280"
+                            },
+                            {
+                                "key": "wu_order_id",
+                                "value": "2627987103658309"
+                            },
+                            {
+                                "key": "mtcn",
+                                "value": "7103658309"
+                            }
+                        ],
+                        "tags": [
+                            "western-union-outbound"
+                        ]
+                    }
+                ],
+                "relatedJourneys": []
+            }
+        }
+    ],
+    "pagination": {
+        "currentPage": 1,
+        "perPage": 20,
+        "totalRecords": 1,
+        "totalPages": 1,
+        "hasMore": false
+    },
+    "meta": {
+        "requestId": "0HNP34O2OISKK:00000001",
+        "deprecated": false
+    }
+}
