@@ -20,6 +20,7 @@ Source: Parent 37284 (`paybiz_channel_stories.csv`).
 
 - **37731 — Enter Amount:** scanning a merchant QR code presents a payment interface; the user is directed into the GKOne app (or to install it), can enter a payment amount, and add an optional note. User should not be able to change the payee (P2B only).
 - **37732 — Validate Amount Entered:** amounts below $1000 are blocked with a validation message.
+  - **Gap:** the P2B scan-to-pay cap is now confirmed to match the plugin channel's $1000–$350,000 band (see 37743), but this story's AC only states the $1000 floor — no $350,000 ceiling is documented here. Story may need updating to add the upper bound explicitly.
 - **37737 — Review and Confirm:** review screen shows the payment amount and lets the user pick GK One Wallet or a registered debit/credit card.
 - **37736 — Generate Receipt of Payment:** receipt generated on success, matching existing receipt design, emailed immediately to the customer's registered address.
 - **37738 — Notification upon Payment:** push notification sent on success or failure.
@@ -30,8 +31,8 @@ Source: Parent 37284 (`paybiz_channel_stories.csv`).
 
 ### Deferred for now
 - **37733 — Validate Transaction against Wallet Amount:** transfers that would push the wallet balance over 500,000 are blocked before reaching the payment processor.
-  - [UNCERTAIN] This is phrased as a wallet-to-wallet transfer limit — likely a drafting mistake rather than a deliberate rule, since QR Code 1.0 is P2B only this release. Confirm with the PO, and separately confirm whether the P2B scan-to-pay cap should instead match the plugin channel's $1000–$350,000 band (37743) or needs its own defined limit.
-  - Parked rather than tested this round — not deprioritized because it's confirmed out of scope, just not being picked up for now. Revisit once the P2P/P2B cap question is resolved.
+  - Confirmed: the 500,000 wallet-to-wallet figure is a drafting mistake — QR Code 1.0 is P2B only this release, so this limit doesn't apply as written. **Mikhail to confirm whether this story should be removed from the backlog outright.**
+  - Parked rather than tested this round pending that call. Resolved: the P2B scan-to-pay cap should match the plugin channel's $1000–$350,000 band (37743) rather than using its own separate limit — see the gap flagged under 37732 above.
 
 ---
 
@@ -47,7 +48,7 @@ Source: Parent 37286 (plugin launch, review, method selection) plus the guest/ca
   - Clarified: this isn't a status a merchant can gain or lose — it's informational "verified by"/"backed by" wording shown for all merchants. There's no "unverified merchant" concept in this release.
   - Note: exact copy may change (e.g. "Powered by" instead of "Verified by") — confirm final wording before writing test assertions tied to specific text.
 - **37743 — Validate Amount (Open):** amounts below $1000 or above $350,000 are blocked with a validation message; an empty amount field shows a "required" error.
-  - [UNCERTAIN] Separately still unresolved: should the P2B scan-to-pay cap match this plugin channel's $1000–$350,000 band, or does it need its own defined limit? 
+  - Confirmed: the P2B scan-to-pay cap (QR Code 1.0) should match this $1000–$350,000 band rather than using its own separate limit.
 - **37744 — Guest Checkout:** customer enters First/Last Name and Email without creating an account; valid entry + passing field validation proceeds to the auth/payment method screen; merchant-defined custom fields (e.g. Unit Number) are also presented and accepted.
   - **Gap:** no AC defines what counts as a valid/invalid name (allowed characters, length) for these fields — flag for clarification, similar to the character rules 37748 defines for cardholder name.
 - **37745 — Validate Guest Checkout:** blank required fields and invalid email addresses are both blocked with validation messages.
@@ -55,7 +56,7 @@ Source: Parent 37286 (plugin launch, review, method selection) plus the guest/ca
   1. Payment summary (Merchant Name, Amount, Currency, Payment Method section) matches the amount from the previous step.
   2. Cardholder name accepts alphabetic characters, spaces, hyphens, apostrophes.
   3. Cardholder name is mandatory — empty + "Make Payment" blocks with an error.
-     - **Gap:** AC doesn't specify whether "Cardholder Name" is one combined field or separate First/Last Name fields — confirm before writing field-level test cases.
+     - Confirmed: Cardholder Name is a single combined field expecting a full name (first + last), e.g. "Naomi Silvera" is valid, "NaomiSilvera" (no space) is not. Needs explicit test coverage around this space-separation rule — single-word entries, extra/multiple spaces, hyphenated or multi-part last names, etc.
   4. Card number auto-formats in groups (e.g. `4111111111111111` → `4111 1111 1111 1111`).
   5. Invalid card number fails validation with an appropriate error.
   6. Expiry date accepts a valid future MM/YYYY value.
@@ -102,18 +103,11 @@ Source: Parent 32611 (`paybiz_transactions_stories.csv`). The scope doc describe
 2. Get a story (or at least documented AC) for the 3DS guest-payment challenge step.
 3. Confirm settlement is deliberately out of test scope, not just undocumented.
 4. Get stories or documented requirements for manual merchant onboarding, password reset, and dummy-account provisioning.
-5. Confirm whether the P2B scan-to-pay cap should match the plugin's $1000–$350,000 band (37743) or needs its own limit, now that the 500,000 wallet-to-wallet figure (37733) is flagged as a likely drafting mistake.
-6. Confirm whether "Cardholder Name" on 37748 is one combined field or separate First/Last Name fields.
-7. Confirm expiry-date validation on 37748 should reject nonsensical date combinations, not just past/future dates.
-8. Confirm whether Guest Checkout (37744) name fields need defined valid/invalid character rules.
-9. Confirm final wording for the merchant verification badge/note (37742) — "Verified by" vs "Powered by" vs other copy.
-
-### Resolved this round
-- Apple Pay / Google Pay removed from 37755's Release 1 scope — no longer conflicts with 37747 (Not MVP).
-- Payment-link stories (37740, 37741) confirmed out of scope for Release 1.
-- Merchant verification status (37742) clarified — not a gain/lose concept, just informational "verified by"/"backed by" display shown for all merchants.
-- Transaction Filtering (37325) confirmed out of scope for Release 1.
-- Transaction Export (37331) confirmed out of scope for Release 1 — Workstream 5 is now fully read-only (list + balance), matching the scope doc.
+5. Mikhail to confirm whether 37733 should be removed from the backlog, now that its 500,000 figure is a confirmed drafting mistake.
+6. Confirm expiry-date validation on 37748 should reject nonsensical date combinations, not just past/future dates.
+7. Confirm whether Guest Checkout (37744) name fields need defined valid/invalid character rules.
+8. Confirm final wording for the merchant verification badge/note (37742) — "Verified by" vs "Powered by" vs other copy.
+9. Update 37732's AC to add the $350,000 upper bound, now that the P2B cap is confirmed to match the plugin channel's band.
 
 ---
 
@@ -125,7 +119,7 @@ Source: Parent 32611 (`paybiz_transactions_stories.csv`). The scope doc describe
 |---|---|---|---|
 | 37731 | Enter Amount | 37284 | Yes (§2) |
 | 37732 | Validate Amount Entered | 37284 | Yes (§2) |
-| 37733 | Validate Transaction against Wallet Amount | 37284 | Deferred for now (§2) |
+| 37733 | Validate Transaction against Wallet Amount | 37284 | Deferred — pending removal call from Mikhail (§2) |
 | 37734 | Individual Payment Instrument | 37284 | Flagged — likely excluded (§2) |
 | 37736 | Generate Receipt of Payment | 37284 | Yes (§2) |
 | 37737 | Review and Confirm | 37284 | Yes (§2) |
