@@ -51,6 +51,7 @@ Source: Parent 37286 (plugin launch, review, method selection) plus the guest/ca
   - Confirmed: the P2B scan-to-pay cap (QR Code 1.0) should match this $1000–$350,000 band rather than using its own separate limit.
 - **37744 — Guest Checkout:** customer enters First/Last Name and Email without creating an account; valid entry + passing field validation proceeds to the auth/payment method screen; merchant-defined custom fields (e.g. Unit Number) are also presented and accepted.
   - **Gap:** no AC defines what counts as a valid/invalid name (allowed characters, length) for these fields — flag for clarification, similar to the character rules 37748 defines for cardholder name.
+  - **Risk (accepted by PO):** no email-address verification exists for guest checkout — if the customer mistypes their email, the payment can still complete but they may never receive the confirmation email (37750). Not a functionality gap to fix — PO has accepted this risk. Test cases should treat a typo'd email as expected to still produce a successful payment, just a lost notification.
 - **37745 — Validate Guest Checkout:** blank required fields and invalid email addresses are both blocked with validation messages.
 - **37748 — Enter Card Details** — 10 sub-requirements:
   1. Payment summary (Merchant Name, Amount, Currency, Payment Method section) matches the amount from the previous step.
