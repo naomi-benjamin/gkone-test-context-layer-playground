@@ -132,6 +132,7 @@ Source: Parent 32611 (`paybiz_transactions_stories.csv`). The scope doc describe
 4. Confirm expiry-date validation on 37748 should reject nonsensical date combinations, not just past/future dates.
 5. Confirm whether Guest Checkout (37744) name fields need defined valid/invalid character rules.
 6. Get a story/AC written for the "Log into GK One" saved-payment-method option (folded into 37755 above) — currently undocumented as its own story.
+7. Confirm whether anything on the Merchant Transactions list/detail view (§4, 37333) should distinguish a guest-checkout Payment Plugin transaction from one made by an authenticated GK One user. 37333's AC doesn't address this either way — raised during test drafting 2026-10-13, see `transactions-test-cases-draft.md` TEST CASE 3.
 
 ### Stories/AC that still need writing (requirement confirmed, text not yet updated)
 These are no longer open questions — they're settled requirements where the actual story/AC text just hasn't caught up yet. Test planning should proceed against the confirmed behavior regardless of story state.

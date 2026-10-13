@@ -75,10 +75,12 @@ Post Conditions:
 The following should be true after test completion:
 • The detail shown accurately reflects the selected transaction, with no editing controls present (read-only)
 
+*Note: [OPEN QUESTION] should there be anything in the transaction list or detail view that distinguishes a guest checkout transaction (Payment Plugin, no GK One login) from a transaction made by an authenticated GK One user? 37333's AC (Customer name, payment method, reference ID, payment channel) doesn't call out a guest-vs-member distinction either way. Worth confirming with dev/PO whether this is expected to be visible to the merchant (e.g. for support/dispute purposes) before assuming either "no distinction needed" or "missing field" — raised 2026-10-13, relevant to the Payment Plugin's guest-checkout path documented in `plugin-test-cases-draft.md`.*
+
 ---
 
 TEST CASE 4
-Title: Verify that a merchant can open a pending transaction and see its status without error or failure details
+Title: Verify that a merchant can open a pending transaction and see its status without error or failure details [CHECK_THIS]
 
 Tags: GK Pay Biz, Merchant Portal, Web *(suggested)*
 
