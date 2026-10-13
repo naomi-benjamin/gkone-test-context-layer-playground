@@ -126,7 +126,7 @@ Source: Parent 32611 (`paybiz_transactions_stories.csv`). The scope doc describe
 ## Summary of open items before test planning
 
 1. Get a story (or at least documented AC) for the 3DS guest-payment challenge step.
-   - Sub-question raised during test drafting (2026-10-13): what should happen when the card used is not 3DS-enrolled/secure at all (as distinct from a transaction that's simply not challenged)? No AC or scope-doc note addresses this — flagged alongside the main 3DS gap rather than as a separate thread.
+   - Sub-question raised during test drafting (2026-10-13): what should happen when the card used is not 3DS-enrolled at all (as distinct from a transaction that's simply not challenged)? No AC or scope-doc note addresses this — flagged alongside the main 3DS gap rather than as a separate thread.
 2. Confirm settlement is deliberately out of test scope, not just undocumented.
 3. Get stories or documented requirements for manual merchant onboarding, password reset, and dummy-account provisioning.
 4. Confirm expiry-date validation on 37748 should reject nonsensical date combinations, not just past/future dates.

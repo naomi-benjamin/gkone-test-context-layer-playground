@@ -16,7 +16,7 @@ The following should be true before proceeding:
 • A merchant has integrated the GK Pay Biz payment plugin into their own app or website
 • The merchant has an active payment request (amount, product/service description, applicable fees and taxes) ready to pass to the plugin
 • The customer does not have a GK One account, or chooses not to use one
-• Debit/Credit card being used is 3DS secure
+• Debit/Credit card being used is 3DS enrolled
 
 Steps:
 | Step | Action                                      | Expected Result                              |
@@ -569,13 +569,13 @@ The following should be true after test completion:
 ---
 
 TEST CASE 26
-Title: Verify behaviour when a card that is not 3DS-enrolled/secure is used for guest checkout
+Title: Verify behaviour when a card that is not 3DS-enrolled is used for guest checkout
 
 Tags: GK Pay Biz, Payment Plugin, Card Entry, 3DS *(suggested)*
 
 Pre Conditions:
 The following should be true before proceeding:
-• The customer is completing a guest card checkout with a card number known to not be 3DS-enrolled/secure
+• The customer is completing a guest card checkout with a card number known to not be 3DS-enrolled
 • NOTE: expected behaviour is undocumented — there is no AC or scope-doc note covering this scenario (see `paybiz_release_1_requirements.md`, open item 1). This test case's steps are written, but the expected result is deliberately left open pending dev/PO confirmation — do not assume either outcome below is correct without checking first.
 
 Steps:
