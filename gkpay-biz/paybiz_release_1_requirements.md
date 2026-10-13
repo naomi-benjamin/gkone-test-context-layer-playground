@@ -94,6 +94,11 @@ A fuller version of the Plugin flow — **resolves the structural question raise
   - Checked: the receipt shows the merchant's **name**, not their email — 37749's "hidden merchant email address" AC still holds, no conflict. The email address itself isn't displayed anywhere on this receipt.
 - **Versioning caveat — confirmed:** this file is labeled "2.0" and its payment-method screen shows Apple Pay / Google Pay, but these are confirmed **still out of scope for Release 1** — the design is forward-looking (a later release), consistent with 37747's "Not MVP" and 37755's Apple/Google Pay exclusion. No change to Release 1 test scope.
 
+### Plugin 2.1 design (source: `GK Pay Biz Payment Plug-in 2.1- Mobile - Check out as GK One.pdf` and `Checkout as Guest - Payment Plug-in.pdf`, added 2026-10-13)
+- **Resolved — "Pay another way":** confirmed to be a back button, explicitly annotated as such in the design file. It appears on both the GK One saved-payment-methods screen (after login) and the dedicated guest card-entry screen, and in both cases returns the customer to the Review & Confirm "Pay with" step, which presents four distinct options: "Log into GK One," "Pay with GooglePay," "Pay with ApplePay," "Checkout as guest." It does not reveal an inline guest form on the same screen — see TEST CASE 3 in `plugin-test-cases-draft.md`, updated accordingly.
+- **Open question — button label drift:** this design's guest-entry option is labeled "Checkout as guest." Earlier test cases in this draft (e.g. TEST CASE 1, step 4) reference "Manual Card Entry (Guest Checkout)" as the button label instead. Not yet confirmed whether these are the same button under two different names (a labeling drift across design iterations) or two different things — worth a quick check before relying on either label in finalized test steps.
+- **Versioning caveat — reconfirmed:** both "Pay with GooglePay" and "Pay with ApplePay" appear as explicit, distinct buttons on this screen, same as the 2.0 design above — confirmed **still out of scope for Release 1**, consistent with 37747's "Not MVP" and 37755's Apple/Google Pay exclusion, even in this newer (2.1) design iteration. No change to Release 1 test scope.
+
 ---
 
 ## 4. Merchant View Transactions
@@ -127,7 +132,6 @@ Source: Parent 32611 (`paybiz_transactions_stories.csv`). The scope doc describe
 4. Confirm expiry-date validation on 37748 should reject nonsensical date combinations, not just past/future dates.
 5. Confirm whether Guest Checkout (37744) name fields need defined valid/invalid character rules.
 6. Get a story/AC written for the "Log into GK One" saved-payment-method option (folded into 37755 above) — currently undocumented as its own story.
-7. Confirm with Mikhail what "Pay another way" actually does on the saved-payment-methods screen. Figma (`NTS-UX-UI-Design-Playground?node-id=3387-...`, checked 2026-10-13) shows the "Or continue as guest" card-entry section rendered on the same screen as the saved methods and the "Pay another way" link — not hidden behind it as previously assumed. If guest entry is already visible, "Pay another way" must do something else (switch GK One accounts? something else entirely?) — don't assume until confirmed.
 
 ### Stories/AC that still need writing (requirement confirmed, text not yet updated)
 These are no longer open questions — they're settled requirements where the actual story/AC text just hasn't caught up yet. Test planning should proceed against the confirmed behavior regardless of story state.

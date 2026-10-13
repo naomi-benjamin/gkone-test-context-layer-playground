@@ -70,26 +70,28 @@ The following should be true after test completion:
 ## Alternate Valid Paths
 
 TEST CASE 3
-Title: Verify that a customer can complete payment as a guest from the saved-payment-methods screen, without using a saved GK One method
+Title: Verify that a customer can use "Pay another way" to return from the GK One saved-methods screen and complete payment as a guest instead
 
 Tags: GK Pay Biz, Payment Plugin, GK One Login *(suggested)*
 
 Pre Conditions:
 The following should be true before proceeding:
-• The payment plugin is open, on the saved-payment-methods screen after a successful GK One login
-• NOTE (2026-10-13, source: Figma `NTS-UX-UI-Design-Playground?node-id=3387-...`): the design shows an "Or continue as guest" section — full card-entry fields (Card holder's name, Card number, Expiry date, CVV) and a "Make payment" button — rendered on the *same screen* as the saved methods and the "Pay another way" link, not hidden behind it. This contradicts the previous version of this test case, which assumed "Pay another way" was what revealed guest entry. What "Pay another way" actually does is now unconfirmed — need to check with Mikhail (see `paybiz_release_1_requirements.md` open items).
-    - Mikhail to confirm
+• The payment plugin is open, on the Review and Confirm screen's "Pay with" step, which presents four distinct options: "Log into GK One," "Pay with GooglePay," "Pay with ApplePay," "Checkout as guest"
+• RESOLVED (2026-10-13, source: `GK Pay Biz Payment Plug-in 2.1- Mobile - Check out as GK One.pdf` and `Checkout as Guest - Payment Plug-in.pdf`): "Pay another way" is confirmed to be a back button — it appears on both the GK One saved-methods screen (after login) and the guest card-entry screen, and in both cases returns the customer to the four-option "Pay with" screen above. It does not reveal an inline guest form on the same screen; this corrects the earlier version of this test case.
 
 Steps:
 | Step | Action                                      | Expected Result                              |
 |------|---------------------------------------------|----------------------------------------------|
-| 1.   | Without tapping "Pay another way," complete the "Or continue as guest" card-entry fields directly with valid data | Values are accepted |
-| 2.   | Tap "Make payment" and complete the 3DS challenge if presented | Payment is processed |
+| 1.   | Select "Log into GK One" and log in with valid credentials | The saved-payment-methods screen is shown (GK One Prepaid card, My NCB MasterCard) |
+| 2.   | Tap "Pay another way"                        | The customer is returned to the four-option "Pay with" screen — not an inline guest form |
+| 3.   | Select "Checkout as guest"                   | The guest card-entry screen is shown (Card holder's name, Card number, Expiry date, CVV, Email, Phone Number) |
+| 4.   | Complete the guest card-entry fields with valid data and tap "Make payment" | Payment is processed |
+| 5.   | Complete the 3DS challenge if presented      | Payment proceeds to completion |
 
 Post Conditions:
 The following should be true after test completion:
-• The payment completes successfully via manually entered card details, not a saved GK One method, without ever needing to tap "Pay another way"
-• (Flag for follow-up) A separate test case covering what "Pay another way" itself does should be written once its behaviour is confirmed with Mikhail — don't assume it's required to reach guest entry
+• The payment completes successfully via manually entered card details, not the GK One saved method
+• "Pay another way" correctly returns to the method-selection screen from both the saved-methods screen and the guest card-entry screen, rather than doing nothing or erroring
 
 ---
 
