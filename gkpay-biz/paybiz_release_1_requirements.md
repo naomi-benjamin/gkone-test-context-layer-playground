@@ -22,17 +22,24 @@ Source: Parent 37284 (`paybiz_channel_stories.csv`).
 - **37732 — Validate Amount Entered:** amounts below $1000 are blocked with a validation message.
   - **Gap:** the P2B scan-to-pay cap is now confirmed to match the plugin channel's $1000–$350,000 band (see 37743), but this story's AC only states the $1000 floor — no $350,000 ceiling is documented here. Story may need updating to add the upper bound explicitly.
 - **37737 — Review and Confirm:** review screen shows the payment amount and lets the user pick GK One Wallet or a registered debit/credit card.
+  - **Confirmed — update AC:** a Fee (and Tax, where applicable) line item is a required part of this screen, same as the Plugin channel's 37754. Current AC only mentions "the payment amount" — story needs updating to add the Fee/Tax breakdown before Total.
 - **37736 — Generate Receipt of Payment:** receipt generated on success, matching existing receipt design, emailed immediately to the customer's registered address.
 - **37738 — Notification upon Payment:** push notification sent on success or failure.
 - **37746 — Pay Using GK One:** launching payment via the GK One app — opens directly if installed, otherwise redirects to the app store.
 
-### Flagged — likely out of scope / needs confirmation
-- **37734 — Individual Payment Instrument:** describes sending funds to someone without a wallet. This reads as Person-to-Person, which the scope doc explicitly excludes from QR Code 1.0 this release. **Recommend confirming with the PO whether this story is excluded for Release 1** before building test coverage against it.
+### Confirmed NOT in scope
+- **37734 — Individual Payment Instrument:** describes sending funds to someone without a wallet (Person-to-Person). **Confirmed excluded** — QR Code 1.0 is P2B only this release.
 
-### Deferred for now
+### Confirmed NOT in scope (pending removal)
 - **37733 — Validate Transaction against Wallet Amount:** transfers that would push the wallet balance over 500,000 are blocked before reaching the payment processor.
-  - Confirmed: the 500,000 wallet-to-wallet figure is a drafting mistake — QR Code 1.0 is P2B only this release, so this limit doesn't apply as written. **Mikhail to confirm whether this story should be removed from the backlog outright.**
-  - Parked rather than tested this round pending that call. Resolved: the P2B scan-to-pay cap should match the plugin channel's $1000–$350,000 band (37743) rather than using its own separate limit — see the gap flagged under 37732 above.
+  - The 500,000 wallet-to-wallet figure is a drafting mistake — QR Code 1.0 is P2B only this release, so this limit doesn't apply as written. **Confirmed by Mikhail: this story is being removed from the backlog.**
+  - Not tested this round. The P2B scan-to-pay cap should match the plugin channel's $1000–$350,000 band (37743) rather than using its own separate limit — see the gap flagged under 37732 above.
+
+### Design cross-check (source: `GK Pay Biz Payment Channel - mobile.pdf`, added to playground 2026-10-13; Payment Link screens in the same file excluded — confirmed out of scope)
+- **New detail, no story yet — confirmed with Mikhail:** QR codes come in two variants — **Dynamic** (amount field starts at $0.00, payer enters the amount — matches 37731/37732) and **Static** (amount pre-filled, e.g. $50,000, not editable by the payer). Definitions confirmed correct; still worth getting this written up as explicit AC, since neither 37731 nor 37732 currently distinguishes the two.
+- **Confirmed — must-have:** the review/confirm screen's Fee (and in one design variant, Tax) line item before Total is real, required Release 1 behavior, not a design-only detail. Folded into 37737 above.
+- **Resolved:** "GK One Wallet" and the specific cards shown aren't in conflict — the wallet is made up of cards. "GK One Prepaid card" is the default wallet card, and other registered cards (e.g. "My NCB MasterCard") only become available/visible after logging into GK One. No AC change needed beyond what's already captured in 37737.
+- Reference copy for test assertions: success screen reads "Payment successful — $X JMD — You've made a payment of $X JMD from [Payer Name]."
 
 ---
 
@@ -44,9 +51,10 @@ Source: Parent 37286 (plugin launch, review, method selection) plus the guest/ca
 - **37754 — Review Payment Details Before Checkout:** checkout screen shows Merchant Name, Product/Service Description, Payment Amount, Fees, Taxes (e.g. GCT), Total Amount Due, Currency; Total = Base Amount + Fees + Tax.
 - **37755 — Select Payment Method:** customer is offered Pay with GK One App and Manual Card Entry (Guest Checkout).
   - Apple Pay / Google Pay removed from this story's scope for Release 1 — **37747** (below) confirms these are Not MVP, so the method-selection screen should not present wallet buttons this release.
+  - **Folded in from Plugin 2.0 design:** "Pay with GK One App" works via a "Log into GK One" step — entering the email/phone associated with the account surfaces the customer's saved GK One payment methods and wallet (shown as selectable cards, e.g. "GK One Prepaid card," "My NCB MasterCard"), with a "Pay another way" link back to guest card entry. No dedicated story exists yet for this login/saved-methods step — treat as in scope for Release 1 and get it written up.
 - **37742 — Display Merchant Verification Status:** selecting the merchant opens a modal; a "Verified GK Pay Biz Merchant" badge appears if the merchant is verified via GK Pay Biz/Bill Express; modal shows Business Name, Email, Contact Number, Address.
   - Clarified: this isn't a status a merchant can gain or lose — it's informational "verified by"/"backed by" wording shown for all merchants. There's no "unverified merchant" concept in this release.
-  - Note: exact copy may change (e.g. "Powered by" instead of "Verified by") — confirm final wording before writing test assertions tied to specific text.
+  - **Confirmed — update AC:** final copy is **"Powered by"**, not "Verified GK Pay Biz Merchant" as the current AC states. Story/AC needs updating to match; test assertions on this badge's text should use "Powered by."
 - **37743 — Validate Amount (Open):** amounts below $1000 or above $350,000 are blocked with a validation message; an empty amount field shows a "required" error.
   - Confirmed: the P2B scan-to-pay cap (QR Code 1.0) should match this $1000–$350,000 band rather than using its own separate limit.
 - **37744 — Guest Checkout:** customer enters First/Last Name and Email without creating an account; valid entry + passing field validation proceeds to the auth/payment method screen; merchant-defined custom fields (e.g. Unit Number) are also presented and accepted.
@@ -74,6 +82,18 @@ Source: Parent 37286 (plugin launch, review, method selection) plus the guest/ca
 - **37747 — Pay Using Apple Pay or Google Pay:** title explicitly states **Not MVP** — excluded from Release 1 test scope. 37755's method-selection AC above has been updated accordingly (Apple/Google Pay removed).
 - **37740 — Enter a Payment Amount (Open)** and **37741 — Enter a Payment Amount (Fixed):** both describe a standalone "payment link" entry point, distinct from launching the plugin from a merchant site. **Confirmed out of scope for Release 1** — only Plugin 1.0 and QR Code 1.0 are in this release.
 
+### Design cross-check (source: `GK Pay Biz Payment Channel - mobile.pdf`, added to playground 2026-10-13; Payment Link screens in the same file excluded — confirmed out of scope)
+- The in-scope "Payment Plug-in" flow (shown embedded in a third-party app — a MyDigicel example) is a **minimal** flow: amount entry → review & confirm (merchant name, amount, total, one already-registered card selected) → processing → success with a reference number and a Share-receipt action. "Powered by GK Pay Biz" branding is visible, consistent with 37752's merchant-branding requirement.
+- No fee/tax line appears on the Plugin's review screen in this example, unlike the QR channel's (see §2) — may be merchant-specific rather than a channel rule; don't assume Plugin never charges fees without confirming.
+
+### Plugin 2.0 design (source: `GK Pay Biz Payment Plug-in(2.0) - Mobile.pdf`, added 2026-10-13)
+A fuller version of the Plugin flow — **resolves the structural question raised above.**
+- **Resolved:** guest checkout, card entry, and the review screen's Fee/GCT/Total breakdown ARE part of the Plugin flow after all. Tapping "Pay Now" in the merchant's app/site redirects to the GK Pay Biz payment portal (`gracekennedy.b2clogin.com`), which shows Review & Confirm (Merchant, Product, Fees, GCT, Total — matches 37754's AC closely) and then either a saved-payment-method path or "Or continue as guest" with the same card-entry form already documented under 37748. 37742/37744/37745/37748/37754 can stay mapped to Plugin as currently written — no re-scoping needed.
+- "Log into GK One" saved-payment-method detail folded into 37755 above.
+- **New detail, no story yet:** full email receipt template shown — "Payment Receipt for [Merchant]" header, Recipient details (Name, When, Reference #), Payment details (Payment method, Amount, Fee, Tax, Total), a security footer ("if you did not do this, change your password/PIN, contact support"), and "Powered by Pay Biz" branding. Useful as a reference for 37749/37750 test assertions.
+  - Checked: the receipt shows the merchant's **name**, not their email — 37749's "hidden merchant email address" AC still holds, no conflict. The email address itself isn't displayed anywhere on this receipt.
+- **Versioning caveat — confirmed:** this file is labeled "2.0" and its payment-method screen shows Apple Pay / Google Pay, but these are confirmed **still out of scope for Release 1** — the design is forward-looking (a later release), consistent with 37747's "Not MVP" and 37755's Apple/Google Pay exclusion. No change to Release 1 test scope.
+
 ---
 
 ## 4. Merchant View Transactions
@@ -100,15 +120,21 @@ Source: Parent 32611 (`paybiz_transactions_stories.csv`). The scope doc describe
 
 ## Summary of open items before test planning
 
-1. Confirm 37734 (Individual Payment Instrument) is excluded from QR Code 1.0 as a P2P case.
-2. Get a story (or at least documented AC) for the 3DS guest-payment challenge step.
-3. Confirm settlement is deliberately out of test scope, not just undocumented.
-4. Get stories or documented requirements for manual merchant onboarding, password reset, and dummy-account provisioning.
-5. Mikhail to confirm whether 37733 should be removed from the backlog, now that its 500,000 figure is a confirmed drafting mistake.
-6. Confirm expiry-date validation on 37748 should reject nonsensical date combinations, not just past/future dates.
-7. Confirm whether Guest Checkout (37744) name fields need defined valid/invalid character rules.
-8. Confirm final wording for the merchant verification badge/note (37742) — "Verified by" vs "Powered by" vs other copy.
-9. Update 37732's AC to add the $350,000 upper bound, now that the P2B cap is confirmed to match the plugin channel's band.
+1. Get a story (or at least documented AC) for the 3DS guest-payment challenge step.
+2. Confirm settlement is deliberately out of test scope, not just undocumented.
+3. Get stories or documented requirements for manual merchant onboarding, password reset, and dummy-account provisioning.
+4. Confirm expiry-date validation on 37748 should reject nonsensical date combinations, not just past/future dates.
+5. Confirm whether Guest Checkout (37744) name fields need defined valid/invalid character rules.
+6. Get a story/AC written for the "Log into GK One" saved-payment-method option (folded into 37755 above) — currently undocumented as its own story.
+
+### Stories/AC that still need writing (requirement confirmed, text not yet updated)
+These are no longer open questions — they're settled requirements where the actual story/AC text just hasn't caught up yet. Test planning should proceed against the confirmed behavior regardless of story state.
+- **37732:** add the $350,000 upper bound (confirmed to match the plugin's band).
+- **37737:** add the Fee/Tax breakdown line item.
+- **37742:** update the verification badge copy to "Powered by."
+- **QR Dynamic/Static variants** (37731/37732): write up as explicit AC — concept confirmed, no story distinguishes the two yet.
+- **"Log into GK One" saved-payment-method step** (§3, near 37755): no story exists at all yet — see item 6 above.
+- **3DS challenge step** (37748): scope doc confirms it happens, but there's no AC anywhere describing it — see item 1 above.
 
 ---
 
@@ -120,8 +146,8 @@ Source: Parent 32611 (`paybiz_transactions_stories.csv`). The scope doc describe
 |---|---|---|---|
 | 37731 | Enter Amount | 37284 | Yes (§2) |
 | 37732 | Validate Amount Entered | 37284 | Yes (§2) |
-| 37733 | Validate Transaction against Wallet Amount | 37284 | Deferred — pending removal call from Mikhail (§2) |
-| 37734 | Individual Payment Instrument | 37284 | Flagged — likely excluded (§2) |
+| 37733 | Validate Transaction against Wallet Amount | 37284 | No — confirmed for removal by Mikhail (§2) |
+| 37734 | Individual Payment Instrument | 37284 | No — confirmed excluded, P2P (§2) |
 | 37736 | Generate Receipt of Payment | 37284 | Yes (§2) |
 | 37737 | Review and Confirm | 37284 | Yes (§2) |
 | 37738 | Notification upon Payment | 37284 | Yes (§2) |
