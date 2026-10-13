@@ -16,6 +16,7 @@ The following should be true before proceeding:
 • A merchant has integrated the GK Pay Biz payment plugin into their own app or website
 • The merchant has an active payment request (amount, product/service description, applicable fees and taxes) ready to pass to the plugin
 • The customer does not have a GK One account, or chooses not to use one
+• Debit/Credit card being used is 3DS secure
 
 Steps:
 | Step | Action                                      | Expected Result                              |
@@ -69,24 +70,26 @@ The following should be true after test completion:
 ## Alternate Valid Paths
 
 TEST CASE 3
-Title: Verify that a customer can select "Pay another way" from the GK One login/saved-methods screen and complete payment as a guest instead
+Title: Verify that a customer can complete payment as a guest from the saved-payment-methods screen, without using a saved GK One method
 
 Tags: GK Pay Biz, Payment Plugin, GK One Login *(suggested)*
 
 Pre Conditions:
 The following should be true before proceeding:
 • The payment plugin is open, on the saved-payment-methods screen after a successful GK One login
+• NOTE (2026-10-13, source: Figma `NTS-UX-UI-Design-Playground?node-id=3387-...`): the design shows an "Or continue as guest" section — full card-entry fields (Card holder's name, Card number, Expiry date, CVV) and a "Make payment" button — rendered on the *same screen* as the saved methods and the "Pay another way" link, not hidden behind it. This contradicts the previous version of this test case, which assumed "Pay another way" was what revealed guest entry. What "Pay another way" actually does is now unconfirmed — need to check with Mikhail (see `paybiz_release_1_requirements.md` open items).
+    - Mikhail to confirm
 
 Steps:
 | Step | Action                                      | Expected Result                              |
 |------|---------------------------------------------|----------------------------------------------|
-| 1.   | Select "Pay another way"                     | The customer is returned to guest card entry |
-| 2.   | Complete the guest checkout and card entry fields with valid data |                                              |
-| 3.   | Tap "Make payment" and complete the 3DS challenge | Payment is processed |
+| 1.   | Without tapping "Pay another way," complete the "Or continue as guest" card-entry fields directly with valid data | Values are accepted |
+| 2.   | Tap "Make payment" and complete the 3DS challenge if presented | Payment is processed |
 
 Post Conditions:
 The following should be true after test completion:
-• The payment completes successfully via manually entered card details, not the GK One saved method
+• The payment completes successfully via manually entered card details, not a saved GK One method, without ever needing to tap "Pay another way"
+• (Flag for follow-up) A separate test case covering what "Pay another way" itself does should be written once its behaviour is confirmed with Mikhail — don't assume it's required to reach guest entry
 
 ---
 
@@ -410,7 +413,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 19
+TEST CASE 19 [TENTATIVE]
 Title: Verify that the system blocks payment when the CVV length does not match the card brand (Visa/Mastercard)
 
 Tags: GK Pay Biz, Payment Plugin, Card Entry, Validation *(suggested)*
@@ -432,7 +435,7 @@ The following should be true after test completion:
 ---
 
 TEST CASE 20
-Title: Verify that the system blocks payment when the CVV length does not match the card brand (Amex)
+Title: Verify that the system blocks payment when the CVV length does not match the card brand (Amex) [TENTATIVE]
 
 Tags: GK Pay Biz, Payment Plugin, Card Entry, Validation *(suggested)*
 
@@ -564,23 +567,23 @@ The following should be true after test completion:
 ---
 
 TEST CASE 26
-Title: Verify that the payment plugin does not present Apple Pay or Google Pay as payment method options
+Title: Verify behaviour when a card that is not 3DS-enrolled/secure is used for guest checkout
 
-Tags: GK Pay Biz, Payment Plugin, Select Payment Method *(suggested)*
+Tags: GK Pay Biz, Payment Plugin, Card Entry, 3DS *(suggested)*
 
 Pre Conditions:
 The following should be true before proceeding:
-• The customer has reached the Select Payment Method screen within the plugin
-• Device used supports both Apple Pay and Google Pay, to rule out device-capability as the reason either is absent
+• The customer is completing a guest card checkout with a card number known to not be 3DS-enrolled/secure
+• NOTE: expected behaviour is undocumented — there is no AC or scope-doc note covering this scenario (see `paybiz_release_1_requirements.md`, open item 1). This test case's steps are written, but the expected result is deliberately left open pending dev/PO confirmation — do not assume either outcome below is correct without checking first.
 
 Steps:
 | Step | Action                                      | Expected Result                              |
 |------|---------------------------------------------|----------------------------------------------|
-| 1.   | Observe the available payment method options | Only "Pay with GK One App" and "Manual Card Entry (Guest Checkout)" are shown; Apple Pay and Google Pay are not presented as options |
+| 1.   | Enter valid details for a card known to not be 3DS-enrolled, then tap "Make payment" | [UNCONFIRMED — confirm with dev/PO] Candidate outcomes to check for: (a) payment proceeds without a 3DS step, treated like a frictionless/no-challenge transaction, (b) payment is blocked or declined for lacking 3DS support, or (c) some other processor-level error is surfaced |
 
 Post Conditions:
 The following should be true after test completion:
-• No Apple Pay or Google Pay option is available anywhere in the Release 1 plugin flow
+• (Flag for follow-up) Resolve the expected outcome with dev/PO before treating this case as pass/fail-able; update this test case once confirmed
 
 ---
 
@@ -673,7 +676,7 @@ The following should be true after test completion:
 
 ## Context applied
 
-- **Primary context:** `playground/gkpay-biz/paybiz_release_1_requirements.md`, §3 "Payment Plugin 1.0 / Web Pay" — all 30 cases trace back to the confirmed requirements there (37752, 37754, 37755 incl. the "Log into GK One" addition, 37742, 37743, 37744 incl. the PO-accepted email-typo risk, 37745, 37748 all 10 sub-points incl. the cardholder-name space rule and expiry nonsense-combo gap, 37749, 37750), and to the explicit exclusions (37747 Apple/Google Pay, 37740/37741 Payment Link).
+- **Primary context:** `playground/gkpay-biz/paybiz_release_1_requirements.md`, §3 "Payment Plugin 1.0 / Web Pay" — 29 of the 30 cases trace back to the confirmed requirements there (37752, 37754, 37755 incl. the "Log into GK One" addition, 37742, 37743, 37744 incl. the PO-accepted email-typo risk, 37745, 37748 all 10 sub-points incl. the cardholder-name space rule and expiry nonsense-combo gap, 37749, 37750). TEST CASE 26 (non-3DS-enrolled card) traces to the same requirements doc's open item 1 sub-question (2026-10-13) rather than confirmed AC — its expected result is deliberately left unconfirmed, not generated from requirements. Per review (2026-10-13), the Apple/Google Pay exclusion case (37747) was removed as not needed for this draft — 37747 and the Payment Link exclusions (37740/37741) remain out of scope for this draft's own reasons but no longer have a dedicated test case here.
 - **Related/secondary context used:** `squads/payments/features/gkpay-biz/domain-knowledge.md` (payment channel terminology, GKPS/Bill Express framing used in preconditions), `squads/payments/features/gkpay-biz/integration-points.md` (GK One Wallet integration informed TEST CASE 2/3's saved-payment-method framing), `squads/payments/squad.md` (confirmed the plugin's own test scope stops at UI/flow behavior, not underlying card-processor validation — reflected in how negative card-validation cases are worded), `_global/cross-cutting-concerns.md` (Notification Service framing for TEST CASE 29/30).
 - **Explicitly excluded per instruction:** `squads/payments/features/gkpay-biz/edge-cases.md` and `test-patterns.md` — not used, as they describe the separate merchant-facing admin portal, not this consumer checkout plugin.
 - **Known-issues.md** — checked, currently empty; no known issues to test around.

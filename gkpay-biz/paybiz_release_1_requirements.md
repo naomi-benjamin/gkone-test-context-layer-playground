@@ -121,11 +121,13 @@ Source: Parent 32611 (`paybiz_transactions_stories.csv`). The scope doc describe
 ## Summary of open items before test planning
 
 1. Get a story (or at least documented AC) for the 3DS guest-payment challenge step.
+   - Sub-question raised during test drafting (2026-10-13): what should happen when the card used is not 3DS-enrolled/secure at all (as distinct from a transaction that's simply not challenged)? No AC or scope-doc note addresses this — flagged alongside the main 3DS gap rather than as a separate thread.
 2. Confirm settlement is deliberately out of test scope, not just undocumented.
 3. Get stories or documented requirements for manual merchant onboarding, password reset, and dummy-account provisioning.
 4. Confirm expiry-date validation on 37748 should reject nonsensical date combinations, not just past/future dates.
 5. Confirm whether Guest Checkout (37744) name fields need defined valid/invalid character rules.
 6. Get a story/AC written for the "Log into GK One" saved-payment-method option (folded into 37755 above) — currently undocumented as its own story.
+7. Confirm with Mikhail what "Pay another way" actually does on the saved-payment-methods screen. Figma (`NTS-UX-UI-Design-Playground?node-id=3387-...`, checked 2026-10-13) shows the "Or continue as guest" card-entry section rendered on the same screen as the saved methods and the "Pay another way" link — not hidden behind it as previously assumed. If guest entry is already visible, "Pay another way" must do something else (switch GK One accounts? something else entirely?) — don't assume until confirmed.
 
 ### Stories/AC that still need writing (requirement confirmed, text not yet updated)
 These are no longer open questions — they're settled requirements where the actual story/AC text just hasn't caught up yet. Test planning should proceed against the confirmed behavior regardless of story state.
