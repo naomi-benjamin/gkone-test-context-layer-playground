@@ -25,10 +25,10 @@ Source: Parent 37284 (`paybiz_channel_stories.csv`).
   - **Confirmed — update AC:** a Fee (and Tax, where applicable) line item is a required part of this screen, same as the Plugin channel's 37754. Current AC only mentions "the payment amount" — story needs updating to add the Fee/Tax breakdown before Total.
 - **37736 — Generate Receipt of Payment:** receipt generated on success, matching existing receipt design, emailed immediately to the customer's registered address.
 - **37738 — Notification upon Payment:** push notification sent on success or failure.
-- **37746 — Pay Using GK One:** launching payment via the GK One app — opens directly if installed, otherwise redirects to the app store.
 
 ### Confirmed NOT in scope
 - **37734 — Individual Payment Instrument:** describes sending funds to someone without a wallet (Person-to-Person). **Confirmed excluded** — QR Code 1.0 is P2B only this release.
+- **37746 — Pay Using GK One:** mis-mapped by the PO under this parent (37284) — **confirmed (2026-10-14) this story actually belongs to the Payment Link workstream**, not QR Code/Scan-to-Pay. Payment Link is itself confirmed out of scope for Release 1 (see §3's "Flagged as NOT in scope," 37740/37741). Removed from QR Code scope accordingly — the "opens directly if installed, otherwise redirects to the app store" behavior it describes is not a confirmed Release 1 requirement for this channel. TEST CASE 7 and TEST CASE 8 in `qr-code-test-cases-draft.md`, both built on this story, should be removed as out of scope.
 
 ### Confirmed NOT in scope (pending removal)
 - **37733 — Validate Transaction against Wallet Amount:** transfers that would push the wallet balance over 500,000 are blocked before reaching the payment processor.

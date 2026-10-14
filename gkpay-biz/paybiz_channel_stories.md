@@ -61,13 +61,6 @@ All stories are `State: New`, unassigned, no tags, unless noted otherwise.
 - **So that:** I am aware of whether it was successful or it failed
 - **AC:** Given a payment attempt has been made, when it succeeds or fails, then the system sends a **push notification** with the status.
 
-### 37746 — Pay Using GK One
-- **As a:** GK One customer
-- **I want to:** authenticate using my GK One app
-- **So that:** I can complete a payment using my enrolled account
-- **AC — Scenario 1 (app installed):** Given the payee selects "Pay with GK One App," when GK One is installed, then the app opens.
-- **AC — Scenario 2 (app not installed):** Given GK One is not installed, when the payee selects "Pay with GK One App," then the payee is redirected to the app store.
-
 ---
 
 ## Channel: Parent 37285 — Payment Link Checkout (Guest / Card / Wallet)

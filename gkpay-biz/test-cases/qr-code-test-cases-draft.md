@@ -89,6 +89,33 @@ The following should be true after test completion:
 ---
 
 TEST CASE 4
+Title: Verify that a customer can select and pay with the GK One Prepaid card (wallet), and the wallet balance is debited accordingly
+
+Tags: Scan to Pay, GK Pay Biz, Mobile *(suggested)*
+
+Pre Conditions:
+The following should be true before proceeding:
+• The customer is logged into GK One with at least one other registered card (e.g. "My NCB MasterCard") in addition to the default GK One Prepaid card, so the Prepaid card is a deliberate choice among options, not the only one available
+• The GK One Prepaid wallet has a sufficient balance to cover the payment amount
+• A valid Dynamic QR code has been scanned and a valid amount entered
+
+Steps:
+| Step | Action                                      | Expected Result                              |
+|------|---------------------------------------------|----------------------------------------------|
+| 1.   | Note the GK One Prepaid wallet's current balance |                                          |
+| 2.   | On the Review and Confirm screen, view available payment methods | Both the GK One Prepaid card and the registered "My NCB MasterCard" are shown as selectable options |
+| 3.   | Select the GK One Prepaid card               | Card is selected |
+| 4.   | Confirm and submit the payment                | Payment is processed using the GK One Prepaid wallet balance |
+| 5.   | Check the GK One Prepaid wallet's balance afterward | [UNCERTAIN: confirm whether the Fee line item shown on Review and Confirm is deducted from the wallet along with the payment amount, or billed/handled separately] The balance has decreased by the payment amount (and fee, if applicable) |
+
+Post Conditions:
+The following should be true after test completion:
+• The payment completes successfully using the GK One Prepaid wallet, not the alternate registered card
+• The wallet balance accurately reflects the debit
+
+---
+
+TEST CASE 5
 Title: Verify that a customer can add an optional note to a QR payment and that it is accepted
 
 Tags: Scan to Pay, GK Pay Biz, Mobile *(suggested)*
@@ -109,7 +136,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 5
+TEST CASE 6
 Title: Verify that a customer can complete a QR payment without entering an optional note
 
 Tags: Scan to Pay, GK Pay Biz, Mobile *(suggested)*
@@ -130,49 +157,9 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 6
-Title: Verify that the GK One app opens directly when the customer selects "Pay with GK One App" and the app is already installed
-
-Tags: Scan to Pay, GK Pay Biz, Mobile *(suggested)*
-
-Pre Conditions:
-The following should be true before proceeding:
-• The GK One app is already installed on the device
-
-Steps:
-| Step | Action                                      | Expected Result                              |
-|------|---------------------------------------------|----------------------------------------------|
-| 1.   | Scan a merchant QR code and select/trigger "Pay with GK One App" | The GK One app opens directly to the payment interface |
-
-Post Conditions:
-The following should be true after test completion:
-• No app-store redirect occurs since the app is already installed
-
----
-
-TEST CASE 7
-Title: Verify that the customer is redirected to the app store when GK One is not installed
-
-Tags: Scan to Pay, GK Pay Biz, Mobile *(suggested)*
-
-Pre Conditions:
-The following should be true before proceeding:
-• The GK One app is NOT installed on the device
-
-Steps:
-| Step | Action                                      | Expected Result                              |
-|------|---------------------------------------------|----------------------------------------------|
-| 1.   | Scan a merchant QR code (or trigger the pay action from outside the app) | The customer is redirected to the relevant app store listing for GK One |
-
-Post Conditions:
-The following should be true after test completion:
-• The payment flow cannot proceed until GK One is installed and opened
-
----
-
 ## Negative / Error Cases
 
-TEST CASE 8
+TEST CASE 7
 Title: Verify that the system blocks payment when the entered amount is below $1000
 
 Tags: Scan to Pay, GK Pay Biz, Mobile, Validation *(suggested)*
@@ -193,7 +180,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 9
+TEST CASE 8
 Title: Verify that the system blocks payment when the entered amount is above $350,000
 
 Tags: Scan to Pay, GK Pay Biz, Mobile, Validation *(suggested)*
@@ -214,7 +201,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 10
+TEST CASE 9
 Title: Verify that the system blocks payment when the amount field is left empty on a Dynamic QR payment
 
 Tags: Scan to Pay, GK Pay Biz, Mobile, Validation *(suggested)*
@@ -235,7 +222,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 11
+TEST CASE 10
 Title: Verify that an invalid or unrecognized QR code fails to resolve before any payment interface is shown
 
 Tags: Scan to Pay, GK Pay Biz, Mobile, Validation *(suggested)*
@@ -255,7 +242,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 12
+TEST CASE 11
 Title: Verify that the customer cannot change the payee on a scanned QR payment
 
 Tags: Scan to Pay, GK Pay Biz, Mobile, Validation *(suggested)*
@@ -272,6 +259,28 @@ Steps:
 Post Conditions:
 The following should be true after test completion:
 • The payment, if completed, can only go to the originally scanned merchant (Merchant A)
+
+---
+
+TEST CASE 12
+Title: Verify that scanning a Person-to-Person Scan-to-Pay QR code does not allow the transaction to proceed
+
+Tags: Scan to Pay, GK Pay Biz, Mobile, Validation *(suggested)*
+
+Pre Conditions:
+The following should be true before proceeding:
+• The customer has a valid P2P Scan-to-Pay QR code (as distinct from a GKPS merchant's P2B QR code)
+• P2P Scan-to-Pay is confirmed disabled for this release (see `paybiz_release_1_requirements.md` §2 exclusions)
+
+Steps:
+| Step | Action                                      | Expected Result                              |
+|------|---------------------------------------------|----------------------------------------------|
+| 1.   | Scan the P2P Scan-to-Pay QR code            | Recognized-but-blocked with a specific "not available" message. The transaction does not proceed. |
+
+Post Conditions:
+The following should be true after test completion:
+• No payment interface is reached that would allow the customer to complete a payment to a P2P recipient
+• No payment can be processed via a P2P Scan-to-Pay QR code under any path tested
 
 ---
 
@@ -373,16 +382,19 @@ Tags: Scan to Pay, GK Pay Biz, Mobile, Notifications *(suggested)*
 Pre Conditions:
 The following should be true before proceeding:
 • The customer has access to the inbox for their GK One-registered email address
+• The customer has at least one registered card (e.g. "My NCB MasterCard") in addition to the default GK One Prepaid card, so the payment method used is a deliberate, verifiable choice rather than only the default
 
 Steps:
 | Step | Action                                      | Expected Result                              |
 |------|---------------------------------------------|----------------------------------------------|
-| 1.   | Complete a successful QR payment              | Payment success is confirmed in-app |
+| 1.   | Complete a successful QR payment, selecting the registered "My NCB MasterCard" as the payment method | Payment success is confirmed in-app |
 | 2.   | Check the customer's registered email inbox   | A receipt email has been received, matching the existing receipt design, immediately after payment |
+| 3.   | Observe the payment method shown on the receipt | The receipt shows the selected payment method as the payment method. Not the GK One Prepaid card or a generic/default label |
 
 Post Conditions:
 The following should be true after test completion:
 • The receipt content (merchant, amount) matches the completed transaction
+• The receipt's payment method field accurately reflects the specific method actually used for the transaction, not a default or mismatched value
 
 ---
 
@@ -431,6 +443,7 @@ The following should be true after test completion:
 
 ## Context applied
 
-- **Primary context:** `playground/gkpay-biz/paybiz_release_1_requirements.md`, §2 "QR Code 1.0 — Scan-to-Pay (Person-to-Business only)" — all 19 cases trace back to the confirmed requirements there (37731, the confirmed Dynamic/Static variants, 37732 incl. the confirmed-but-not-yet-written $350,000 upper bound, 37737 incl. the confirmed Fee/Tax addition, 37736, 37738, 37746), and to the explicit exclusions (37734 P2P, 37733 the 500,000 cap being removed, Apple/Google Pay, Payment Plugin/Payment Link).
-- **Related/secondary context used:** `squads/payments/features/scan-to-pay/overview.md` and `domain-knowledge.md` — supplied the two Home-screen/Wallet entry points (TEST CASE 16), the invalid/unrecognized-QR-must-fail business rule (TEST CASE 11), and the camera-permission precondition (TEST CASE 15, flagged as an assumption since exact denial-handling isn't documented anywhere). `squads/payments/features/scan-to-pay/known-issues.md` checked — empty, nothing to route around. `squads/payments/features/gkpay-biz/integration-points.md` (GK One Wallet framing for payment-method cases). `squads/payments/squad.md` (confirms card/processor-level validation is FinTech/GK Web Pay's concern, not this channel's — negative card-decline cases in TEST CASE 19 are written at the flow level, not processor level). `_global/cross-cutting-concerns.md` (Notification Service — push, not email, for this channel).
+- **Primary context:** `playground/gkpay-biz/paybiz_release_1_requirements.md`, §2 "QR Code 1.0 — Scan-to-Pay (Person-to-Business only)" — 17 of the 19 cases trace back to the confirmed requirements there (37731, the confirmed Dynamic/Static variants, 37732 incl. the confirmed-but-not-yet-written $350,000 upper bound, 37737 incl. the confirmed Fee/Tax addition, 37736, 37738), and to the explicit exclusions (37734 P2P, 37733 the 500,000 cap being removed, Apple/Google Pay, Payment Plugin/Payment Link). TEST CASE 4 (deliberate GK One Prepaid card payment) and TEST CASE 12 (P2P Scan-to-Pay QR code must not process) were both added per review (2026-10-14) to close gaps against the same exclusion list — TEST CASE 4 for the prepaid wallet path (previously only implicit in TEST CASE 1, with no case verifying it as a deliberate choice or checking the wallet balance debit, unlike TEST CASE 3's equivalent for an alternate card), and TEST CASE 12 to give the P2P exclusion (37734) its own explicit negative-path verification rather than leaving it only as a stated scope boundary.
+  - **Removed (2026-10-14):** two cases built on story 37746 ("Pay Using GK One" — opens directly if installed, otherwise app-store redirect). 37746 was mis-mapped by the PO under this channel's parent (37284); it's now confirmed to actually belong to the Payment Link workstream, which is itself out of scope for Release 1. Removed as testing out-of-scope behavior, not a QR Code/Scan-to-Pay requirement.
+- **Related/secondary context used:** `squads/payments/features/scan-to-pay/overview.md` and `domain-knowledge.md` — supplied the two Home-screen/Wallet entry points (TEST CASE 16), the invalid/unrecognized-QR-must-fail business rule (TEST CASE 10), and the camera-permission precondition (TEST CASE 15, flagged as an assumption since exact denial-handling isn't documented anywhere). `squads/payments/features/scan-to-pay/known-issues.md` checked — empty, nothing to route around. `squads/payments/features/gkpay-biz/integration-points.md` (GK One Wallet framing for payment-method cases). `squads/payments/squad.md` (confirms card/processor-level validation is FinTech/GK Web Pay's concern, not this channel's — negative card-decline cases in TEST CASE 19 are written at the flow level, not processor level). `_global/cross-cutting-concerns.md` (Notification Service — push, not email, for this channel).
 - **Explicitly excluded:** `squads/payments/features/gkpay-biz/edge-cases.md` and `test-patterns.md` (separate merchant admin portal, not this consumer flow).
