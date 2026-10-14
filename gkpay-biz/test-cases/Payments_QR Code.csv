@@ -1,0 +1,68 @@
+﻿ID,Work Item Type,Title,Test Step,Step Action,Step Expected,Automation Status,Area Path,Assigned To,State
+"37998","Test Case","Verify that a GK One customer can scan a merchant's Dynamic QR code and complete a payment successfully",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","From the Home screen, select Scan to Pay and scan the merchant's Dynamic QR code","The payment interface opens, resolved to the scanned merchant",,,,
+,,,"2","Observe the amount field","The amount field starts at $0.00 and is editable",,,,
+,,,"3","Enter a valid payment amount (e.g. $5,000) and an optional note","Values are accepted",,,,
+,,,"4","Proceed to the Review and Confirm screen","The payment amount, a Fee line item, and the Total are displayed; the merchant (payee) cannot be changed",,,,
+,,,"5","Select the GK One Prepaid card (wallet) as the payment method","Payment method selected",,,,
+,,,"6","Confirm and submit the payment","Payment is processed",,,,
+,,,"7","Observe the result screen","""Payment successful — $5,000.00 JMD — You've made a payment of $5,000.00 JMD from [Payer Name]"" is displayed",,,,
+"37999","Test Case","Verify that a GK One customer can scan a merchant's Static QR code and complete a payment with the pre-filled amount",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Scan the merchant's Static QR code","The payment interface opens, resolved to the scanned merchant",,,,
+,,,"2","Observe the amount field","The amount is pre-filled with the merchant's fixed amount and is NOT editable",,,,
+,,,"3","Proceed to the Review and Confirm screen","The pre-filled amount, Fee, and Total are displayed",,,,
+,,,"4","Select a payment method and confirm payment","Payment is processed",,,,
+,,,"5","Observe the result screen","Payment success is displayed with the correct fixed amount",,,,
+"38000","Test Case","Verify that a customer can pay using a registered card other than the default GK One Prepaid card after logging into GK One",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","On the Review and Confirm screen, view available payment methods","Both the GK One Prepaid card and the registered ""My NCB MasterCard"" are shown as selectable options",,,,
+,,,"2","Select ""My NCB MasterCard""","Card is selected",,,,
+,,,"3","Confirm and submit the payment","Payment is processed using the selected card",,,,
+"38001","Test Case","Verify that a customer can select and pay with the GK One Prepaid card (wallet), and the wallet balance is debited accordingly",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Note the GK One Prepaid wallet's current balance",,,,,
+,,,"2","On the Review and Confirm screen, view available payment methods","Both the GK One Prepaid card and the registered ""My NCB MasterCard"" are shown as selectable options",,,,
+,,,"3","Select the GK One Prepaid card","Card is selected",,,,
+,,,"4","Confirm and submit the payment","Payment is processed using the GK One Prepaid wallet balance",,,,
+,,,"5","Check the GK One Prepaid wallet's balance afterward","[UNCERTAIN: confirm whether the Fee line item shown on Review and Confirm is deducted from the wallet along with the payment amount, or billed/handled separately] The balance has decreased by the payment amount (and fee, if applicable)",,,,
+"38002","Test Case","Verify that a customer can add an optional note to a QR payment and that it is accepted",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter a valid amount and a short note (e.g. ""Lunch"")","Note is accepted",,,,
+,,,"2","Proceed through review and complete the payment","Payment is processed successfully with the note attached",,,,
+"38003","Test Case","Verify that a customer can complete a QR payment without entering an optional note",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter a valid amount and leave the note field blank",,,,,
+,,,"2","Proceed through review and complete the payment","Payment is processed successfully with no note",,,,
+"38004","Test Case","Verify that the system blocks payment when the entered amount is below $1000",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter an amount of $999.99",,,,,
+,,,"2","Attempt to proceed","A validation message is displayed; the customer cannot proceed",,,,
+"38005","Test Case","Verify that the system blocks payment when the entered amount is above $350,000",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter an amount of $350,000.01",,,,,
+,,,"2","Attempt to proceed","A validation message is displayed; the customer cannot proceed",,,,
+"38006","Test Case","Verify that the system blocks payment when the amount field is left empty on a Dynamic QR payment",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Leave the amount field empty",,,,,
+,,,"2","Attempt to proceed","A validation message is displayed; the customer cannot proceed",,,,
+"38007","Test Case","Verify that an invalid or unrecognized QR code fails to resolve before any payment interface is shown",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Scan the invalid/unrecognized QR code","An error is shown indicating the QR code could not be resolved; no payment interface is opened",,,,
+"38008","Test Case","Verify that the customer cannot change the payee on a scanned QR payment",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Look for any control to change or edit the payee/merchant on the payment screen","No such control exists; the payee is fixed to Merchant A throughout the flow",,,,
+"38009","Test Case","Verify that scanning a Person-to-Person Scan-to-Pay QR code does not allow the transaction to proceed",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Scan the P2P Scan-to-Pay QR code","Recognized-but-blocked with a specific ""not available"" message. The transaction does not proceed.",,,,
+"38010","Test Case","Verify that a payment of exactly $1000 is accepted (lower boundary)",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter an amount of exactly $1,000.00",,,,,
+,,,"2","Attempt to proceed","No validation error is shown; customer can proceed",,,,
+"38011","Test Case","Verify that a payment of exactly $350,000 is accepted (upper boundary)",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter an amount of exactly $350,000.00",,,,,
+,,,"2","Attempt to proceed","No validation error is shown; customer can proceed",,,,
+"38012","Test Case","Verify that the Scan to Pay camera requests permission when not already granted, and handles denial gracefully",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Select Scan to Pay from the Home screen","A camera permission prompt is shown",,,,
+,,,"2","Deny camera permission","The app does not crash; a clear message is shown indicating the camera is required to scan a QR code, and/or a fallback is offered",,,,
+"38013","Test Case","Verify that Scan to Pay is accessible both from the Home screen and from the GK One Card's ""PayMe"" button in Wallet",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","From the Home screen, select Scan to Pay","Camera/scan interface opens",,,,
+,,,"2","Navigate to Wallet and select ""PayMe"" on the GK One Card","Camera/scan interface opens, equivalent to the Home screen entry point",,,,
+"38014","Test Case","Verify that a receipt is emailed to the customer's registered email address after a successful QR payment",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Complete a successful QR payment, selecting the registered ""My NCB MasterCard"" as the payment method","Payment success is confirmed in-app",,,,
+,,,"2","Check the customer's registered email inbox","A receipt email has been received, matching the existing receipt design, immediately after payment",,,,
+,,,"3","Observe the payment method shown on the receipt","The receipt shows the selected payment method as the payment method. Not the GK One Prepaid card or a generic/default label",,,,
+"38015","Test Case","Verify that a push notification is sent to the customer when a QR payment completes successfully",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Complete a successful QR payment","Payment success is confirmed in-app",,,,
+,,,"2","Check the device's notification center","A push notification confirming the successful payment has been received",,,,
+"38016","Test Case","Verify that a push notification is sent to the customer when a QR payment attempt fails",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Attempt a QR payment that will be declined by the processor","Payment fails; failure is shown in-app",,,,
+,,,"2","Check the device's notification center","A push notification indicating the payment failed has been received",,,,

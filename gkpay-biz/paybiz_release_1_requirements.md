@@ -164,7 +164,7 @@ These are no longer open questions — they're settled requirements where the ac
 | 37743 | Validate Amount (Open) | 37285 | Yes (§3) |
 | 37744 | Guest Checkout | 37285 | Yes (§3) |
 | 37745 | Validate Guest Checkout | 37285 | Yes (§3) |
-| 37746 | Pay Using GK One | 37284 | Yes (§2) |
+| 37746 | Pay Using GK One | 37284 | No — mis-mapped, actually Payment Link scope, confirmed out (§2) |
 | 37747 | Pay Using Apple Pay or Google Pay (Not MVP) | 37285 | No — Not MVP (§3) |
 | 37748 | Enter Card Details | 37285 | Yes (§3) |
 | 37749 | Confirmation Receipt of Payment | 37285 | Yes (§3) |

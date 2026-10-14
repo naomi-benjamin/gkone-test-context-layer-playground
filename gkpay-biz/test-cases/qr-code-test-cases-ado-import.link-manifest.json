@@ -1,0 +1,175 @@
+[
+  {
+    "title": "Verify that a GK One customer can scan a merchant's Dynamic QR code and complete a payment successfully",
+    "stories": [
+      "37731",
+      "37737",
+      "37736",
+      "37738"
+    ],
+    "confidence": "high",
+    "note": "composite Dynamic-QR happy-path smoke test",
+    "id": 37998
+  },
+  {
+    "title": "Verify that a GK One customer can scan a merchant's Static QR code and complete a payment with the pre-filled amount",
+    "stories": [
+      "37731",
+      "37737",
+      "37736",
+      "37738"
+    ],
+    "confidence": "high",
+    "note": "composite Static-QR happy-path; Dynamic/Static distinction is design-confirmed but not yet written into 37731/37732's own AC text",
+    "id": 37999
+  },
+  {
+    "title": "Verify that a customer can pay using a registered card other than the default GK One Prepaid card after logging into GK One",
+    "stories": [
+      "37737"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38000
+  },
+  {
+    "title": "Verify that a customer can select and pay with the GK One Prepaid card (wallet), and the wallet balance is debited accordingly",
+    "stories": [
+      "37737"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38001
+  },
+  {
+    "title": "Verify that a customer can add an optional note to a QR payment and that it is accepted",
+    "stories": [
+      "37731"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38002
+  },
+  {
+    "title": "Verify that a customer can complete a QR payment without entering an optional note",
+    "stories": [
+      "37731"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38003
+  },
+  {
+    "title": "Verify that the system blocks payment when the entered amount is below $1000",
+    "stories": [
+      "37732"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38004
+  },
+  {
+    "title": "Verify that the system blocks payment when the entered amount is above $350,000",
+    "stories": [
+      "37732"
+    ],
+    "confidence": "medium",
+    "note": "the $350,000 ceiling is confirmed but not yet written into 37732's own AC text \u2014 see requirements doc 'Stories/AC that still need writing'",
+    "id": 38005
+  },
+  {
+    "title": "Verify that the system blocks payment when the amount field is left empty on a Dynamic QR payment",
+    "stories": [
+      "37732"
+    ],
+    "confidence": "medium",
+    "note": "37732's documented AC only states the $1000 floor; empty-field handling isn't explicitly called out for this channel (unlike the Plugin's 37743, which does state it explicitly)",
+    "id": 38006
+  },
+  {
+    "title": "Verify that an invalid or unrecognized QR code fails to resolve before any payment interface is shown",
+    "stories": [
+      "37731"
+    ],
+    "confidence": "low",
+    "note": "invalid/unrecognized QR handling isn't explicitly addressed in 37731's AC \u2014 inferred necessity, not sourced text",
+    "id": 38007
+  },
+  {
+    "title": "Verify that the customer cannot change the payee on a scanned QR payment",
+    "stories": [
+      "37731"
+    ],
+    "confidence": "high",
+    "note": "direct match: 'User should not be able to change the payee (P2B only)'",
+    "id": 38008
+  },
+  {
+    "title": "Verify that scanning a Person-to-Person Scan-to-Pay QR code does not allow the transaction to proceed",
+    "stories": [
+      "37734"
+    ],
+    "confidence": "high",
+    "note": "tests that this explicitly-excluded P2P story's functionality stays blocked",
+    "id": 38009
+  },
+  {
+    "title": "Verify that a payment of exactly $1000 is accepted (lower boundary)",
+    "stories": [
+      "37732"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38010
+  },
+  {
+    "title": "Verify that a payment of exactly $350,000 is accepted (upper boundary)",
+    "stories": [
+      "37732"
+    ],
+    "confidence": "medium",
+    "note": "same AC-not-yet-written caveat as TEST CASE 8",
+    "id": 38011
+  },
+  {
+    "title": "Verify that the Scan to Pay camera requests permission when not already granted, and handles denial gracefully",
+    "stories": [],
+    "confidence": "none",
+    "note": "camera-permission denial handling isn't documented in any story \u2014 already flagged as an assumption in the draft's own note",
+    "id": 38012
+  },
+  {
+    "title": "Verify that Scan to Pay is accessible both from the Home screen and from the GK One Card's \"PayMe\" button in Wallet",
+    "stories": [],
+    "confidence": "none",
+    "note": "sourced from scan-to-pay/domain-knowledge.md, not from a channel-stories CSV story",
+    "id": 38013
+  },
+  {
+    "title": "Verify that a receipt is emailed to the customer's registered email address after a successful QR payment",
+    "stories": [
+      "37736"
+    ],
+    "confidence": "medium",
+    "note": "37736 confirms the receipt-email requirement; the added payment-method-correctness assertion isn't explicitly in 37736's AC text",
+    "id": 38014
+  },
+  {
+    "title": "Verify that a push notification is sent to the customer when a QR payment completes successfully",
+    "stories": [
+      "37738"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38015
+  },
+  {
+    "title": "Verify that a push notification is sent to the customer when a QR payment attempt fails",
+    "stories": [
+      "37738"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38016
+  }
+]

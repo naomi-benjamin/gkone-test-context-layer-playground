@@ -1,0 +1,82 @@
+﻿ID,Work Item Type,Title,Preconditions,Postconditions,Test Step,Step Action,Step Expected,Area Path,Assigned To,State,Tags
+,Test Case,Verify that a merchant can view a list of all incoming transactions on the Transactions page,"Pre Conditions:
+The following should be true before proceeding:
+- The merchant is authenticated into the GK PayBiz portal
+- The merchant's account has at least one completed transaction and one pending transaction","Post Conditions:
+The following should be true after test completion:
+- All transactions shown belong only to the authenticated merchant's account",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,GK Pay Biz; Merchant Portal; Web; Smoke
+,,,,,1,Navigate to the Transactions page,A list of all incoming transactions for the merchant's account is displayed,,,,
+,,,,,2,Observe the pending transaction's status,"It is shown as ""Pending""",,,,
+,,,,,3,Observe the completed transaction's status,"It is shown as ""Completed""",,,,
+,Test Case,Verify that a newly completed payment appears in the merchant's transaction list after refreshing or reopening the Transactions page,"Pre Conditions:
+The following should be true before proceeding:
+- The merchant is authenticated and viewing the Transactions page
+- A customer is able to make a new payment to this merchant via an in-scope channel (e.g. QR Code or Payment Plugin)","Post Conditions:
+The following should be true after test completion:
+- The transaction list reflects the new payment immediately on refresh/reopen
+- Note: [UNCERTAIN] whether the underlying data feed is polling, websocket, or a true real-time push is not confirmed — this case only verifies the user-facing behavior (""no delay on refresh/open""), not the transport mechanism. Confirm with dev if a live/auto-updating-without-refresh expectation needs separate coverage.*",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,GK Pay Biz; Merchant Portal; Web
+,,,,,1,Note the current transaction list,,,,,
+,,,,,2,Have a customer complete a new payment to this merchant,,,,,
+,,,,,3,Refresh or reopen the Transactions page,"The new transaction now appears in the list, without further delay",,,,
+,Test Case,Verify that a merchant can open a completed transaction and view its customer payment details,"Pre Conditions:
+The following should be true before proceeding:
+- The merchant is authenticated and has at least one completed transaction in their list","Post Conditions:
+The following should be true after test completion:
+- The detail shown accurately reflects the selected transaction, with no editing controls present (read-only)
+- Note: [OPEN QUESTION] should there be anything in the transaction list or detail view that distinguishes a guest checkout transaction (Payment Plugin, no GK One login) from a transaction made by an authenticated GK One user? 37333's AC (Customer name, payment method, reference ID, payment channel) doesn't call out a guest-vs-member distinction either way. Worth confirming with dev/PO whether this is expected to be visible to the merchant (e.g. for support/dispute purposes) before assuming either ""no distinction needed"" or ""missing field"" — raised 2026-10-13, relevant to the Payment Plugin's guest-checkout path documented in `plugin-test-cases-draft.md`.*",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,GK Pay Biz; Merchant Portal; Web
+,,,,,1,Select/open a completed transaction,Transaction detail view opens,,,,
+,,,,,2,Observe the detail view,"Customer name, payment method, reference ID, and payment channel are all shown",,,,
+,Test Case,Verify that a merchant can open a pending transaction and see its status without error or failure details,"Pre Conditions:
+The following should be true before proceeding:
+- The merchant is authenticated and has at least one pending transaction in their list","Post Conditions:
+The following should be true after test completion:
+- The pending transaction's detail view does not misleadingly show failure information",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,GK Pay Biz; Merchant Portal; Web
+,,,,,1,Select/open the pending transaction,"Transaction detail view opens, showing status ""Pending""",,,,
+,,,,,2,Observe for any error or failure-reason field,"None is shown, since the transaction has neither completed nor failed",,,,
+,Test Case,Verify that a merchant can view transactions originating from different payment channels in the same list,"Pre Conditions:
+The following should be true before proceeding:
+- The merchant has at least one transaction received via QR Code 1.0 and at least one received via the Payment Plugin","Post Conditions:
+The following should be true after test completion:
+- The payment channel field accurately distinguishes transactions by their originating channel",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,GK Pay Biz; Merchant Portal; Web
+,,,,,1,View the Transactions list,Both transactions are shown together in the same list,,,,
+,,,,,2,Open each transaction's detail view,"Each shows the correct payment channel (e.g. ""QR Code"" vs. ""Payment Plugin"") for that transaction",,,,
+,Test Case,Verify that a failed transaction's detail view shows the error or reason for failure,"Pre Conditions:
+The following should be true before proceeding:
+- The merchant has at least one transaction in the ""Failed"" state","Post Conditions:
+The following should be true after test completion:
+- The merchant has enough information to understand why the transaction failed, without needing to contact support",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,GK Pay Biz; Merchant Portal; Web
+,,,,,1,Select/open the failed transaction,"Transaction detail view opens, showing status ""Failed""",,,,
+,,,,,2,Observe the detail view for failure information,An error message or reason for the failure is displayed,,,,
+,Test Case,Verify that a merchant cannot view another merchant's transactions,"Pre Conditions:
+The following should be true before proceeding:
+- Two distinct merchant accounts exist (Merchant A and Merchant B), each with their own transactions
+- The tester is authenticated as Merchant A","Post Conditions:
+The following should be true after test completion:
+- No cross-merchant data leakage occurs under any access path tested",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,GK Pay Biz; Merchant Portal; Web; Security
+,,,,,1,View the Transactions list as Merchant A,Only Merchant A's transactions are shown,,,,
+,,,,,2,"Attempt to access Merchant B's transaction detail directly (e.g. via a guessed or manipulated transaction/reference ID in the URL, if applicable)",Access is denied; Merchant B's transaction data is not returned or displayed,,,,
+,Test Case,Verify that an unauthenticated user cannot access the Transactions page,"Pre Conditions:
+The following should be true before proceeding:
+- The tester does not have an active authenticated session with the GK PayBiz portal","Post Conditions:
+The following should be true after test completion:
+- No transaction data is exposed to an unauthenticated request",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,GK Pay Biz; Merchant Portal; Web; Security
+,,,,,1,Attempt to navigate directly to the Transactions page URL,The user is redirected to login/authentication and is not shown any transaction data,,,,
+,Test Case,Verify that the Transactions page displays a clear empty state when the merchant has no transactions yet,"Pre Conditions:
+The following should be true before proceeding:
+- The merchant account has zero transactions (e.g. a newly onboarded merchant)","Post Conditions:
+The following should be true after test completion:
+- The empty state does not read as a system error",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,GK Pay Biz; Merchant Portal; Web
+,,,,,1,Navigate to the Transactions page,"A clear ""no transactions yet"" empty state is shown, not an error or a blank/broken page",,,,
+,Test Case,Verify that a transaction's status updates from Pending to Completed when viewed again after the underlying payment completes,"Pre Conditions:
+The following should be true before proceeding:
+- A transaction exists in the ""Pending"" state and is expected to transition to ""Completed"" shortly","Post Conditions:
+The following should be true after test completion:
+- The status transition is reflected correctly without requiring any merchant action beyond refresh/reopen",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,GK Pay Biz; Merchant Portal; Web
+,,,,,1,"Note the transaction's status as ""Pending""",,,,,
+,,,,,2,"Wait for the underlying payment to complete, then refresh or reopen the Transactions page","The transaction's status now shows ""Completed""",,,,
+,Test Case,Verify that filtering and export controls are not present on the Transactions page for Release 1,"Pre Conditions:
+The following should be true before proceeding:
+- The merchant is authenticated and viewing the Transactions page with multiple transactions present","Post Conditions:
+The following should be true after test completion:
+- Confirms the Release 1 scope boundary — if filtering or export appear, that is a scope regression, not a missing feature to raise as a routine enhancement request",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,GK Pay Biz; Merchant Portal; Web
+,,,,,1,"Review the Transactions page for any filter controls (date, channel, amount) or export/download controls (CSV, PDF)",None are present — this page is read-only list + balance only for Release 1,,,,

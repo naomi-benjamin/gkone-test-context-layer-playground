@@ -1,0 +1,99 @@
+[
+  {
+    "title": "Verify that a merchant can view a list of all incoming transactions on the Transactions page",
+    "stories": [
+      "32622",
+      "37332"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38019
+  },
+  {
+    "title": "Verify that a newly completed payment appears in the merchant's transaction list after refreshing or reopening the Transactions page",
+    "stories": [
+      "32622"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38020
+  },
+  {
+    "title": "Verify that a merchant can open a completed transaction and view its customer payment details",
+    "stories": [
+      "37333"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38021
+  },
+  {
+    "title": "Verify that a merchant can open a pending transaction and see its status without error or failure details",
+    "stories": [
+      "32622",
+      "37332"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38022
+  },
+  {
+    "title": "Verify that a merchant can view transactions originating from different payment channels in the same list",
+    "stories": [
+      "37333"
+    ],
+    "confidence": "medium",
+    "note": "37333 confirms payment channel in the detail view; showing multiple channels together in the list itself isn't explicitly stated",
+    "id": 38023
+  },
+  {
+    "title": "Verify that a failed transaction's detail view shows the error or reason for failure",
+    "stories": [
+      "37332"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38024
+  },
+  {
+    "title": "Verify that a merchant cannot view another merchant's transactions",
+    "stories": [],
+    "confidence": "none",
+    "note": "cross-merchant access control isn't stated in any of the three in-scope stories \u2014 standard security expectation, not sourced AC",
+    "id": 38025
+  },
+  {
+    "title": "Verify that an unauthenticated user cannot access the Transactions page",
+    "stories": [],
+    "confidence": "none",
+    "note": "unauthenticated-access blocking isn't stated in any of the three in-scope stories \u2014 inferred, not sourced AC",
+    "id": 38026
+  },
+  {
+    "title": "Verify that the Transactions page displays a clear empty state when the merchant has no transactions yet",
+    "stories": [],
+    "confidence": "none",
+    "note": "empty-state behavior isn't addressed in any of the three stories",
+    "id": 38027
+  },
+  {
+    "title": "Verify that a transaction's status updates from Pending to Completed when viewed again after the underlying payment completes",
+    "stories": [
+      "32622",
+      "37332"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38028
+  },
+  {
+    "title": "Verify that filtering and export controls are not present on the Transactions page for Release 1",
+    "stories": [
+      "37325",
+      "37331"
+    ],
+    "confidence": "high",
+    "note": "tests the absence of these two explicitly-out-of-scope stories' functionality, not their AC \u2014 flagging since 'Tested By' usually links to AC a case validates, not scope it confirms absent",
+    "id": 38029
+  }
+]

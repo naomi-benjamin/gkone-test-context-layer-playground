@@ -1,0 +1,274 @@
+[
+  {
+    "title": "Verify that a customer can launch the payment plugin from an integrating app and complete a guest checkout card payment successfully",
+    "stories": [
+      "37752",
+      "37754",
+      "37744",
+      "37748",
+      "37749"
+    ],
+    "confidence": "high",
+    "note": "composite happy-path smoke test spanning launch/review/guest-checkout/card-entry/confirmation",
+    "id": 37967
+  },
+  {
+    "title": "Verify that a customer can complete payment via \"Pay with GK One App\" using a saved payment method after logging in",
+    "stories": [
+      "37755"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37968
+  },
+  {
+    "title": "Verify that a customer can use \"Pay another way\" to return from the GK One saved-methods screen and complete payment as a guest instead",
+    "stories": [
+      "37755",
+      "37744"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37969
+  },
+  {
+    "title": "Verify that a merchant-defined custom field (e.g. \"Unit Number\") is presented and accepted during guest checkout",
+    "stories": [
+      "37744"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37970
+  },
+  {
+    "title": "Verify that the card number input auto-formats into groups of 4 digits as the customer types",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 4",
+    "id": 37971
+  },
+  {
+    "title": "Verify that a cardholder name containing a hyphen and an apostrophe is accepted",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 2",
+    "id": 37972
+  },
+  {
+    "title": "Verify that the payment plugin launches correctly and displays the correct merchant branding when embedded in different integrating apps",
+    "stories": [
+      "37752"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37973
+  },
+  {
+    "title": "Verify that the system blocks payment when the entered amount is below $1000",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37974
+  },
+  {
+    "title": "Verify that the system blocks payment when the entered amount is above $350,000",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37975
+  },
+  {
+    "title": "Verify that the system blocks payment when the amount field is left empty",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37976
+  },
+  {
+    "title": "Verify that the system blocks guest checkout when required fields (name or email) are left blank",
+    "stories": [
+      "37745"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37977
+  },
+  {
+    "title": "Verify that the system blocks guest checkout when the email address is in an invalid format",
+    "stories": [
+      "37745"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37978
+  },
+  {
+    "title": "Verify that the system blocks payment submission when the cardholder name field is left empty",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 3",
+    "id": 37979
+  },
+  {
+    "title": "Verify that the system blocks payment submission when the cardholder name does not contain a space (single-word entry)",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 3 detail",
+    "id": 37980
+  },
+  {
+    "title": "Verify that the system blocks payment submission when an invalid card number is entered",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 5",
+    "id": 37981
+  },
+  {
+    "title": "Verify that the system blocks payment submission when the card's expiry date has already passed",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 7",
+    "id": 37982
+  },
+  {
+    "title": "Verify that the system rejects an expiry date with a month value greater than 12",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "medium",
+    "note": "sub-point 6, but requirements doc flags this exact nonsensical-date case as an AC gap not yet written into the story",
+    "id": 37983
+  },
+  {
+    "title": "Verify that the system rejects non-numeric or malformed input in the expiry date field",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "medium",
+    "note": "sub-point 6, same AC gap as TEST CASE 17",
+    "id": 37984
+  },
+  {
+    "title": "Verify that the system blocks payment when the CVV length does not match the card brand (Visa/Mastercard)",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "medium",
+    "note": "sub-point 9; reviewer marked this case [TENTATIVE] in the draft",
+    "id": 37985
+  },
+  {
+    "title": "Verify that the system blocks payment when the CVV length does not match the card brand (Amex) [TENTATIVE]",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "medium",
+    "note": "sub-point 9; reviewer marked this case [TENTATIVE] in the draft",
+    "id": 37986
+  },
+  {
+    "title": "Verify that the CVV input is masked as it is typed",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 8",
+    "id": 37987
+  },
+  {
+    "title": "Verify that a payment of exactly $1000 is accepted (lower boundary)",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37988
+  },
+  {
+    "title": "Verify that a payment of exactly $350,000 is accepted (upper boundary)",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37989
+  },
+  {
+    "title": "Verify that a guest checkout payment still completes successfully when the customer enters a mistyped (but validly formatted) email address",
+    "stories": [
+      "37744",
+      "37750"
+    ],
+    "confidence": "high",
+    "note": "PO-accepted mistyped-email risk, tied to guest checkout + the lost notification",
+    "id": 37990
+  },
+  {
+    "title": "Verify that a 3DS challenge is presented during guest card checkout and must be completed for payment to succeed",
+    "stories": [],
+    "confidence": "none",
+    "note": "no story exists for the 3DS challenge step at all \u2014 requirements doc open item 1 / 'Stories/AC that still need writing'",
+    "id": 37991
+  },
+  {
+    "title": "Verify behaviour when a card that is not 3DS-enrolled is used for guest checkout",
+    "stories": [],
+    "confidence": "none",
+    "note": "no story exists \u2014 same 3DS gap, this is the open sub-question under item 1",
+    "id": 37992
+  },
+  {
+    "title": "Verify that the Merchant Verification modal displays the correct \"Powered by\" copy and merchant information",
+    "stories": [
+      "37742"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37993
+  },
+  {
+    "title": "Verify that the confirmation receipt displays the merchant name and amount but never displays the merchant's email address",
+    "stories": [
+      "37749"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37994
+  },
+  {
+    "title": "Verify that an email notification is sent to the customer when a payment completes successfully",
+    "stories": [
+      "37750"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37995
+  },
+  {
+    "title": "Verify that an email notification is sent to the customer when a payment attempt fails",
+    "stories": [
+      "37750"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37996
+  }
+]

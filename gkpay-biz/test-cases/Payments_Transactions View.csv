@@ -1,0 +1,33 @@
+﻿ID,Work Item Type,Title,Test Step,Step Action,Step Expected,Automation Status,Area Path,Assigned To,State
+"38019","Test Case","Verify that a merchant can view a list of all incoming transactions on the Transactions page",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Navigate to the Transactions page","A list of all incoming transactions for the merchant's account is displayed",,,,
+,,,"2","Observe the pending transaction's status","It is shown as ""Pending""",,,,
+,,,"3","Observe the completed transaction's status","It is shown as ""Completed""",,,,
+"38020","Test Case","Verify that a newly completed payment appears in the merchant's transaction list after refreshing or reopening the Transactions page",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Note the current transaction list",,,,,
+,,,"2","Have a customer complete a new payment to this merchant",,,,,
+,,,"3","Refresh or reopen the Transactions page","The new transaction now appears in the list, without further delay",,,,
+"38021","Test Case","Verify that a merchant can open a completed transaction and view its customer payment details",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Select/open a completed transaction","Transaction detail view opens",,,,
+,,,"2","Observe the detail view","Customer name, payment method, reference ID, and payment channel are all shown",,,,
+"38022","Test Case","Verify that a merchant can open a pending transaction and see its status without error or failure details",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Select/open the pending transaction","Transaction detail view opens, showing status ""Pending""",,,,
+,,,"2","Observe for any error or failure-reason field","None is shown, since the transaction has neither completed nor failed",,,,
+"38023","Test Case","Verify that a merchant can view transactions originating from different payment channels in the same list",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","View the Transactions list","Both transactions are shown together in the same list",,,,
+,,,"2","Open each transaction's detail view","Each shows the correct payment channel (e.g. ""QR Code"" vs. ""Payment Plugin"") for that transaction",,,,
+"38024","Test Case","Verify that a failed transaction's detail view shows the error or reason for failure",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Select/open the failed transaction","Transaction detail view opens, showing status ""Failed""",,,,
+,,,"2","Observe the detail view for failure information","An error message or reason for the failure is displayed",,,,
+"38025","Test Case","Verify that a merchant cannot view another merchant's transactions",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","View the Transactions list as Merchant A","Only Merchant A's transactions are shown",,,,
+,,,"2","Attempt to access Merchant B's transaction detail directly (e.g. via a guessed or manipulated transaction/reference ID in the URL, if applicable)","Access is denied; Merchant B's transaction data is not returned or displayed",,,,
+"38026","Test Case","Verify that an unauthenticated user cannot access the Transactions page",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Attempt to navigate directly to the Transactions page URL","The user is redirected to login/authentication and is not shown any transaction data",,,,
+"38027","Test Case","Verify that the Transactions page displays a clear empty state when the merchant has no transactions yet",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Navigate to the Transactions page","A clear ""no transactions yet"" empty state is shown, not an error or a blank/broken page",,,,
+"38028","Test Case","Verify that a transaction's status updates from Pending to Completed when viewed again after the underlying payment completes",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Note the transaction's status as ""Pending""",,,,,
+,,,"2","Wait for the underlying payment to complete, then refresh or reopen the Transactions page","The transaction's status now shows ""Completed""",,,,
+"38029","Test Case","Verify that filtering and export controls are not present on the Transactions page for Release 1",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Review the Transactions page for any filter controls (date, channel, amount) or export/download controls (CSV, PDF)","None are present — this page is read-only list + balance only for Release 1",,,,

@@ -1,0 +1,161 @@
+﻿ID,Work Item Type,Title,Preconditions,Postconditions,Test Step,Step Action,Step Expected,Area Path,Assigned To,State,Tags
+,Test Case,Verify that a GK One customer can scan a merchant's Dynamic QR code and complete a payment successfully,"Pre Conditions:
+The following should be true before proceeding:
+- The customer is authenticated in the GK One app
+- The customer has the GK One app installed
+- A valid, active GKPS merchant has a Dynamic QR code available to scan
+- Camera permission is already granted to the GK One app","Post Conditions:
+The following should be true after test completion:
+- The payment is completed successfully
+- A receipt matching the existing receipt design is emailed immediately to the customer's registered email address
+- A push notification confirming successful payment is received",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile; Smoke
+,,,,,1,"From the Home screen, select Scan to Pay and scan the merchant's Dynamic QR code","The payment interface opens, resolved to the scanned merchant",,,,
+,,,,,2,Observe the amount field,The amount field starts at $0.00 and is editable,,,,
+,,,,,3,"Enter a valid payment amount (e.g. $5,000) and an optional note",Values are accepted,,,,
+,,,,,4,Proceed to the Review and Confirm screen,"The payment amount, a Fee line item, and the Total are displayed; the merchant (payee) cannot be changed",,,,
+,,,,,5,Select the GK One Prepaid card (wallet) as the payment method,Payment method selected,,,,
+,,,,,6,Confirm and submit the payment,Payment is processed,,,,
+,,,,,7,Observe the result screen,"""Payment successful — $5,000.00 JMD — You've made a payment of $5,000.00 JMD from [Payer Name]"" is displayed",,,,
+,Test Case,Verify that a GK One customer can scan a merchant's Static QR code and complete a payment with the pre-filled amount,"Pre Conditions:
+The following should be true before proceeding:
+- The customer is authenticated in the GK One app
+- A valid, active GKPS merchant has a Static QR code configured with a fixed amount (e.g. $50,000)","Post Conditions:
+The following should be true after test completion:
+- The payment completes using exactly the merchant's pre-set amount, unmodified
+- A receipt is emailed and a push notification is received",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile
+,,,,,1,Scan the merchant's Static QR code,"The payment interface opens, resolved to the scanned merchant",,,,
+,,,,,2,Observe the amount field,The amount is pre-filled with the merchant's fixed amount and is NOT editable,,,,
+,,,,,3,Proceed to the Review and Confirm screen,"The pre-filled amount, Fee, and Total are displayed",,,,
+,,,,,4,Select a payment method and confirm payment,Payment is processed,,,,
+,,,,,5,Observe the result screen,Payment success is displayed with the correct fixed amount,,,,
+,Test Case,Verify that a customer can pay using a registered card other than the default GK One Prepaid card after logging into GK One,"Pre Conditions:
+The following should be true before proceeding:
+- The customer is logged into GK One with at least one other registered card (e.g. ""My NCB MasterCard"") in addition to the default GK One Prepaid card
+- A valid Dynamic QR code has been scanned and a valid amount entered","Post Conditions:
+The following should be true after test completion:
+- The payment completes successfully using the non-default registered card, not the GK One Prepaid wallet balance",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile
+,,,,,1,"On the Review and Confirm screen, view available payment methods","Both the GK One Prepaid card and the registered ""My NCB MasterCard"" are shown as selectable options",,,,
+,,,,,2,"Select ""My NCB MasterCard""",Card is selected,,,,
+,,,,,3,Confirm and submit the payment,Payment is processed using the selected card,,,,
+,Test Case,"Verify that a customer can select and pay with the GK One Prepaid card (wallet), and the wallet balance is debited accordingly","Pre Conditions:
+The following should be true before proceeding:
+- The customer is logged into GK One with at least one other registered card (e.g. ""My NCB MasterCard"") in addition to the default GK One Prepaid card, so the Prepaid card is a deliberate choice among options, not the only one available
+- The GK One Prepaid wallet has a sufficient balance to cover the payment amount
+- A valid Dynamic QR code has been scanned and a valid amount entered","Post Conditions:
+The following should be true after test completion:
+- The payment completes successfully using the GK One Prepaid wallet, not the alternate registered card
+- The wallet balance accurately reflects the debit",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile
+,,,,,1,Note the GK One Prepaid wallet's current balance,,,,,
+,,,,,2,"On the Review and Confirm screen, view available payment methods","Both the GK One Prepaid card and the registered ""My NCB MasterCard"" are shown as selectable options",,,,
+,,,,,3,Select the GK One Prepaid card,Card is selected,,,,
+,,,,,4,Confirm and submit the payment,Payment is processed using the GK One Prepaid wallet balance,,,,
+,,,,,5,Check the GK One Prepaid wallet's balance afterward,"[UNCERTAIN: confirm whether the Fee line item shown on Review and Confirm is deducted from the wallet along with the payment amount, or billed/handled separately] The balance has decreased by the payment amount (and fee, if applicable)",,,,
+,Test Case,Verify that a customer can add an optional note to a QR payment and that it is accepted,"Pre Conditions:
+The following should be true before proceeding:
+- A valid Dynamic QR code has been scanned","Post Conditions:
+The following should be true after test completion:
+- The note does not block or alter the payment outcome",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile
+,,,,,1,"Enter a valid amount and a short note (e.g. ""Lunch"")",Note is accepted,,,,
+,,,,,2,Proceed through review and complete the payment,Payment is processed successfully with the note attached,,,,
+,Test Case,Verify that a customer can complete a QR payment without entering an optional note,"Pre Conditions:
+The following should be true before proceeding:
+- A valid Dynamic QR code has been scanned","Post Conditions:
+The following should be true after test completion:
+- The note field being empty does not block payment, confirming it is genuinely optional",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile
+,,,,,1,Enter a valid amount and leave the note field blank,,,,,
+,,,,,2,Proceed through review and complete the payment,Payment is processed successfully with no note,,,,
+,Test Case,Verify that the system blocks payment when the entered amount is below $1000,"Pre Conditions:
+The following should be true before proceeding:
+- A valid Dynamic QR code has been scanned","Post Conditions:
+The following should be true after test completion:
+- No payment request is submitted",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile; Validation
+,,,,,1,Enter an amount of $999.99,,,,,
+,,,,,2,Attempt to proceed,A validation message is displayed; the customer cannot proceed,,,,
+,Test Case,"Verify that the system blocks payment when the entered amount is above $350,000","Pre Conditions:
+The following should be true before proceeding:
+- A valid Dynamic QR code has been scanned","Post Conditions:
+The following should be true after test completion:
+- No payment request is submitted",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile; Validation
+,,,,,1,"Enter an amount of $350,000.01",,,,,
+,,,,,2,Attempt to proceed,A validation message is displayed; the customer cannot proceed,,,,
+,Test Case,Verify that the system blocks payment when the amount field is left empty on a Dynamic QR payment,"Pre Conditions:
+The following should be true before proceeding:
+- A valid Dynamic QR code has been scanned","Post Conditions:
+The following should be true after test completion:
+- No payment request is submitted",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile; Validation
+,,,,,1,Leave the amount field empty,,,,,
+,,,,,2,Attempt to proceed,A validation message is displayed; the customer cannot proceed,,,,
+,Test Case,Verify that an invalid or unrecognized QR code fails to resolve before any payment interface is shown,"Pre Conditions:
+The following should be true before proceeding:
+- The customer has a QR code/image that does not correspond to a valid, active GKPS merchant","Post Conditions:
+The following should be true after test completion:
+- No payee or amount screen is reached, and no payment can be initiated from this scan",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile; Validation
+,,,,,1,Scan the invalid/unrecognized QR code,An error is shown indicating the QR code could not be resolved; no payment interface is opened,,,,
+,Test Case,Verify that the customer cannot change the payee on a scanned QR payment,"Pre Conditions:
+The following should be true before proceeding:
+- A valid Dynamic QR code from Merchant A has been scanned and the payment interface is open","Post Conditions:
+The following should be true after test completion:
+- The payment, if completed, can only go to the originally scanned merchant (Merchant A)",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile; Validation
+,,,,,1,Look for any control to change or edit the payee/merchant on the payment screen,No such control exists; the payee is fixed to Merchant A throughout the flow,,,,
+,Test Case,Verify that scanning a Person-to-Person Scan-to-Pay QR code does not allow the transaction to proceed,"Pre Conditions:
+The following should be true before proceeding:
+- The customer has a valid P2P Scan-to-Pay QR code (as distinct from a GKPS merchant's P2B QR code)
+- P2P Scan-to-Pay is confirmed disabled for this release (see `paybiz_release_1_requirements.md` §2 exclusions)","Post Conditions:
+The following should be true after test completion:
+- No payment interface is reached that would allow the customer to complete a payment to a P2P recipient
+- No payment can be processed via a P2P Scan-to-Pay QR code under any path tested",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile; Validation
+,,,,,1,Scan the P2P Scan-to-Pay QR code,"Recognized-but-blocked with a specific ""not available"" message. The transaction does not proceed.",,,,
+,Test Case,Verify that a payment of exactly $1000 is accepted (lower boundary),"Pre Conditions:
+The following should be true before proceeding:
+- A valid Dynamic QR code has been scanned","Post Conditions:
+The following should be true after test completion:
+- The amount is accepted as the minimum valid boundary",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile; Boundary
+,,,,,1,"Enter an amount of exactly $1,000.00",,,,,
+,,,,,2,Attempt to proceed,No validation error is shown; customer can proceed,,,,
+,Test Case,"Verify that a payment of exactly $350,000 is accepted (upper boundary)","Pre Conditions:
+The following should be true before proceeding:
+- A valid Dynamic QR code has been scanned","Post Conditions:
+The following should be true after test completion:
+- The amount is accepted as the maximum valid boundary",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile; Boundary
+,,,,,1,"Enter an amount of exactly $350,000.00",,,,,
+,,,,,2,Attempt to proceed,No validation error is shown; customer can proceed,,,,
+,Test Case,"Verify that the Scan to Pay camera requests permission when not already granted, and handles denial gracefully","Pre Conditions:
+The following should be true before proceeding:
+- Camera permission has NOT been granted to the GK One app","Post Conditions:
+The following should be true after test completion:
+- The customer is not left on a blank or broken screen after denying permission
+- Note: exact fallback behavior on denial is not documented in the requirements doc or the Scan to Pay feature folder — flagged as an assumption. Confirm actual expected behavior with dev before treating a deviation as a defect.*",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile
+,,,,,1,Select Scan to Pay from the Home screen,A camera permission prompt is shown,,,,
+,,,,,2,Deny camera permission,"The app does not crash; a clear message is shown indicating the camera is required to scan a QR code, and/or a fallback is offered",,,,
+,Test Case,"Verify that Scan to Pay is accessible both from the Home screen and from the GK One Card's ""PayMe"" button in Wallet","Pre Conditions:
+The following should be true before proceeding:
+- The customer is authenticated in the GK One app","Post Conditions:
+The following should be true after test completion:
+- Both entry points lead to the same scan-to-pay flow, with no behavioral difference based on entry point",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile
+,,,,,1,"From the Home screen, select Scan to Pay",Camera/scan interface opens,,,,
+,,,,,2,"Navigate to Wallet and select ""PayMe"" on the GK One Card","Camera/scan interface opens, equivalent to the Home screen entry point",,,,
+,Test Case,Verify that a receipt is emailed to the customer's registered email address after a successful QR payment,"Pre Conditions:
+The following should be true before proceeding:
+- The customer has access to the inbox for their GK One-registered email address
+- The customer has at least one registered card (e.g. ""My NCB MasterCard"") in addition to the default GK One Prepaid card, so the payment method used is a deliberate, verifiable choice rather than only the default","Post Conditions:
+The following should be true after test completion:
+- The receipt content (merchant, amount) matches the completed transaction
+- The receipt's payment method field accurately reflects the specific method actually used for the transaction, not a default or mismatched value",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile; Notifications
+,,,,,1,"Complete a successful QR payment, selecting the registered ""My NCB MasterCard"" as the payment method",Payment success is confirmed in-app,,,,
+,,,,,2,Check the customer's registered email inbox,"A receipt email has been received, matching the existing receipt design, immediately after payment",,,,
+,,,,,3,Observe the payment method shown on the receipt,The receipt shows the selected payment method as the payment method. Not the GK One Prepaid card or a generic/default label,,,,
+,Test Case,Verify that a push notification is sent to the customer when a QR payment completes successfully,"Pre Conditions:
+The following should be true before proceeding:
+- Push notifications are enabled on the test device for the GK One app","Post Conditions:
+The following should be true after test completion:
+- No email notification is expected for this channel's payment status update — push is the confirmed mechanism here (unlike the Plugin channel's email notification)",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile; Notifications
+,,,,,1,Complete a successful QR payment,Payment success is confirmed in-app,,,,
+,,,,,2,Check the device's notification center,A push notification confirming the successful payment has been received,,,,
+,Test Case,Verify that a push notification is sent to the customer when a QR payment attempt fails,"Pre Conditions:
+The following should be true before proceeding:
+- A payment attempt can be forced to fail (e.g. using a known test card/account that triggers a processor decline)
+- Push notifications are enabled on the test device","Post Conditions:
+The following should be true after test completion:
+- The failure notification does not falsely confirm a successful payment",,,,GKOne\Payments,Naomi Silvera <naomi.silvera@gkco.com>,Design,Scan to Pay; GK Pay Biz; Mobile; Notifications
+,,,,,1,Attempt a QR payment that will be declined by the processor,Payment fails; failure is shown in-app,,,,
+,,,,,2,Check the device's notification center,A push notification indicating the payment failed has been received,,,,
