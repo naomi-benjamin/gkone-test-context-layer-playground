@@ -25,7 +25,7 @@ Steps:
 | 2.   | Observe the screen that opens                | The GK Pay Biz payment plugin opens, displaying the merchant's branding and the payment details passed by the merchant |
 | 3.   | Proceed to the Review and Confirm screen     | Merchant Name, Product/Service Description, Payment Amount, Fees, Taxes, Total Amount Due, and Currency are all displayed; Total equals Amount + Fees + Tax |
 | 4.   | Select "Manual Card Entry (Guest Checkout)" as the payment method |                                              |
-| 5.   | Enter a valid full name (e.g. "Naomi Silvera") and a valid email address | Values are accepted |
+| 5.   | Enter a valid full name (e.g. "Naomi Silvera"), a valid email address and a valid phone number | Values are accepted |
 | 6.   | Enter valid card details: cardholder name, a valid card number, a valid future expiry date (MM/YYYY), and a valid CVV for the card brand |                                              |
 | 7.   | Tap "Make payment"                           | A loading indicator is shown while the payment is processed |
 | 8.   | Complete the 3DS challenge presented          | 3DS challenge is completed successfully |
