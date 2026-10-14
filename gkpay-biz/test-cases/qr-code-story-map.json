@@ -1,0 +1,21 @@
+{
+  "1": {"stories": ["37731", "37737", "37736", "37738"], "confidence": "high", "note": "composite Dynamic-QR happy-path smoke test"},
+  "2": {"stories": ["37731", "37737", "37736", "37738"], "confidence": "high", "note": "composite Static-QR happy-path; Dynamic/Static distinction is design-confirmed but not yet written into 37731/37732's own AC text"},
+  "3": {"stories": ["37737"], "confidence": "high"},
+  "4": {"stories": ["37737"], "confidence": "high"},
+  "5": {"stories": ["37731"], "confidence": "high"},
+  "6": {"stories": ["37731"], "confidence": "high"},
+  "7": {"stories": ["37732"], "confidence": "high"},
+  "8": {"stories": ["37732"], "confidence": "medium", "note": "the $350,000 ceiling is confirmed but not yet written into 37732's own AC text — see requirements doc 'Stories/AC that still need writing'"},
+  "9": {"stories": ["37732"], "confidence": "medium", "note": "37732's documented AC only states the $1000 floor; empty-field handling isn't explicitly called out for this channel (unlike the Plugin's 37743, which does state it explicitly)"},
+  "10": {"stories": ["37731"], "confidence": "low", "note": "invalid/unrecognized QR handling isn't explicitly addressed in 37731's AC — inferred necessity, not sourced text"},
+  "11": {"stories": ["37731"], "confidence": "high", "note": "direct match: 'User should not be able to change the payee (P2B only)'"},
+  "12": {"stories": ["37734"], "confidence": "high", "note": "tests that this explicitly-excluded P2P story's functionality stays blocked"},
+  "13": {"stories": ["37732"], "confidence": "high"},
+  "14": {"stories": ["37732"], "confidence": "medium", "note": "same AC-not-yet-written caveat as TEST CASE 8"},
+  "15": {"stories": [], "confidence": "none", "note": "camera-permission denial handling isn't documented in any story — already flagged as an assumption in the draft's own note"},
+  "16": {"stories": [], "confidence": "none", "note": "sourced from scan-to-pay/domain-knowledge.md, not from a channel-stories CSV story"},
+  "17": {"stories": ["37736"], "confidence": "medium", "note": "37736 confirms the receipt-email requirement; the added payment-method-correctness assertion isn't explicitly in 37736's AC text"},
+  "18": {"stories": ["37738"], "confidence": "high"},
+  "19": {"stories": ["37738"], "confidence": "high"}
+}

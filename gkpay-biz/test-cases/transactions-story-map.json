@@ -1,0 +1,13 @@
+{
+  "1": {"stories": ["32622", "37332"], "confidence": "high"},
+  "2": {"stories": ["32622"], "confidence": "high"},
+  "3": {"stories": ["37333"], "confidence": "high"},
+  "4": {"stories": ["32622", "37332"], "confidence": "high"},
+  "5": {"stories": ["37333"], "confidence": "medium", "note": "37333 confirms payment channel in the detail view; showing multiple channels together in the list itself isn't explicitly stated"},
+  "6": {"stories": ["37332"], "confidence": "high"},
+  "7": {"stories": [], "confidence": "none", "note": "cross-merchant access control isn't stated in any of the three in-scope stories — standard security expectation, not sourced AC"},
+  "8": {"stories": [], "confidence": "none", "note": "unauthenticated-access blocking isn't stated in any of the three in-scope stories — inferred, not sourced AC"},
+  "9": {"stories": [], "confidence": "none", "note": "empty-state behavior isn't addressed in any of the three stories"},
+  "10": {"stories": ["32622", "37332"], "confidence": "high"},
+  "11": {"stories": ["37325", "37331"], "confidence": "high", "note": "tests the absence of these two explicitly-out-of-scope stories' functionality, not their AC — flagging since 'Tested By' usually links to AC a case validates, not scope it confirms absent"}
+}
