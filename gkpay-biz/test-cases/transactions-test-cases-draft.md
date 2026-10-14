@@ -80,7 +80,7 @@ The following should be true after test completion:
 ---
 
 TEST CASE 4
-Title: Verify that a merchant can open a pending transaction and see its status without error or failure details [CHECK_THIS]
+Title: Verify that a merchant can open a pending transaction and see its status without error or failure details
 
 Tags: GK Pay Biz, Merchant Portal, Web *(suggested)*
 
@@ -249,32 +249,8 @@ The following should be true after test completion:
 
 ---
 
-## Post-Condition Verification
-
-TEST CASE 12
-Title: Verify that the merchant's account balance is visible on or from the Transactions page
-
-Tags: GK Pay Biz, Merchant Portal, Web *(suggested)*
-
-Pre Conditions:
-The following should be true before proceeding:
-• The merchant is authenticated and has a non-zero account balance
-
-Steps:
-| Step | Action                                      | Expected Result                              |
-|------|---------------------------------------------|----------------------------------------------|
-| 1.   | Navigate to the Transactions page (or the screen/section where balance is shown) | The merchant's current balance is displayed |
-
-Post Conditions:
-The following should be true after test completion:
-• The displayed balance is accurate relative to completed transactions
-
-*Note: [ASSUMPTION/GAP] the Release 1 scope doc describes this workstream as "transaction list + balance view," but none of the three in-scope stories (32622, 37332, 37333) individually specify balance-view fields or placement. This case is included to cover the scope doc's explicit mention, but the exact UI location/fields for balance are not documented — confirm with design/dev before treating a mismatch as a defect.*
-
----
-
 ## Context applied
 
-- **Primary context:** `playground/gkpay-biz/paybiz_release_1_requirements.md`, §4 "Merchant View Transactions" — all 12 cases trace to the three confirmed in-scope stories (32622, 37332, 37333) and the explicit exclusions (37325 Transaction Filtering, 37331 Transaction Export), both confirmed out of scope for Release 1.
+- **Primary context:** `playground/gkpay-biz/paybiz_release_1_requirements.md`, §4 "Merchant View Transactions" — all 11 cases trace to the three confirmed in-scope stories (32622, 37332, 37333) and the explicit exclusions (37325 Transaction Filtering, 37331 Transaction Export), both confirmed out of scope for Release 1. Per review (2026-10-14), the balance-view case was removed as out of scope — none of the three in-scope stories specify balance-view fields or placement, and this draft no longer asserts coverage of it.
 - **Related/secondary context used:** `squads/payments/features/gkpay-biz/integration-points.md` — the [UNCERTAIN] real-time data feed mechanism directly shaped TEST CASE 2's wording (tests the user-facing "no delay on refresh" behavior rather than asserting a specific push/poll mechanism). `squads/payments/features/gkpay-biz/domain-knowledge.md` — payment channel terminology (QR code vs. Plugin) used in TEST CASE 5. `squads/payments/squad.md` — confirms this is a web portal capability, distinct from the GKOne mobile app. `_global/cross-cutting-concerns.md` and `_global/domain-gloassary.md` — general terminology only, no specific case derived directly from them.
 - **Deliberately excluded per instruction:** `squads/payments/features/gkpay-biz/edge-cases.md` and `test-patterns.md` — these describe a broader portal vision (filtering, export, disputes, subscriptions) from an earlier objectives document that is NOT the confirmed, narrower Release 1 scope. Using them would have reintroduced out-of-scope functionality (e.g. filter/export test patterns) — TEST CASE 11 exists specifically to guard against that scope creep.
