@@ -546,50 +546,98 @@ The following should be true after test completion:
 ---
 
 TEST CASE 25
-Title: Verify that a 3DS challenge is presented during guest card checkout and must be completed for payment to succeed
+Title: Verify that a customer is redirected to the card issuer's authentication page when 3D Secure is required, and payment completes after successful authentication
 
 Tags: GK Pay Biz, Payment Plugin, Card Entry, 3DS *(suggested)*
 
 Pre Conditions:
 The following should be true before proceeding:
 • The customer is completing a guest card checkout with valid card details
-• NOTE: detailed 3DS UI/behaviour is not yet formally documented in acceptance criteria — confirm actual implementation details with dev before relying on this case as comprehensive 3DS coverage
+• The card's issuer requires 3D Secure authentication for this transaction (story 37891)
 
 Steps:
 | Step | Action                                      | Expected Result                              |
 |------|---------------------------------------------|----------------------------------------------|
-| 1.   | Enter valid card details and tap "Make payment" | A 3DS challenge screen/step is presented before the payment completes |
-| 2.   | Complete the 3DS challenge successfully       | The payment proceeds to completion |
+| 1.   | Enter valid card details and tap "Make payment" | The customer is redirected to the card issuer's authentication page |
+| 2.   | Complete the issuer's authentication challenge successfully | The issuer returns approval and payment processing continues |
+| 3.   | Observe the result screen                     | Payment success confirmation is shown |
 
 Post Conditions:
 The following should be true after test completion:
-• The payment only completes after the 3DS challenge is successfully passed
-• (Flag for follow-up) Additional test cases should be written once formal 3DS acceptance criteria exist, e.g. covering a failed/abandoned 3DS challenge
+• The payment only completes after the issuer returns a successful authentication outcome
 
 ---
 
 TEST CASE 26
-Title: Verify behaviour when a card that is not 3DS-enrolled is used for guest checkout
+Title: Verify that payment is declined when 3D Secure authentication fails
 
 Tags: GK Pay Biz, Payment Plugin, Card Entry, 3DS *(suggested)*
 
 Pre Conditions:
 The following should be true before proceeding:
-• The customer is completing a guest card checkout with a card number known to not be 3DS-enrolled
-• NOTE: expected behaviour is undocumented — there is no AC or scope-doc note covering this scenario (see `paybiz_release_1_requirements.md`, open item 1). This test case's steps are written, but the expected result is deliberately left open pending dev/PO confirmation — do not assume either outcome below is correct without checking first.
+• The customer is completing a guest card checkout with valid card details
+• The card's issuer requires 3D Secure authentication, and the test setup can force a failed authentication outcome (e.g. a known test card/credential for failed 3DS)
 
 Steps:
 | Step | Action                                      | Expected Result                              |
 |------|---------------------------------------------|----------------------------------------------|
-| 1.   | Enter valid details for a card known to not be 3DS-enrolled, then tap "Make payment" | [UNCONFIRMED — confirm with dev/PO] Candidate outcomes to check for: (a) payment proceeds without a 3DS step, treated like a frictionless/no-challenge transaction, (b) payment is blocked or declined for lacking 3DS support, or (c) some other processor-level error is surfaced |
+| 1.   | Enter valid card details and tap "Make payment" | The customer is redirected to the issuer's authentication page |
+| 2.   | Complete the authentication challenge with details that cause it to fail | The issuer returns a failed outcome |
+| 3.   | Observe the result screen                     | Payment is declined; no payment success confirmation is shown |
 
 Post Conditions:
 The following should be true after test completion:
-• (Flag for follow-up) Resolve the expected outcome with dev/PO before treating this case as pass/fail-able; update this test case once confirmed
+• The payment is not processed when 3DS authentication fails
+• The customer sees a clear decline message, not a generic or silent failure
 
 ---
 
 TEST CASE 27
+Title: Verify that payment is not processed when a customer exits the 3D Secure authentication flow before completing it
+
+Tags: GK Pay Biz, Payment Plugin, Card Entry, 3DS *(suggested)*
+
+Pre Conditions:
+The following should be true before proceeding:
+• The customer is completing a guest card checkout with valid card details
+• The card's issuer requires 3D Secure authentication for this transaction
+
+Steps:
+| Step | Action                                      | Expected Result                              |
+|------|---------------------------------------------|----------------------------------------------|
+| 1.   | Enter valid card details and tap "Make payment" | The customer is redirected to the issuer's authentication page |
+| 2.   | Exit/abandon the authentication flow before completing it (e.g. close the challenge, navigate back) | The customer is returned to the plugin without a completed authentication outcome |
+| 3.   | Observe the result screen                     | No payment success confirmation is shown; payment has not been processed |
+
+Post Conditions:
+The following should be true after test completion:
+• The payment is not processed when authentication is left incomplete
+• The customer is not charged and is left in a recoverable state (able to retry payment)
+
+---
+
+TEST CASE 28
+Title: Verify behaviour when a card that does not require 3D Secure is used for guest checkout
+
+Tags: GK Pay Biz, Payment Plugin, Card Entry, 3DS *(suggested)*
+
+Pre Conditions:
+The following should be true before proceeding:
+• The customer is completing a guest card checkout with a card/issuer known not to require 3D Secure for this transaction
+• [UNCERTAIN] 37891's AC only describes what happens when the issuer *does* require 3DS (redirect to authentication). The case where it does not is inferred, not stated outright — that the customer proceeds straight to payment processing with no redirect, same as any other card submission. Confirm this inference with dev/PO (see `paybiz_release_1_requirements.md` open items) before treating a deviation as a defect.
+
+Steps:
+| Step | Action                                      | Expected Result                              |
+|------|---------------------------------------------|----------------------------------------------|
+| 1.   | Enter valid details for a card/issuer that does not require 3DS, then tap "Make payment" | [Inferred, not explicitly confirmed] No authentication redirect occurs; payment proceeds directly to processing, same as the non-3DS flow in TEST CASE 1 |
+
+Post Conditions:
+The following should be true after test completion:
+• (Flag for follow-up) Confirm this inferred outcome with dev/PO; update this case once explicitly confirmed
+
+---
+
+TEST CASE 29
 Title: Verify that the Merchant Verification modal displays the correct "Powered by" copy and merchant information
 
 Tags: GK Pay Biz, Payment Plugin, Merchant Verification *(suggested)*
@@ -612,7 +660,7 @@ The following should be true after test completion:
 
 ## Post-Condition Verification
 
-TEST CASE 28
+TEST CASE 30
 Title: Verify that the confirmation receipt displays the merchant name and amount but never displays the merchant's email address
 
 Tags: GK Pay Biz, Payment Plugin, Receipt *(suggested)*
@@ -633,7 +681,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 29
+TEST CASE 31
 Title: Verify that an email notification is sent to the customer when a payment completes successfully
 
 Tags: GK Pay Biz, Payment Plugin, Notifications *(suggested)*
@@ -654,7 +702,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 30
+TEST CASE 32
 Title: Verify that an email notification is sent to the customer when a payment attempt fails
 
 Tags: GK Pay Biz, Payment Plugin, Notifications *(suggested)*
@@ -678,7 +726,7 @@ The following should be true after test completion:
 
 ## Context applied
 
-- **Primary context:** `playground/gkpay-biz/paybiz_release_1_requirements.md`, §3 "Payment Plugin 1.0 / Web Pay" — 29 of the 30 cases trace back to the confirmed requirements there (37752, 37754, 37755 incl. the "Log into GK One" addition, 37742, 37743, 37744 incl. the PO-accepted email-typo risk, 37745, 37748 all 10 sub-points incl. the cardholder-name space rule and expiry nonsense-combo gap, 37749, 37750). TEST CASE 26 (non-3DS-enrolled card) traces to the same requirements doc's open item 1 sub-question (2026-10-13) rather than confirmed AC — its expected result is deliberately left unconfirmed, not generated from requirements. Per review (2026-10-13), the Apple/Google Pay exclusion case (37747) was removed as not needed for this draft — 37747 and the Payment Link exclusions (37740/37741) remain out of scope for this draft's own reasons but no longer have a dedicated test case here.
-- **Related/secondary context used:** `squads/payments/features/gkpay-biz/domain-knowledge.md` (payment channel terminology, GKPS/Bill Express framing used in preconditions), `squads/payments/features/gkpay-biz/integration-points.md` (GK One Wallet integration informed TEST CASE 2/3's saved-payment-method framing), `squads/payments/squad.md` (confirmed the plugin's own test scope stops at UI/flow behavior, not underlying card-processor validation — reflected in how negative card-validation cases are worded), `_global/cross-cutting-concerns.md` (Notification Service framing for TEST CASE 29/30).
+- **Primary context:** `playground/gkpay-biz/paybiz_release_1_requirements.md`, §3 "Payment Plugin 1.0 / Web Pay" — 31 of the 32 cases trace back to confirmed requirements/AC (37752, 37754, 37755 incl. the "Log into GK One" addition, 37742, 37743, 37744 incl. the PO-accepted email-typo risk, 37745, 37748 all 10 sub-points incl. the cardholder-name space rule and expiry nonsense-combo gap, 37749, 37750, and now **37891** for TEST CASE 25–27, updated 2026-10-15 once full 3DS AC was received — previously these traced only to a scope-doc meeting note). TEST CASE 28 (card not requiring 3DS) still traces to inference rather than explicit AC, same as before, since 37891 only describes the "3DS required" path explicitly. Per review (2026-10-13), the Apple/Google Pay exclusion case (37747) was removed as not needed for this draft — 37747 and the Payment Link exclusions (37740/37741) remain out of scope for this draft's own reasons but no longer have a dedicated test case here.
+- **Related/secondary context used:** `squads/payments/features/gkpay-biz/domain-knowledge.md` (payment channel terminology, GKPS/Bill Express framing used in preconditions), `squads/payments/features/gkpay-biz/integration-points.md` (GK One Wallet integration informed TEST CASE 2/3's saved-payment-method framing), `squads/payments/squad.md` (confirmed the plugin's own test scope stops at UI/flow behavior, not underlying card-processor validation — reflected in how negative card-validation cases are worded), `_global/cross-cutting-concerns.md` (Notification Service framing for TEST CASE 31/32).
 - **Explicitly excluded per instruction:** `squads/payments/features/gkpay-biz/edge-cases.md` and `test-patterns.md` — not used, as they describe the separate merchant-facing admin portal, not this consumer checkout plugin.
 - **Known-issues.md** — checked, currently empty; no known issues to test around.

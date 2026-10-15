@@ -1,6 +1,6 @@
 # GK Pay Biz test cases — ADO export & story linking
 
-Covers the three Release 1 suites (`plugin`, `transactions`, `qr-code`): markdown draft →
+Covers the four Release 1 suites (`plugin`, `transactions`, `qr-code`, `payment-link`): markdown draft →
 ADO import CSV → import into ADO → link each Test Case to the story/stories it tests.
 
 The tooling itself (both scripts, PAT setup, full usage docs, and the gotchas found building them)
@@ -21,8 +21,8 @@ what's specific to these three suites.
 - `Payments_<Suite>.csv` — ADO's own export of each already-imported suite; the source for the real
   IDs merged into the manifests above
 
-Area Path for all three: `GKOne\Payments`. Tags used to disambiguate same-titled cases across
-suites: `"Payment Plugin"`, `"Merchant Portal"`, `"Scan to Pay"`.
+Area Path for all four: `GKOne\Payments`. Tags used to disambiguate same-titled cases across
+suites: `"Payment Plugin"`, `"Merchant Portal"`, `"Scan to Pay"`, `"Payment Link"`.
 
 ## Running the linker for these three suites
 
@@ -34,6 +34,7 @@ python3 ../../../scripts/link_tests_to_stories.py --org GKDigital --project GKOn
   --manifest plugin-test-cases-ado-import.link-manifest.json --tag "Payment Plugin" \
   --manifest transactions-test-cases-ado-import.link-manifest.json --tag "Merchant Portal" \
   --manifest qr-code-test-cases-ado-import.link-manifest.json --tag "Scan to Pay" \
+  --manifest payment-link-ado-import.link-manifest.json --tag "Payment Link" \
   --area-path "GKOne\Payments" \
   --dry-run
 ```
@@ -43,6 +44,7 @@ run on its own right after importing just that one suite.
 
 ## Status
 
-- **Plugin**: imported (IDs 37967–37996), manifest has real IDs merged, linked.
+- **Plugin**: imported (IDs 37967–37996), manifest has real IDs merged, linked. **Stale as of 2026-10-15** — the draft was renumbered (30 → 32 cases) when the 3DS gap was resolved with real AC (new TC25–27, old TC25/26 replaced, everything after shifted). The imported ADO Test Cases, CSV, story-map, and manifest still reflect the old 30-case numbering — re-run `md_to_ado_csv.py` and re-import/re-link before trusting this suite's ADO state.
 - **QR Code**: imported (IDs 37998–38016), manifest has real IDs merged, dry-run checked.
 - **Transactions**: imported (IDs 38019–38029), manifest has real IDs merged, dry-run checked.
+- **Payment Link**: imported (IDs 38639–38671), manifest has real IDs merged (all 33 matched cleanly), dry-run not yet run. 1 case unlinked by design (TC28, confirms Apple/Google Pay absence — no story to link to), 2 at medium confidence (TC18/19, expiry nonsense-combo gap) — worth a glance before linking.

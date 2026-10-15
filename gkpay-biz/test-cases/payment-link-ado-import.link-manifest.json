@@ -1,0 +1,305 @@
+[
+  {
+    "title": "Verify that a customer can click a Dynamic payment link and complete a guest checkout card payment successfully",
+    "stories": [
+      "37740",
+      "37742",
+      "37744",
+      "37748",
+      "37891",
+      "37749"
+    ],
+    "confidence": "high",
+    "note": "composite happy-path smoke test spanning Dynamic amount entry/merchant verification/guest checkout/card entry/3DS/confirmation",
+    "id": 38639
+  },
+  {
+    "title": "Verify that a customer can click a Static payment link and complete a payment with the merchant's pre-set amount",
+    "stories": [
+      "37741",
+      "37744",
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "Static amount entry as the primary behavior under test; checkout steps (guest/card) are executed but incidental",
+    "id": 38640
+  },
+  {
+    "title": "Verify that the GK One app opens directly when a customer selects \"Pay with GK One App\" from a payment link and the app is already installed",
+    "stories": [
+      "37746"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38641
+  },
+  {
+    "title": "Verify that the customer is redirected to the app store when selecting \"Pay with GK One App\" and GK One is not installed",
+    "stories": [
+      "37746"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38642
+  },
+  {
+    "title": "Verify that a merchant-defined custom field (e.g. \"Unit Number\") is presented and accepted during guest checkout via a payment link",
+    "stories": [
+      "37744"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38643
+  },
+  {
+    "title": "Verify that a cardholder name containing a hyphen and an apostrophe is accepted during card entry via a payment link",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 2",
+    "id": 38644
+  },
+  {
+    "title": "Verify that the card number input auto-formats into groups of 4 digits as the customer types, via a payment link",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 4",
+    "id": 38645
+  },
+  {
+    "title": "Verify that a customer can add an optional note when entering a Dynamic payment amount via a payment link",
+    "stories": [
+      "37740"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38646
+  },
+  {
+    "title": "Verify that the system blocks payment when a Dynamic payment amount entered via a link is below $1000",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38647
+  },
+  {
+    "title": "Verify that the system blocks payment when a Dynamic payment amount entered via a link is above $350,000",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38648
+  },
+  {
+    "title": "Verify that the system blocks payment when the Dynamic amount field is left empty",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38649
+  },
+  {
+    "title": "Verify that the system blocks guest checkout via a payment link when required fields (name or email) are left blank",
+    "stories": [
+      "37745"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38650
+  },
+  {
+    "title": "Verify that the system blocks guest checkout via a payment link when the email address is in an invalid format",
+    "stories": [
+      "37745"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38651
+  },
+  {
+    "title": "Verify that the system blocks payment submission when the cardholder name field is left empty, via a payment link",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 3",
+    "id": 38652
+  },
+  {
+    "title": "Verify that the system blocks payment submission when the cardholder name does not contain a space (single-word entry), via a payment link",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 3 detail \u2014 confirmed space-separation rule",
+    "id": 38653
+  },
+  {
+    "title": "Verify that the system blocks payment submission when an invalid card number is entered, via a payment link",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 5",
+    "id": 38654
+  },
+  {
+    "title": "Verify that the system blocks payment submission when the card's expiry date has already passed, via a payment link",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 7",
+    "id": 38655
+  },
+  {
+    "title": "Verify that the system rejects an expiry date with a month value greater than 12, via a payment link",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "medium",
+    "note": "sub-point 6, but requirements doc flags this exact nonsensical-date case as an AC gap not yet written into the story",
+    "id": 38656
+  },
+  {
+    "title": "Verify that the system rejects non-numeric or malformed input in the expiry date field, via a payment link",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "medium",
+    "note": "sub-point 6, same AC gap as TEST CASE 18",
+    "id": 38657
+  },
+  {
+    "title": "Verify that the system blocks payment when the CVV length does not match the card brand (Visa/Mastercard), via a payment link",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 9 \u2014 brand-length CVV rule is explicit in the story's own AC",
+    "id": 38658
+  },
+  {
+    "title": "Verify that the system blocks payment when the CVV length does not match the card brand (Amex), via a payment link",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 9 \u2014 brand-length CVV rule is explicit in the story's own AC",
+    "id": 38659
+  },
+  {
+    "title": "Verify that payment is declined when 3D Secure authentication fails, via a payment link",
+    "stories": [
+      "37891"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38660
+  },
+  {
+    "title": "Verify that payment is not processed when a customer exits the 3D Secure authentication flow before completing it, via a payment link",
+    "stories": [
+      "37891"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38661
+  },
+  {
+    "title": "Verify that a Dynamic payment amount of exactly $1000 is accepted (lower boundary)",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38662
+  },
+  {
+    "title": "Verify that a Dynamic payment amount of exactly $350,000 is accepted (upper boundary)",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38663
+  },
+  {
+    "title": "Verify that a Static payment link's amount cannot be edited by the customer",
+    "stories": [
+      "37741"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38664
+  },
+  {
+    "title": "Verify that a guest checkout payment via a payment link still completes successfully when the customer enters a mistyped (but validly formatted) email address",
+    "stories": [
+      "37744",
+      "37750"
+    ],
+    "confidence": "high",
+    "note": "PO-accepted mistyped-email risk, tied to guest checkout + the lost notification",
+    "id": 38665
+  },
+  {
+    "title": "Verify that the payment link checkout does not present Apple Pay or Google Pay as payment method options",
+    "stories": [],
+    "confidence": "none",
+    "note": "confirms Apple Pay/Google Pay are absent \u2014 doesn't validate 37747's own AC (which describes the buttons working), so not linked to it; no story documents their exclusion from this channel",
+    "id": 38666
+  },
+  {
+    "title": "Verify that the CVV input is masked as it is typed, via a payment link",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 8",
+    "id": 38667
+  },
+  {
+    "title": "Verify that the Merchant Verification modal displays the correct \"Powered by\" copy and merchant information on a payment link",
+    "stories": [
+      "37742"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38668
+  },
+  {
+    "title": "Verify that the confirmation receipt displays the merchant name and amount but never displays the merchant's email address, via a payment link",
+    "stories": [
+      "37749"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38669
+  },
+  {
+    "title": "Verify that an email notification is sent to the customer when a payment via a payment link completes successfully",
+    "stories": [
+      "37750"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38670
+  },
+  {
+    "title": "Verify that an email notification is sent to the customer when a payment attempt via a payment link fails",
+    "stories": [
+      "37750"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 38671
+  }
+]

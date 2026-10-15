@@ -79,6 +79,13 @@ Primary feature: `squads/platform/features/ekyc/` (CMS check, non-JM markets onl
 
 ### Scope
 - Is there a feature flag for this? (See `playground/2026-06-17-cms-check-flag-interference/` for earlier flag issues around the CMS check.)
+  - Yes. Name: EnableCmsOtherFieldSecondaryLookup
+  - Follow-ups (unanswered; TCs 29–32 in `test-cases-draft-02.md` assume the defaults shown):
+    - Scope: per tenant, global, or per environment? (assumed per tenant)
+    - Flag off = exactly the pre-release behaviour (primary search only, `RECORD_NOT_FOUND`)? (assumed yes)
+    - Is the flag read on each CMS check run, or cached? This matters for a retry after the flag is toggled. (assumed read per run)
+    - Default state per environment, and the planned rollout order across KY/VG/GY/TT.
+    - Any interaction with `EnableIdentityConflictResolution` on the retry path? (see the 2026-06-17 bug draft)
 
 ## Test angles
 

@@ -24,6 +24,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in a non-JM market (KY), KYC Status 0
 • A CMS record exists in KY with [ID] in the "Other" field and not in any primary ID field
 • No other CMS record in KY holds [ID] in a primary ID field or the "Other" field
@@ -55,6 +56,7 @@ Tags: KYC, Onboarding, CMS, Audit, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Same data setup as Test Case 1 (single CMS record in KY with [ID] in the "Other" field; all checks pass)
 • The tester has noted the CMS customer number and GKONumber of the target CMS record
 • The tester has read access to `Users.CmsOtherFieldNameMatches`
@@ -84,6 +86,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Same data setup as Test Case 1
 • The tester has noted the address, nationality and country of birth on the target CMS record, and these differ from any default values
 
@@ -110,6 +113,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in a non-JM market, KYC Status 0
 • A CMS record in that market holds [ID] in the primary ID field matching the scanned document type
 • The CMS record passes all CMS checks (not blocked, name, DOB, Proof of Address)
@@ -134,6 +138,7 @@ Tags: KYC, Onboarding, CMS, Mobile
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in KY, KYC Status 0
 • The test document is a Passport containing [ID]
 • A CMS record in KY holds [ID] in the "Other" field, and its primary ID fields hold a Driver's Licence or National ID Card with a different number
@@ -160,6 +165,7 @@ Tags: KYC, Onboarding, CMS, Mobile
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in a non-JM market, KYC Status 0
 • Two test documents are available: a Driver's Licence and a National ID Card, each with its own ID number
 • For each document, a separate CMS record in the market holds that document's number in the "Other" field only and passes all CMS checks
@@ -185,6 +191,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in KY, KYC Status 0
 • A CMS record in KY holds [ID] in the "Other" field and not in any primary ID field
 • No other CMS record in KY holds [ID] in a primary ID field or the "Other" field
@@ -214,6 +221,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in GY, KYC Status 0
 • A CMS record in GY holds [ID] in the "Other" field and not in any primary ID field
 • No other CMS record in GY holds [ID] in a primary ID field or the "Other" field
@@ -243,6 +251,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in TT, KYC Status 0
 • A CMS record in TT holds [ID] in the "Other" field and not in any primary ID field
 • No other CMS record in TT holds [ID] in a primary ID field or the "Other" field
@@ -272,6 +281,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in VG, KYC Status 0
 • A CMS record in VG holds [ID] in the "Other" field only and passes all CMS checks
 
@@ -293,6 +303,7 @@ Tags: KYC, Onboarding, CMS, Mobile
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Same data setup as Test Case 1, except the CMS full name differs from the test document's name only in letter case and extra internal spaces (e.g. "JOHN  SMITH" vs "John Smith")
 • DOB matches
 
@@ -317,6 +328,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in a non-JM market, KYC Status 0
 • A single CMS record in the market holds [ID] in the "Other" field only
 • The CMS record's full name is a different person's name; DOB matches
@@ -342,6 +354,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in a non-JM market, KYC Status 0
 • A single CMS record in the market holds [ID] in the "Other" field only
 • The CMS record's full name matches; DOB differs from the test document
@@ -367,6 +380,7 @@ Tags: KYC, Onboarding, CMS, Mobile
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in a non-JM market, KYC Status 0
 • A single CMS record in the market belongs to a different person, and its "Other" field holds a non-ID value (e.g. a reference or account number) exactly equal to [ID]
 • That record's full name and DOB both differ from the test document
@@ -392,6 +406,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Same data setup as Test Case 1, except the CMS record is blocked
 
 Steps:
@@ -415,6 +430,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Same data setup as Test Case 1, except the CMS record has no Proof of Address
 
 Steps:
@@ -438,6 +454,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in a non-JM market, KYC Status 0
 • No CMS record in the market holds [ID] in any primary ID field or the "Other" field
 
@@ -462,6 +479,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in a non-JM market, KYC Status 0
 • Two CMS records in the market hold [ID] in the "Other" field; no record holds it in a primary ID field
 • Record A passes all CMS checks for the test document (name, DOB, not blocked, Proof of Address); record B has a different name and DOB
@@ -487,6 +505,7 @@ Tags: KYC, Onboarding, CMS, Mobile
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Four fresh customer accounts in a non-JM market, KYC Status 0, each with a test document containing a different ID number
 • For each customer, one CMS record holds a variant of their ID number in the "Other" field, and no record holds the exact number anywhere:
   – Variant A: separators added (e.g. [ID] with dashes or internal spaces)
@@ -516,6 +535,7 @@ Tags: KYC, Onboarding, CMS, Mobile
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Two fresh customer accounts in a non-JM market, KYC Status 0, each with a test document containing an alphanumeric ID number (e.g. a passport number with letters)
 • For customer 1, a CMS record's "Other" field holds their ID number with a leading and a trailing space
 • For customer 2, a CMS record's "Other" field holds their ID number with the letters in the opposite case
@@ -540,6 +560,7 @@ Tags: KYC, Onboarding, CMS, Mobile
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in KY, KYC Status 0
 • A CMS record in a different non-JM market (e.g. TT) holds [ID] in the "Other" field and would pass all checks
 • No CMS record in KY holds [ID] anywhere
@@ -565,6 +586,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in a non-JM market, KYC Status 0
 • CMS record A in the market holds [ID] in the primary ID field matching the scanned document type; its full name does not match the test document
 • CMS record B in the market holds [ID] in the "Other" field and would pass all CMS checks
@@ -590,6 +612,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in a non-JM market, KYC Status 0
 • A CMS record in the market holds [ID] in the "Other" field and would pass all checks
 • CMS is made unavailable (error or timeout) for the primary search
@@ -615,6 +638,7 @@ Tags: KYC, Onboarding, CMS, Mobile
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer is registered and signed in to GK One in a non-JM market, KYC Status 0
 • No CMS record in the market holds [ID] in a primary ID field, so the primary search returns no record
 • CMS is made unavailable (error or timeout) for the "Other" field search only
@@ -642,6 +666,7 @@ Tags: KYC, Onboarding, CMS, Mobile
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Same data setup as Test Case 1
 • The CMS record's GKONumber is already linked to a different, existing GK One user
 
@@ -665,6 +690,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer in a non-JM market failed the CMS check before the release with reason `RECORD_NOT_FOUND`, KYC Status 8
 • A CMS record in the market holds the customer's ID number in the "Other" field only and passes all CMS checks
 • The release containing the "Other" field lookup is deployed
@@ -695,6 +721,7 @@ Tags: KYC, Onboarding, CMS, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
+• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
 • Customer in a non-JM market is at KYC Status 8 and on the Documents Required screen
 • A single CMS record in the market holds the customer's ID number in the "Other" field only
 • The CMS record's DOB differs from the customer's document (name matches)
@@ -746,13 +773,16 @@ The following should be true after test completion:
 - `squads/platform/features/ekyc/integration-points.md` CMS section: non-JM only and automatic trigger (all cases), `CMS_SERVICE_UNAVAILABLE` (TCs 23–24).
 - `squads/platform/features/ekyc/test-patterns.md`: fresh account per run (preconditions).
 - `squads/platform/squad.md`, `overview.md`, `edge-cases.md`, `known-issues.md` (no known issues logged; nothing excluded).
-- `_global/domain-gloassary.md`: KYC Status vs KYC Tier. `_global/cross-cutting-concerns.md`: no feature flag listed for this change.
+- `_global/domain-gloassary.md`: KYC Status vs KYC Tier. `_global/cross-cutting-concerns.md`: `EnableCmsOtherFieldSecondaryLookup` is not listed there yet. The flag name comes from `notes.md` (Open questions → Scope).
 
 **Playground input:**
 - `notes.md` in this folder (AC, Answers 2026-10-15, test angles). All cases trace to it.
 
 **Related context (playground, lower trust):**
 - `playground/2026-05-12-ekyc-cms-retry/test-cases-draft.md` UI flow reference: the "We couldn't confirm your identity." banner, Documents Required, Retry ID Verification, the Action Needed modal and "Yes, I have". Used in TCs 12–24 (banner) and TCs 26–27 (retry steps). This is playground content and not authoritative; check the wording against the current build.
+
+
+**Flag assumptions:** TCs 1–27 now have "flag enabled" as a precondition. TC 28 (JM) doesn't, because no CMS check runs there. Flag-on/flag-off cases are in `test-cases-draft-02.md`.
 
 **Marked content leaned on:**
 - `[TODO: Full list of checks to be confirmed]` in Checks performed: TCs 15–16 assume the documented list is complete for "Other" matches.

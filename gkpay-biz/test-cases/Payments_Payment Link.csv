@@ -1,0 +1,112 @@
+﻿ID,Work Item Type,Title,Test Step,Step Action,Step Expected,Automation Status,Area Path,Assigned To,State
+"38639","Test Case","Verify that a customer can click a Dynamic payment link and complete a guest checkout card payment successfully",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Click the merchant's payment link","A browser-based payment interface opens",,,,
+,,,"2","Observe the amount field","The amount field is blank and editable",,,,
+,,,"3","Enter a valid payment amount and an optional note","Values are accepted; the Payee cannot be changed",,,,
+,,,"4","Select/tap the merchant name to open the merchant info modal","Modal opens showing ""Powered by"" and Business Name, Business Email, Contact Number, Business Address",,,,
+,,,"5","Close the modal and select ""Checkout as guest"" (or equivalent guest option)",,,,,
+,,,"6","Enter a valid full name (e.g. ""Naomi Silvera"") and a valid email address","Values are accepted",,,,
+,,,"7","Enter valid card details: cardholder name, a valid card number, a valid future expiry date (MM/YYYY), and a valid CVV for the card brand",,,,,
+,,,"8","Tap ""Make payment""","The customer is redirected to the card issuer's authentication page",,,,
+,,,"9","Complete the 3DS challenge successfully","The issuer returns approval and payment processing continues",,,,
+,,,"10","Observe the result screen","Payment success confirmation is shown, with the merchant name and amount displayed",,,,
+"38640","Test Case","Verify that a customer can click a Static payment link and complete a payment with the merchant's pre-set amount",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Click the merchant's Static payment link","A browser-based payment interface opens",,,,
+,,,"2","Observe the amount field","The amount is pre-filled with the merchant's set amount and is NOT editable",,,,
+,,,"3","Proceed to guest checkout and card entry with valid data","Values are accepted",,,,
+,,,"4","Tap ""Make payment"" and complete the 3DS challenge if presented","Payment is processed",,,,
+,,,"5","Observe the result screen","Payment success is displayed with the correct, unmodified fixed amount",,,,
+"38641","Test Case","Verify that the GK One app opens directly when a customer selects ""Pay with GK One App"" from a payment link and the app is already installed",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Select ""Pay with GK One App""","The GK One app opens directly",,,,
+"38642","Test Case","Verify that the customer is redirected to the app store when selecting ""Pay with GK One App"" and GK One is not installed",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Select ""Pay with GK One App""","The customer is redirected to the relevant app store listing for GK One",,,,
+"38643","Test Case","Verify that a merchant-defined custom field (e.g. ""Unit Number"") is presented and accepted during guest checkout via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Proceed to guest checkout from a payment link","The custom field (e.g. ""Unit Number"") is displayed alongside name and email",,,,
+,,,"2","Enter a valid value in the custom field, along with a valid name and email","Values are accepted",,,,
+,,,"3","Proceed to card entry and complete the payment with valid details",,,,,
+"38644","Test Case","Verify that a cardholder name containing a hyphen and an apostrophe is accepted during card entry via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter a cardholder name containing a hyphen and apostrophe, e.g. ""Mary-Jane O'Brien""","Value is accepted, no validation error shown",,,,
+,,,"2","Complete the remaining card fields with valid data and submit payment","Payment proceeds",,,,
+"38645","Test Case","Verify that the card number input auto-formats into groups of 4 digits as the customer types, via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Type the card number `4111111111111111` into the card number field, digit by digit","The field displays the number formatted as `4111 1111 1111 1111`",,,,
+"38646","Test Case","Verify that a customer can add an optional note when entering a Dynamic payment amount via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter a valid amount and a short note (e.g. ""Invoice #4521"")","Note is accepted",,,,
+,,,"2","Proceed through checkout and complete the payment","Payment is processed successfully with the note attached",,,,
+"38647","Test Case","Verify that the system blocks payment when a Dynamic payment amount entered via a link is below $1000",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter an amount of $999.99",,,,,
+,,,"2","Attempt to continue","A validation message is displayed; the customer cannot proceed",,,,
+"38648","Test Case","Verify that the system blocks payment when a Dynamic payment amount entered via a link is above $350,000",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter an amount of $350,000.01",,,,,
+,,,"2","Attempt to continue","A validation message is displayed; the customer cannot proceed",,,,
+"38649","Test Case","Verify that the system blocks payment when the Dynamic amount field is left empty",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Leave the amount field empty",,,,,
+,,,"2","Attempt to continue","An error is displayed indicating an amount is required; the customer cannot proceed",,,,
+"38650","Test Case","Verify that the system blocks guest checkout via a payment link when required fields (name or email) are left blank",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Leave the name field blank, enter a valid email",,,,,
+,,,"2","Attempt to continue","A validation message is displayed for the missing name field; customer cannot proceed",,,,
+,,,"3","Enter a valid name, leave the email field blank",,,,,
+,,,"4","Attempt to continue","A validation message is displayed for the missing email field; customer cannot proceed",,,,
+"38651","Test Case","Verify that the system blocks guest checkout via a payment link when the email address is in an invalid format",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter a valid name and an incorrectly formatted email address (e.g. ""naomi@@gmail"")",,,,,
+,,,"2","Attempt to continue","A validation message is displayed indicating the email format is invalid; customer cannot proceed",,,,
+"38652","Test Case","Verify that the system blocks payment submission when the cardholder name field is left empty, via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Leave the cardholder name field empty, complete all other card fields with valid data",,,,,
+,,,"2","Tap ""Make payment""","An error is displayed; payment is blocked",,,,
+"38653","Test Case","Verify that the system blocks payment submission when the cardholder name does not contain a space (single-word entry), via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter ""NaomiSilvera"" (no space) as the cardholder name, complete all other card fields with valid data",,,,,
+,,,"2","Tap ""Make payment""","An error is displayed indicating a full name (first and last) is required; payment is blocked",,,,
+"38654","Test Case","Verify that the system blocks payment submission when an invalid card number is entered, via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter an invalid/non-existent card number, complete all other card fields with valid data",,,,,
+,,,"2","Tap ""Make payment""","An appropriate error is displayed; payment is blocked",,,,
+"38655","Test Case","Verify that the system blocks payment submission when the card's expiry date has already passed, via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter an expiry date that has already passed, complete all other card fields with valid data",,,,,
+,,,"2","Tap ""Make payment""","An error is displayed indicating the card is expired; payment is blocked",,,,
+"38656","Test Case","Verify that the system rejects an expiry date with a month value greater than 12, via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter ""13/2027"" in the expiry date field, complete all other card fields with valid data",,,,,
+,,,"2","Tap ""Make payment""","A validation error is displayed; payment is blocked",,,,
+"38657","Test Case","Verify that the system rejects non-numeric or malformed input in the expiry date field, via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter non-numeric characters (e.g. ""AB/CDEF"") in the expiry date field","Input is rejected or a validation error is shown",,,,
+,,,"2","Enter a malformed value (e.g. ""1/27"" or ""012027"") in the expiry date field","Input is rejected or a validation error is shown",,,,
+,,,"3","Attempt to submit payment with the malformed value still present","Payment is blocked",,,,
+"38658","Test Case","Verify that the system blocks payment when the CVV length does not match the card brand (Visa/Mastercard), via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter a 2-digit CVV, then a 4-digit CVV",,,,,
+,,,"2","Tap ""Make payment"" for each case","An error is displayed for each; payment is blocked (Visa/Mastercard requires exactly 3 digits)",,,,
+"38659","Test Case","Verify that the system blocks payment when the CVV length does not match the card brand (Amex), via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter a 3-digit CVV",,,,,
+,,,"2","Tap ""Make payment""","An error is displayed; payment is blocked (Amex requires exactly 4 digits)",,,,
+"38660","Test Case","Verify that payment is declined when 3D Secure authentication fails, via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter valid card details and tap ""Make payment""","The customer is redirected to the issuer's authentication page",,,,
+,,,"2","Complete the authentication challenge with details that cause it to fail","The issuer returns a failed outcome",,,,
+,,,"3","Observe the result screen","Payment is declined; no payment success confirmation is shown",,,,
+"38661","Test Case","Verify that payment is not processed when a customer exits the 3D Secure authentication flow before completing it, via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter valid card details and tap ""Make payment""","The customer is redirected to the issuer's authentication page",,,,
+,,,"2","Exit/abandon the authentication flow before completing it (e.g. close the challenge, navigate back)","The customer is returned to the payment link checkout without a completed authentication outcome",,,,
+,,,"3","Observe the result screen","No payment success confirmation is shown; payment has not been processed",,,,
+"38662","Test Case","Verify that a Dynamic payment amount of exactly $1000 is accepted (lower boundary)",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter an amount of exactly $1,000.00",,,,,
+,,,"2","Attempt to continue","No validation error is shown; customer can proceed",,,,
+"38663","Test Case","Verify that a Dynamic payment amount of exactly $350,000 is accepted (upper boundary)",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter an amount of exactly $350,000.00",,,,,
+,,,"2","Attempt to continue","No validation error is shown; customer can proceed",,,,
+"38664","Test Case","Verify that a Static payment link's amount cannot be edited by the customer",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Attempt to tap/select the amount field and change its value","The amount field does not accept edits — no input control is available, or any attempted change is rejected",,,,
+"38665","Test Case","Verify that a guest checkout payment via a payment link still completes successfully when the customer enters a mistyped (but validly formatted) email address",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter a valid name and a validly formatted but incorrect/mistyped email address (e.g. intended ""naomi@gmail.com"" entered as ""naomii@gmail.com"")","Value is accepted — no format error, since the address is well-formed",,,,
+,,,"2","Complete card entry with valid details and submit payment","Payment is submitted and processed normally",,,,
+,,,"3","Observe the result screen","Payment success confirmation is shown, same as any other successful guest payment",,,,
+"38666","Test Case","Verify that the payment link checkout does not present Apple Pay or Google Pay as payment method options",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Observe the available payment method options","Only ""Pay with GK One App"" and a guest/card-entry option are shown; Apple Pay and Google Pay are not presented as options",,,,
+"38667","Test Case","Verify that the CVV input is masked as it is typed, via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Enter a valid CVV","Each digit entered is masked (not shown in plain text) on screen",,,,
+"38668","Test Case","Verify that the Merchant Verification modal displays the correct ""Powered by"" copy and merchant information on a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Select/tap on the merchant name or info element to open the merchant info modal","A modal opens",,,,
+,,,"2","Observe the modal contents","The badge/copy reads ""Powered by"" (not ""Verified GK Pay Biz Merchant""); Business Name, Business Email, Contact Number, and Address are all displayed",,,,
+"38669","Test Case","Verify that the confirmation receipt displays the merchant name and amount but never displays the merchant's email address, via a payment link",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Observe the confirmation/receipt screen","Merchant name and payment amount are displayed",,,,
+,,,"2","Review the full receipt content for any merchant email reference","No merchant email address is displayed anywhere on the receipt",,,,
+"38670","Test Case","Verify that an email notification is sent to the customer when a payment via a payment link completes successfully",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Complete a successful payment via a payment link","Payment success is confirmed in-browser",,,,
+,,,"2","Check the customer's email inbox","An email notification confirming the successful payment has been received",,,,
+"38671","Test Case","Verify that an email notification is sent to the customer when a payment attempt via a payment link fails",,,,"Not Automated","GKOne\Payments","Naomi Silvera <naomi.silvera@gkco.com>","Ready"
+,,,"1","Attempt a payment using a card/scenario that will be declined by the processor","Payment fails; failure is shown in-browser",,,,
+,,,"2","Check the customer's email inbox","An email notification indicating the payment failed has been received",,,,

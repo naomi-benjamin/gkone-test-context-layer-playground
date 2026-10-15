@@ -61,35 +61,40 @@ All stories are `State: New`, unassigned, no tags, unless noted otherwise.
 - **So that:** I am aware of whether it was successful or it failed
 - **AC:** Given a payment attempt has been made, when it succeeds or fails, then the system sends a **push notification** with the status.
 
+*Note (2026-10-15): story 37746 ("Pay Using GK One," listed above) is also referenced by `GKPayBiz_addedscope.csv` as part of the Payment Link channel — see Parent 37285 below. Full story content is written up once, here under its original Parent 37284; the Payment Link channel section just points back to it rather than duplicating.*
+
 ---
 
 ## Channel: Parent 37285 — Payment Link Checkout (Guest / Card / Wallet)
 
+**Scope update (2026-10-15):** `GKPayBiz_addedscope.csv` (same folder) confirms this channel — Payment Link — is being added to Release scope. It lists 11 story IDs: ten already documented below (37740, 37741, 37742, 37743, 37744, 37745, 37747, 37748, 37749, 37750), one from the QR channel shared into this flow (37746, see note on its table row), and one brand-new story not previously seen anywhere in this repo (37891 — see entry at the bottom of this section). The added-scope CSV has no Description/Acceptance Criteria columns — it's an ID/title manifest only, not full story content.
+
 | ID | Title |
 |---|---|
-| 37740 | Enter a Payment Amount (Open) |
-| 37741 | Enter a Payment Amount (Fixed) |
+| 37740 | Enter a Payment Amount (Dynamic) |
+| 37741 | Enter a Payment Amount (Static) |
 | 37742 | Display merchant verification status |
-| 37743 | Validate Amount (Open) |
+| 37743 | Validate Amount (Dynamic) |
 | 37744 | Guest Checkout |
 | 37745 | Validate Guest Checkout |
+| 37746 | Pay Using GK One *(shared with Parent 37284 — see note below)* |
 | 37747 | Pay Using Apple Pay or Google Pay (Not MVP) |
 | 37748 | Enter Card Details |
 | 37749 | Confirmation Receipt of Payment |
 | 37750 | Notification upon Payment |
+| 37891 | Complete 3D Secure Authentication *(new — see entry below)* |
 
-### 37740 — Enter a Payment Amount (Open)
+### 37740 — Enter a Payment Amount (Dynamic)
 - **As a:** GKOne customer
 - **I want to:** enter the amount I wish to pay when I click on a payment link
 - **So that:** I can make a payment to the merchant
 - **AC:** Given a payment link is clicked, a browser link should be presented; when the payment interface is shown, then the user can enter a payment amount, cannot change the Payee, and may add an optional note.
 
-### 37741 — Enter a Payment Amount (Fixed)
+### 37741 — Enter a Payment Amount (Static)
 - **As a:** GKOne customer
 - **I want to:** enter the amount I wish to pay when I click on a payment link
 - **So that:** I can make a payment to the merchant
 - **AC:** Given a payment link is clicked, a browser link should be presented; when the payment interface is shown, then the user can make a payment but **neither the Payee nor the amount can be changed**; an optional note may be added.
-- [UNCERTAIN] Title says "Fixed" amount but AC still describes entering an amount — likely means the amount is pre-filled/locked rather than freely entered. Worth clarifying with the PO.
 
 ### 37742 — Display merchant verification status
 - **As a:** customer
@@ -100,13 +105,12 @@ All stories are `State: New`, unassigned, no tags, unless noted otherwise.
   2. Given the merchant is verified through GK Pay Biz / Bill Express, when the modal is opened, then a "Verified GK Pay Biz Merchant" badge is shown.
   3. Given merchant info exists, when the modal is displayed, then it shows: Business Name, Business Email, Contact Number, Business Address.
 
-### 37743 — Validate Amount (Open)
+### 37743 — Validate Amount (Dynamic)
 - **Description:** "gk" — [UNCERTAIN] placeholder/incomplete description, no proper user story written.
 - **AC (3 scenarios):**
   1. Given the payee enters an amount below $1000, when they select Continue, then a validation message is shown and they cannot proceed.
   2. Given the payee enters an amount above $350,000, when they select Continue, then a validation message is shown and payment does not proceed.
   3. Given the amount field is empty, when they select Continue, then an error indicates an amount is required.
-- [UNCERTAIN] Lower bound here ($1000) and upper bound ($350,000) — confirm these against 37732's wallet-channel bounds ($1000 / wallet cap 500,000), since the two channels use different ceilings.
 
 ### 37744 — Guest Checkout
 - **As a:** GKOne customer
@@ -118,7 +122,9 @@ All stories are `State: New`, unassigned, no tags, unless noted otherwise.
   - Given the merchant has created a custom field (e.g. Unit Number), when the form is displayed, then that field is presented and its value accepted.
 
 ### 37745 — Validate Guest Checkout
-- **Description:** "gk" — [UNCERTAIN] placeholder/incomplete description, same as 37743.
+- **As a** user 
+- **I want to** be able to ensure my checkout experience is validated 
+- **So that** I am aware if any mistakes were made.
 - **AC:**
   - Given required fields are blank, when the payee selects "Continue to Payment," then validation messages are displayed.
   - Given an invalid email address is entered, when the customer selects Continue to Payment, then an error message is displayed.
@@ -154,7 +160,7 @@ All stories are `State: New`, unassigned, no tags, unless noted otherwise.
 - **I want to:** get a receipt after top-up
 - **So that:** I can confirm my purchase
 - **AC:** Given a successful payment, when the confirmation is displayed, then the payer can view a receipt showing merchant name, amount, and a **hidden** merchant email address.
-- [UNCERTAIN] "Hidden merchant email address" is an unusual requirement vs. 37736 (same title/intent on the wallet channel) which emails a full receipt — confirm whether this is intentional for the link-checkout channel or a copy/paste inconsistency.
+- Confirmed: the hidden-merchant-email treatment is consistent with the Plugin channel's 37749 (same ID, shared story) — not a copy-paste inconsistency, this is the standard pattern.
 
 ### 37750 — Notification upon Payment
 - **As a:** GK One user
@@ -162,6 +168,18 @@ All stories are `State: New`, unassigned, no tags, unless noted otherwise.
 - **So that:** I am aware of whether it was successful or it failed
 - **AC:** Given a payment attempt has been made, when it succeeds or fails, then the system sends an **email notification** with the status.
 - Note: mirrors 37738 (same title) on the wallet channel, but 37738 sends a **push** notification while this one sends **email** — channel-specific difference, not a duplicate.
+
+### 37891 — Complete 3D Secure Authentication
+- **As a:** customer
+- **I want to:** complete issuer authentication when required
+- **So that:** my card transaction can be authorized securely
+- **AC (4 scenarios):**
+  1. **3DS challenge required:** Given the card issuer requires 3D Secure authentication, when payment is submitted, then the customer is redirected to their issuer's authentication page.
+  2. **Successful challenge:** Given authentication is completed successfully, when the issuer returns approval, then payment processing continues.
+  3. **Failed challenge:** Given authentication fails, when the challenge outcome is returned, then payment is declined.
+  4. **Authentication cancelled:** Given the customer exits the authentication flow, when authentication is incomplete, then payment is not processed.
+- **Resolved (2026-10-15):** story content received from the user, closing the long-standing 3DS gap flagged throughout `paybiz_release_1_requirements.md` and the Plugin test case draft. Propagate this into both before continuing test planning — see cross-channel observations below for what needs updating.
+- **Parent confirmed: 37285 (Payment Link).** Grouped correctly here. Per the cross-channel note below, 3DS applies to Plugin's guest card payments too, since Plugin shares this card-entry sub-flow (37748) with Payment Link — not a separate story needed per channel.
 
 ---
 
@@ -202,10 +220,12 @@ All stories are `State: New`, unassigned, no tags, unless noted otherwise.
 ## Cross-channel observations
 
 - **Duplicate titles across channels, different behavior:** "Notification upon Payment" appears on both the wallet channel (37738, push) and the link-checkout channel (37750, email) — not a true duplicate, but worth flagging in case one was meant to cover both channels. Similarly "Generate Receipt of Payment" (37736, wallet) vs. "Confirmation Receipt of Payment" (37749, link checkout, hidden merchant email).
-- **Validation limits differ by channel:** wallet channel minimum is $1000 with a 500,000 wallet cap (37732, 37733); link-checkout channel has a $1000–$350,000 band (37743). [UNCERTAIN] Confirm these are deliberately different per channel and not a drift between stories.
-- **Two stories have placeholder descriptions** ("gk"): 37743 and 37745. The AC is present and usable, but the user-story framing (As a / I want / So that) is missing — may be worth flagging back to the author.
+- **Validation limits — resolved:** the $1000–$350,000 band (37743) is the universal cap, regardless of channel or funding source (including GK One Prepaid Card). No payment-method-specific exception. This reconfirms the existing 37733 decision in `paybiz_release_1_requirements.md` — the 500,000 figure stays a drafting mistake, and 37733 stays marked for removal from the backlog. The tension flagged above is resolved in favor of the single $350,000 cap.
+- **One story has a placeholder description** ("gk"): 37743. The AC is present and usable, but the user-story framing (As a / I want / So that) is missing — may be worth flagging back to the author. (37745's description was previously placeholder too — now resolved, see entry above.)
 - **37747 (Apple Pay/Google Pay) is explicitly Not MVP** — consider excluding from initial test coverage unless the squad confirms otherwise.
+- **Payment Link reuses stories from both other channels:** 37746 (QR channel) and the merchant-verification/guest-checkout/card-entry group (37742–37750, originally documented here as "Payment Link Checkout") both resurface in `GKPayBiz_addedscope.csv`'s scope-addition list — consistent with earlier design review (`paybiz_release_1_requirements.md`) finding that Payment Link and the embedded Plugin share the same downstream checkout experience, just with different entry points. Worth keeping in mind when writing test cases: a defect in the shared checkout steps likely affects Payment Link, Plugin, and partially QR (for 37746) simultaneously.
+- **37891 (3DS Authentication) is now resolved with full content** (see entry above) — closes the 3DS gap previously flagged across `paybiz_release_1_requirements.md` (§3 and the open items list) and `test-cases-draft.md` (TEST CASE 25, marked provisional pending this). Both need updating to reflect the real AC rather than the scope-doc-only assumption.
 
 ---
 
-*Source: `paybiz_channel_stories.csv` (same folder). This file is scratch/playground content — not authoritative feature documentation.*
+*Source: `paybiz_channel_stories.csv` and `GKPayBiz_addedscope.csv` (same folder, added 2026-10-15). This file is scratch/playground content — not authoritative feature documentation.*
