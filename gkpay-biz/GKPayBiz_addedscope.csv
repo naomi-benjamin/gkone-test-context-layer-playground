@@ -1,0 +1,13 @@
+﻿ID,Work Item Type,Title,Assigned To,State,Tags
+"37740","User Story","Enter a Payment Amount (Open)",,"New",
+"37741","User Story","Enter a Payment Amount (Fixed)",,"New",
+"37742","User Story","Display merchant verification status",,"New",
+"37743","User Story","Validate Amount (Open)",,"New",
+"37744","User Story","Guest Checkout",,"New",
+"37745","User Story","Validate Guest Checkout",,"New",
+"37746","User Story","Pay Using GK One",,"New",
+"37747","User Story","Pay Using Apple Pay or Google Pay (Not MVP)",,"New",
+"37748","User Story","Enter Card Details",,"New",
+"37749","User Story","Confirmation Receipt of Payment",,"New",
+"37750","User Story","Notification upon Payment",,"New",
+"37891","User Story","Complete 3D Secure Authentication",,"New",
