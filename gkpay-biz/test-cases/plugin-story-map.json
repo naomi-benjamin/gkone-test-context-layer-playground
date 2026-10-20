@@ -23,10 +23,12 @@
   "22": {"stories": ["37743"], "confidence": "high"},
   "23": {"stories": ["37743"], "confidence": "high"},
   "24": {"stories": ["37744", "37750"], "confidence": "high", "note": "PO-accepted mistyped-email risk, tied to guest checkout + the lost notification"},
-  "25": {"stories": [], "confidence": "none", "note": "no story exists for the 3DS challenge step at all — requirements doc open item 1 / 'Stories/AC that still need writing'"},
-  "26": {"stories": [], "confidence": "none", "note": "no story exists — same 3DS gap, this is the open sub-question under item 1"},
-  "27": {"stories": ["37742"], "confidence": "high"},
-  "28": {"stories": ["37749"], "confidence": "high"},
-  "29": {"stories": ["37750"], "confidence": "high"},
-  "30": {"stories": ["37750"], "confidence": "high"}
+  "25": {"stories": ["37891"], "confidence": "high", "note": "3DS required → redirect → successful authentication. Updated 2026-10-15: story 37891 now exists with full AC, resolving the prior 'no story' gap — this TC's content and title were rewritten to match, superseding the old TC25 imported as ADO 37991 (title no longer matches)."},
+  "26": {"stories": ["37891"], "confidence": "high", "note": "NEW 2026-10-15: failed 3DS authentication → payment declined. No equivalent case existed before 37891's AC resolved this scenario. Not yet imported to ADO."},
+  "27": {"stories": ["37891"], "confidence": "high", "note": "NEW 2026-10-15: customer abandons/cancels 3DS authentication → payment not processed. No equivalent case existed before 37891's AC resolved this scenario. Not yet imported to ADO."},
+  "28": {"stories": [], "confidence": "none", "note": "card/issuer not requiring 3DS — still inferred, not stated outright in 37891's AC (see open item 7 in requirements doc). Same case as the old TC26 (imported as ADO 37992), title/wording updated 2026-10-15 ('is not 3DS-enrolled' -> 'does not require 3D Secure') to match 37891's actual terminology — old ADO item's title no longer matches."},
+  "29": {"stories": ["37742"], "confidence": "high", "note": "unchanged from old TC27 (ADO 37993) — pure renumbering, same title/content"},
+  "30": {"stories": ["37749"], "confidence": "high", "note": "unchanged from old TC28 (ADO 37994) — pure renumbering, same title/content"},
+  "31": {"stories": ["37750"], "confidence": "high", "note": "unchanged from old TC29 (ADO 37995) — pure renumbering, same title/content"},
+  "32": {"stories": ["37750"], "confidence": "high", "note": "unchanged from old TC30 (ADO 37996) — pure renumbering, same title/content"}
 }

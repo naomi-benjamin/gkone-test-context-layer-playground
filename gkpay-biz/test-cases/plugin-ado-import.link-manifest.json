@@ -1,0 +1,290 @@
+[
+  {
+    "title": "Verify that a customer can launch the payment plugin from an integrating app and complete a guest checkout card payment successfully",
+    "stories": [
+      "37752",
+      "37754",
+      "37744",
+      "37748",
+      "37749"
+    ],
+    "confidence": "high",
+    "note": "composite happy-path smoke test spanning launch/review/guest-checkout/card-entry/confirmation",
+    "id": 37967
+  },
+  {
+    "title": "Verify that a customer can complete payment via \"Pay with GK One App\" using a saved payment method after logging in",
+    "stories": [
+      "37755"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37968
+  },
+  {
+    "title": "Verify that a customer can use \"Pay another way\" to return from the GK One saved-methods screen and complete payment as a guest instead",
+    "stories": [
+      "37755",
+      "37744"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37969
+  },
+  {
+    "title": "Verify that a merchant-defined custom field (e.g. \"Unit Number\") is presented and accepted during guest checkout",
+    "stories": [
+      "37744"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37970
+  },
+  {
+    "title": "Verify that the card number input auto-formats into groups of 4 digits as the customer types",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 4",
+    "id": 37971
+  },
+  {
+    "title": "Verify that a cardholder name containing a hyphen and an apostrophe is accepted",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 2",
+    "id": 37972
+  },
+  {
+    "title": "Verify that the payment plugin launches correctly and displays the correct merchant branding when embedded in different integrating apps",
+    "stories": [
+      "37752"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37973
+  },
+  {
+    "title": "Verify that the system blocks payment when the entered amount is below $1000",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37974
+  },
+  {
+    "title": "Verify that the system blocks payment when the entered amount is above $350,000",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37975
+  },
+  {
+    "title": "Verify that the system blocks payment when the amount field is left empty",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37976
+  },
+  {
+    "title": "Verify that the system blocks guest checkout when required fields (name or email) are left blank",
+    "stories": [
+      "37745"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37977
+  },
+  {
+    "title": "Verify that the system blocks guest checkout when the email address is in an invalid format",
+    "stories": [
+      "37745"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37978
+  },
+  {
+    "title": "Verify that the system blocks payment submission when the cardholder name field is left empty",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 3",
+    "id": 37979
+  },
+  {
+    "title": "Verify that the system blocks payment submission when the cardholder name does not contain a space (single-word entry)",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 3 detail",
+    "id": 37980
+  },
+  {
+    "title": "Verify that the system blocks payment submission when an invalid card number is entered",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 5",
+    "id": 37981
+  },
+  {
+    "title": "Verify that the system blocks payment submission when the card's expiry date has already passed",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 7",
+    "id": 37982
+  },
+  {
+    "title": "Verify that the system rejects an expiry date with a month value greater than 12",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "medium",
+    "note": "sub-point 6, but requirements doc flags this exact nonsensical-date case as an AC gap not yet written into the story",
+    "id": 37983
+  },
+  {
+    "title": "Verify that the system rejects non-numeric or malformed input in the expiry date field",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "medium",
+    "note": "sub-point 6, same AC gap as TEST CASE 17",
+    "id": 37984
+  },
+  {
+    "title": "Verify that the system blocks payment when the CVV length does not match the card brand (Visa/Mastercard)",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "medium",
+    "note": "sub-point 9; reviewer marked this case [TENTATIVE] in the draft",
+    "id": 37985
+  },
+  {
+    "title": "Verify that the system blocks payment when the CVV length does not match the card brand (Amex) [TENTATIVE]",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "medium",
+    "note": "sub-point 9; reviewer marked this case [TENTATIVE] in the draft",
+    "id": 37986
+  },
+  {
+    "title": "Verify that the CVV input is masked as it is typed",
+    "stories": [
+      "37748"
+    ],
+    "confidence": "high",
+    "note": "sub-point 8",
+    "id": 37987
+  },
+  {
+    "title": "Verify that a payment of exactly $1000 is accepted (lower boundary)",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37988
+  },
+  {
+    "title": "Verify that a payment of exactly $350,000 is accepted (upper boundary)",
+    "stories": [
+      "37743"
+    ],
+    "confidence": "high",
+    "note": "",
+    "id": 37989
+  },
+  {
+    "title": "Verify that a guest checkout payment still completes successfully when the customer enters a mistyped (but validly formatted) email address",
+    "stories": [
+      "37744",
+      "37750"
+    ],
+    "confidence": "high",
+    "note": "PO-accepted mistyped-email risk, tied to guest checkout + the lost notification",
+    "id": 37990
+  },
+  {
+    "title": "Verify that a customer is redirected to the card issuer's authentication page when 3D Secure is required, and payment completes after successful authentication",
+    "stories": [
+      "37891"
+    ],
+    "confidence": "high",
+    "note": "3DS required \u2192 redirect \u2192 successful authentication. Updated 2026-10-15: story 37891 now exists with full AC, resolving the prior 'no story' gap \u2014 this TC's content and title were rewritten to match, superseding the old TC25 imported as ADO 37991 (title no longer matches)."
+  },
+  {
+    "title": "Verify that payment is declined when 3D Secure authentication fails",
+    "stories": [
+      "37891"
+    ],
+    "confidence": "high",
+    "note": "NEW 2026-10-15: failed 3DS authentication \u2192 payment declined. No equivalent case existed before 37891's AC resolved this scenario. Not yet imported to ADO."
+  },
+  {
+    "title": "Verify that payment is not processed when a customer exits the 3D Secure authentication flow before completing it",
+    "stories": [
+      "37891"
+    ],
+    "confidence": "high",
+    "note": "NEW 2026-10-15: customer abandons/cancels 3DS authentication \u2192 payment not processed. No equivalent case existed before 37891's AC resolved this scenario. Not yet imported to ADO."
+  },
+  {
+    "title": "Verify behaviour when a card that does not require 3D Secure is used for guest checkout",
+    "stories": [],
+    "confidence": "none",
+    "note": "card/issuer not requiring 3DS \u2014 still inferred, not stated outright in 37891's AC (see open item 7 in requirements doc). Same case as the old TC26 (imported as ADO 37992), title/wording updated 2026-10-15 ('is not 3DS-enrolled' -> 'does not require 3D Secure') to match 37891's actual terminology \u2014 old ADO item's title no longer matches."
+  },
+  {
+    "title": "Verify that the Merchant Verification modal displays the correct \"Powered by\" copy and merchant information",
+    "stories": [
+      "37742"
+    ],
+    "confidence": "high",
+    "note": "unchanged from old TC27 (ADO 37993) \u2014 pure renumbering, same title/content",
+    "id": 37993
+  },
+  {
+    "title": "Verify that the confirmation receipt displays the merchant name and amount but never displays the merchant's email address",
+    "stories": [
+      "37749"
+    ],
+    "confidence": "high",
+    "note": "unchanged from old TC28 (ADO 37994) \u2014 pure renumbering, same title/content",
+    "id": 37994
+  },
+  {
+    "title": "Verify that an email notification is sent to the customer when a payment completes successfully",
+    "stories": [
+      "37750"
+    ],
+    "confidence": "high",
+    "note": "unchanged from old TC29 (ADO 37995) \u2014 pure renumbering, same title/content",
+    "id": 37995
+  },
+  {
+    "title": "Verify that an email notification is sent to the customer when a payment attempt fails",
+    "stories": [
+      "37750"
+    ],
+    "confidence": "high",
+    "note": "unchanged from old TC30 (ADO 37996) \u2014 pure renumbering, same title/content",
+    "id": 37996
+  }
+]
