@@ -2,13 +2,13 @@
 
 Generated: 2026-10-15. Skill: Test Case Generator. Input: `notes.md` in this folder (Open questions → Scope).
 
-**Scope:** behaviour of the eKYC CMS check in non-JM markets (KY, VG, GY, TT) when `EnableCmsOtherFieldSecondaryLookup` is on or off. The flag-on behaviour itself (TCs 1–28) is in `test-cases-draft.md`. Case numbering continues from that file so the IDs don't clash.
+**Scope:** behaviour of the eKYC CMS check in non-JM markets (KY, VG, GY, TT) when `EnableCmsOtherFieldSecondaryLookup` is on or off. The flag-on behaviour itself (TCs 1–27) is in `test-cases-draft.md`. Case numbering continues from that file so the IDs don't clash.
 
 Test data and DB check conventions are the same as `test-cases-draft.md`.
 
 ---
 
-TEST CASE 29
+TEST CASE 28
 Title: Verify that a customer whose ID number is stored only in the CMS "Other" field fails the CMS check with RECORD_NOT_FOUND when EnableCmsOtherFieldSecondaryLookup is disabled
 
 Tags: KYC, Onboarding, CMS, Feature Flag, Mobile, Regression
@@ -33,7 +33,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 30
+TEST CASE 29
 Title: Verify that a customer whose ID number is in a primary CMS ID field passes the CMS check when EnableCmsOtherFieldSecondaryLookup is disabled
 
 Tags: KYC, Onboarding, CMS, Feature Flag, Mobile, Regression
@@ -57,7 +57,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 31
+TEST CASE 30
 Title: Verify that a KYC Status 8 customer whose ID is in the "Other" field is matched on retry only after EnableCmsOtherFieldSecondaryLookup is enabled
 
 Tags: KYC, Onboarding, CMS, Feature Flag, Mobile, Regression
@@ -87,7 +87,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 32
+TEST CASE 31
 Title: Verify that the "Other" field lookup runs and failures are logged on CMS retry when EnableCmsOtherFieldSecondaryLookup and EnableIdentityConflictResolution are both enabled
 
 Tags: KYC, Onboarding, CMS, Feature Flag, Mobile, Regression
@@ -116,13 +116,13 @@ The following should be true after test completion:
 
 ## Context applied
 
-- `notes.md` in this folder: flag name (Open questions → Scope), retry and existing-Status-8 answers (TC 31), failure reasons (TCs 29, 31, 32).
-- `test-cases-draft.md` TC 1 data setup (TC 29), TCs 26–27 retry steps (TCs 31–32).
+- `notes.md` in this folder: flag name (Open questions → Scope), retry and existing-Status-8 answers (TC 30), failure reasons (TCs 28, 30, 31).
+- `test-cases-draft.md` TC 1 data setup (TC 28), TCs 25–26 retry steps (TCs 30–31).
 - `squads/platform/features/ekyc/domain-knowledge.md` CMS check: Outcomes, Failure reasons, Failure recovery.
 - `_global/cross-cutting-concerns.md`: `EnableCmsOtherFieldSecondaryLookup` is not listed there yet.
-- Related (playground, lower trust): `playground/2026-06-17-cms-check-flag-interference/bug-draft.md`. `EnableIdentityConflictResolution` silently skipped the CMS check on non-JM reattempt, which is the basis for TC 32. `playground/2026-05-12-ekyc-cms-retry/` provides the retry UI wording for TCs 31–32.
+- Related (playground, lower trust): `playground/2026-06-17-cms-check-flag-interference/bug-draft.md`. `EnableIdentityConflictResolution` silently skipped the CMS check on non-JM reattempt, which is the basis for TC 31. `playground/2026-05-12-ekyc-cms-retry/` provides the retry UI wording for TCs 30–31.
 
-**Flag assumptions (TCs 29–32):**
-- Flag scope is assumed to be per tenant. If it's global or per environment, change the preconditions and step 4 of TC 31.
-- With the flag disabled, behaviour is assumed to match pre-release behaviour (primary search only). TCs 29–31 depend on this.
-- TC 31 assumes the flag is read when each CMS check runs, so it isn't cached at session or app start.
+**Flag assumptions (TCs 28–31):**
+- Flag scope is assumed to be per tenant. If it's global or per environment, change the preconditions and step 4 of TC 30.
+- With the flag disabled, behaviour is assumed to match pre-release behaviour (primary search only). TCs 28–30 depend on this.
+- TC 30 assumes the flag is read when each CMS check runs, so it isn't cached at session or app start.

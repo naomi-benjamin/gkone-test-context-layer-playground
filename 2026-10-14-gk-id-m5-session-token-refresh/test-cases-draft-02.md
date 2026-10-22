@@ -1,0 +1,415 @@
+# M5 Test Cases — GK ID Session and Token Refresh (with Postman steps)
+
+Cases 1–19 from `test-cases-draft.md`, merged with `postman-run-sheet.md`. Each action has the English step, then the Postman step on a new line (`<br>`, which ADO renders as a line break). Exploratory (20–23) and lifetime (24–26) cases stay in `test-cases-draft.md` for now.
+
+Postman shorthand used in preconditions: **SIGN IN** = 02 · Build the sign-in URL → open the console URL in a browser and sign in → paste the `code` from the address bar into `authCode` → 02 · Exchange code for tokens (within 60 seconds).
+
+---
+
+TEST CASE 1
+Title: Verify that an application allowed `offline_access` receives a refresh token when the authorization request asks for that scope
+
+Tags: GK ID, OAuth, Token Refresh, API, Smoke
+
+Pre Conditions:
+The following should be true before proceeding:
+- `EnableOAuth2V1` is on.
+- App A's consent policy allows `offline_access`.
+- Tester has a customer account that can sign in to GK One.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Set App A's authorization request scope to include `openid profile email offline_access`.<br>Postman: collection variables → confirm `scope` = `openid profile email offline_access`. | |
+| 2. | Sign in as the customer and exchange the authorization code for tokens.<br>Postman: 02 · Build the sign-in URL → open the console URL in a browser and sign in → paste `code` into `authCode` → 02 · Exchange code for tokens. | Sign-in completes and the token response is returned. |
+| 3. | Inspect the raw token response.<br>Postman: 02 · Exchange code for tokens → response body and console. | Response contains an `access_token`, an `id_token` and a `refresh_token`. |
+
+Post Conditions:
+The following should be true after test completion:
+- App A holds a refresh token (RT1) for the customer.
+
+TEST CASE 2
+Title: Verify that an application allowed `offline_access` receives no refresh token and no error when the authorization request does not ask for that scope
+
+Tags: GK ID, OAuth, Token Refresh, API
+
+Pre Conditions:
+The following should be true before proceeding:
+- App A's consent policy allows `offline_access`.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Set App A's authorization request scope to `openid profile email` (no `offline_access`).<br>Postman: collection variables → set `scope` = `openid profile email`. | |
+| 2. | Sign in as the customer and exchange the authorization code for tokens.<br>Postman: 02 · Build the sign-in URL → browser sign-in → paste `code` into `authCode` → 02 · Exchange code for tokens. | Sign-in completes without an error. |
+| 3. | Inspect the raw token response.<br>Postman: 02 · Exchange code for tokens → response body and console. | Response contains an `access_token` and an `id_token`. No `refresh_token` is present. |
+
+Post Conditions:
+The following should be true after test completion:
+- App A holds no refresh token from this sign-in.
+- Postman `scope` variable is set back to `openid profile email offline_access`.
+
+TEST CASE 3
+Title: Verify that an application not allowed `offline_access` is refused with `invalid_scope` when the authorization request asks for that scope
+
+Tags: GK ID, OAuth, Token Refresh, API, Negative
+
+Pre Conditions:
+The following should be true before proceeding:
+- App B's consent policy does not allow `offline_access`.
+- App B has `https://oauth.pstmn.io/v1/callback` registered as a redirect URI.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Build an authorization request for App B with scope `openid profile email offline_access` and valid PKCE parameters.<br>Postman: set `clientId` and `clientSecret` to App B's values, keep `scope` with `offline_access` → 02 · Build the sign-in URL. | |
+| 2. | Send the request to `/authorize`.<br>Postman: open the console URL in a browser. | Request is refused with `invalid_scope` (shown as `error=invalid_scope` in the address bar). No sign-in screen is reached and no authorization code is issued. |
+
+Post Conditions:
+The following should be true after test completion:
+- No tokens are issued to App B.
+- Postman `clientId` and `clientSecret` are set back to App A's values.
+
+TEST CASE 4
+Title: Verify that an application can exchange a refresh token for new tokens without the customer signing in again
+
+Tags: GK ID, OAuth, Token Refresh, API, Smoke
+
+Pre Conditions:
+The following should be true before proceeding:
+- App A holds AT1, IT1 and RT1 from a sign-in that asked for `offline_access` (Postman: SIGN IN, then copy `accessToken`, `idToken`, `refreshToken` into `at1`, `it1`, `rt1`).
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Send a refresh request with RT1.<br>Postman: 02 · Refresh the access token. | Response is `200` and contains a new `access_token` (AT2), a new `id_token` (IT2) and a new `refresh_token` (RT2). No sign-in screen or customer interaction is required. |
+| 2. | Compare AT2, IT2 and RT2 with AT1, IT1 and RT1.<br>Postman: compare the refresh response body with `at1`, `it1`, `rt1`. | All three are different values from the originals. |
+| 3. | Call `/userinfo` with AT2.<br>Postman: 01 · Userinfo, and capture the token. | Response is `200` and returns the same customer. |
+
+Post Conditions:
+The following should be true after test completion:
+- App A holds a working AT2 and RT2.
+
+TEST CASE 5
+Title: Verify that the ID token returned by a refresh keeps the original `auth_time`, carries no `nonce`, and the refreshed tokens keep the original scopes
+
+Tags: GK ID, OAuth, OpenID Connect, Token Refresh, API
+
+Pre Conditions:
+The following should be true before proceeding:
+- App A holds IT1 and RT1 from a sign-in that asked for `openid profile email offline_access` (Postman: SIGN IN).
+- IT1 has been decoded and its `auth_time` and scopes noted (Postman: decode `idToken` at jwt.io).
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Wait at least one minute after sign-in, so a changed `auth_time` would be visible. | |
+| 2. | Send a refresh request with RT1.<br>Postman: 02 · Refresh the access token. | New tokens (AT2, IT2, RT2) are returned. |
+| 3. | Decode IT2 and compare its `auth_time` with IT1's.<br>Postman: copy `id_token` from the refresh response body (it is not saved to a variable) → decode at jwt.io. | `auth_time` in IT2 is identical to IT1's. |
+| 4. | Check IT2 for a `nonce` claim.<br>Postman: same decoded `id_token`. | IT2 carries no `nonce`. |
+| 5. | Check the `scope` value in the refresh response, or introspect AT2.<br>Postman: refresh response body, or 01 · Introspect the access token. | Scopes are the same as the original grant (`openid profile email offline_access`) — no scope added or dropped. |
+
+Post Conditions:
+The following should be true after test completion:
+- Refreshing has not been treated as a new sign-in.
+
+TEST CASE 6
+Title: Verify that a refreshed access token reports active at introspection and the replaced access token keeps its own expiry
+
+Tags: GK ID, OAuth, Token Refresh, API
+
+Pre Conditions:
+The following should be true before proceeding:
+- App A holds AT1 and RT1 (Postman: SIGN IN, then copy `accessToken` into `at1`).
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Send a refresh request with RT1.<br>Postman: 02 · Refresh the access token. | AT2 and RT2 are returned. |
+| 2. | Call `/introspect` with AT2.<br>Postman: 01 · Introspect the access token (bearer and body both `{{accessToken}}`). | `active: true`, with an expiry 1 hour after AT2 was issued. |
+| 3. | Call `/introspect` with AT1.<br>Postman: 01 · Introspect the access token with body `token` = `{{at1}}`. | Record the result. AT1 is still within its 1-hour lifetime; refreshing is not documented as deactivating it. |
+
+Post Conditions:
+The following should be true after test completion:
+- AT2 is active for 1 hour from issue.
+
+TEST CASE 7
+Title: Verify that a refreshed access token reports inactive at introspection once its 1-hour lifetime has passed
+
+Tags: GK ID, OAuth, Token Refresh, API, Regression
+
+Pre Conditions:
+The following should be true before proceeding:
+- App A holds AT2 from a refresh, with its issue time noted (Postman: SIGN IN → 02 · Refresh the access token → copy `accessToken` into `tc7` → decode at jwt.io and note `exp`).
+- The customer does not sign in to App A again until the test completes — a new sign-in was observed to deactivate earlier access tokens.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Call `/introspect` with AT2 shortly before 1 hour after issue.<br>Postman: 01 · Introspect the access token with body `token` = `{{tc7}}`. | `active: true`. |
+| 2. | Call `/introspect` with AT2 just after 1 hour after issue.<br>Postman: 02 · Refresh the access token (for a fresh bearer) → 01 · Introspect the access token with body `token` = `{{tc7}}`. | `active: false`. |
+| 3. | Call `/userinfo` with AT2.<br>Postman: 01 · Userinfo, and capture the token with the bearer temporarily set to `{{tc7}}`. | Response is `401`. |
+
+Post Conditions:
+The following should be true after test completion:
+- An expired refreshed access token is treated the same as any expired access token.
+- Postman bearer on 01 · Userinfo is set back to `{{accessToken}}`.
+
+TEST CASE 8
+Title: Verify that a refresh token cannot be used again after it has been exchanged
+
+Tags: GK ID, OAuth, Token Refresh, API, Security, Negative
+
+Pre Conditions:
+The following should be true before proceeding:
+- App A holds RT1 (Postman: SIGN IN, then copy `refreshToken` into `rt1`).
+- Postman has a "Refresh with old token" request: a copy of 02 · Refresh the access token whose body `refresh_token` is set to the old token variable.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Send a refresh request with RT1.<br>Postman: 02 · Refresh the access token. | New tokens including RT2 are returned. |
+| 2. | Send a second refresh request with RT1.<br>Postman: Refresh with old token (body `refresh_token` = `{{rt1}}`). | Request is rejected (expected `invalid_grant`). No tokens are returned. |
+
+Post Conditions:
+The following should be true after test completion:
+- RT1 is permanently unusable.
+
+TEST CASE 9
+Title: Verify that the current refresh token keeps working after an old, replaced refresh token is presented
+
+Tags: GK ID, OAuth, Token Refresh, API, Edge Case
+
+Pre Conditions:
+The following should be true before proceeding:
+- App A holds RT1 (Postman: SIGN IN, then copy `refreshToken` into `rt1`).
+- Postman has the "Refresh with old token" request.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Send a refresh request with RT1.<br>Postman: 02 · Refresh the access token. | RT2 is returned. |
+| 2. | Send a refresh request with RT1 again.<br>Postman: Refresh with old token (body `refresh_token` = `{{rt1}}`). | Request is rejected. |
+| 3. | Send a refresh request with RT2.<br>Postman: 02 · Refresh the access token. | Response is `200` and returns AT3, IT3 and RT3. The grant has not been revoked by the reuse attempt. |
+| 4. | Call `/introspect` with AT3.<br>Postman: 01 · Introspect the access token. | `active: true`. |
+
+Post Conditions:
+The following should be true after test completion:
+- Only the reused old token was rejected; App A's access continues on RT3.
+
+TEST CASE 10
+Title: Verify that repeated refreshes each replace the previous refresh token
+
+Tags: GK ID, OAuth, Token Refresh, API, Regression
+
+Pre Conditions:
+The following should be true before proceeding:
+- App A holds RT1 (Postman: SIGN IN).
+- Postman has the "Refresh with old token" request.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Send a refresh request with RT1.<br>Postman: 02 · Refresh the access token, then copy `refreshToken` into `rt2`. | RT2 is returned. |
+| 2. | Send a refresh request with RT2.<br>Postman: 02 · Refresh the access token. | RT3 is returned. |
+| 3. | Send a refresh request with RT3.<br>Postman: 02 · Refresh the access token. | RT4 is returned. |
+| 4. | Send a refresh request with RT2.<br>Postman: Refresh with old token (body `refresh_token` = `{{rt2}}`). | Request is rejected. |
+| 5. | Send a refresh request with RT4.<br>Postman: 02 · Refresh the access token. | Response is `200` and returns RT5. |
+
+Post Conditions:
+The following should be true after test completion:
+- Only the most recently issued refresh token works at any point in the chain.
+
+TEST CASE 11
+Title: Verify that a refresh token keeps working after the customer signs out, while their access tokens are deactivated
+
+Tags: GK ID, OAuth, Token Refresh, Session, API, Edge Case
+
+Pre Conditions:
+The following should be true before proceeding:
+- Customer has signed in to App A with `offline_access`; App A holds AT1 and RT1 (Postman: SIGN IN, then copy `accessToken` into `at1`).
+- The `end_session_endpoint` URL has been taken from the discovery document (Postman: 04 · End session prints it).
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Call `/introspect` with AT1.<br>Postman: 01 · Introspect the access token. | `active: true`. |
+| 2. | In the same browser session used to sign in, go to the `end_session_endpoint` (`/logout`).<br>Postman: open `https://app-gkone-identity-001-dev.azurewebsites.net/logout` in the browser used for SIGN IN. | Customer is signed out of GK One and the GK One session cookie is cleared. |
+| 3. | Call `/introspect` with AT1.<br>Postman: 01 · Introspect the access token. | `active: false` (a `401` on the call also means AT1 is dead, as AT1 is the bearer). |
+| 4. | Call `/userinfo` with AT1.<br>Postman: 01 · Userinfo, and capture the token. | Response is `401`. |
+| 5. | Send a refresh request with RT1.<br>Postman: 02 · Refresh the access token. | Response is `200` and returns AT2, IT2 and RT2. |
+| 6. | Call `/introspect` with AT2.<br>Postman: 01 · Introspect the access token. | `active: true`. |
+
+Post Conditions:
+The following should be true after test completion:
+- The GK One session is ended, but App A's offline access survives through the refresh token.
+
+TEST CASE 12
+Title: Verify that refreshing tokens does not keep the customer's GK One session alive for other applications after sign-out
+
+Tags: GK ID, OAuth, Token Refresh, SSO, Session, Edge Case
+
+Pre Conditions:
+The following should be true before proceeding:
+- Customer has signed in to App A with `offline_access` in a browser; App A holds RT1 (Postman: SIGN IN).
+- App B is registered with `https://oauth.pstmn.io/v1/callback` as a redirect URI.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | In the same browser, go to the `end_session_endpoint` (`/logout`).<br>Postman: open `https://app-gkone-identity-001-dev.azurewebsites.net/logout` in the browser used for SIGN IN. | Customer is signed out of GK One. |
+| 2. | Send a refresh request with RT1.<br>Postman: 02 · Refresh the access token. | New tokens are returned. |
+| 3. | In the same browser, start an authorization request for App B.<br>Postman: set `clientId` and `clientSecret` to App B's values and `scope` = `openid profile email` → 02 · Build the sign-in URL → open the console URL in the same browser. | The ordinary GK One sign-in screen is shown. The customer is not silently signed in to App B. |
+
+Post Conditions:
+The following should be true after test completion:
+- App A still has access through its refresh token.
+- No GK One session exists in the browser until the customer signs in again.
+- Postman `clientId`, `clientSecret` and `scope` are set back to App A's values.
+
+TEST CASE 13
+Title: Verify that a refresh token stops working when the customer removes the application from their account portal
+
+Tags: GK ID, OAuth, Token Refresh, Account Management, Web, Regression
+
+Pre Conditions:
+The following should be true before proceeding:
+- Customer has signed in to App A with `offline_access`; App A holds AT1 and RT1 (Postman: SIGN IN).
+- App A appears in the customer's linked applications at `/account`.
+- Run this case once with a first-party application and once with a third-party application, if both are registered (Postman: swap `clientId` and `clientSecret` to that application's values).
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Send a refresh request with RT1.<br>Postman: 02 · Refresh the access token, then copy `accessToken` into `at2`. | RT2 is returned. |
+| 2. | Signed in as the customer, go to `/account` and revoke App A, confirming the prompt.<br>Postman: open `https://app-gkone-identity-001-dev.azurewebsites.net/account` in the browser used for SIGN IN. | App A disappears from the linked applications list without a page reload. |
+| 3. | Send a refresh request with RT2.<br>Postman: 02 · Refresh the access token. | Request is rejected (expected `invalid_grant`). No tokens are returned. |
+| 4. | Call `/introspect` with AT2.<br>Postman: 01 · Introspect the access token with body `token` = `{{at2}}`. | `active: false` (a `401` on the call also means AT2 is dead). |
+
+Post Conditions:
+The following should be true after test completion:
+- App A has no working tokens for the customer.
+- The customer's GK One session is unaffected.
+
+TEST CASE 14
+Title: Verify that a refresh token stops working when the application revokes it through `/revoke`
+
+Tags: GK ID, OAuth, Token Refresh, API, Regression
+
+Pre Conditions:
+The following should be true before proceeding:
+- App A holds RT1 (Postman: SIGN IN).
+- Postman has a "Revoke token" request: a copy of 02 · Refresh the access token with URL `{{issuer}}/revoke`, body `token={{refreshToken}}`, `client_id={{clientId}}`, `client_secret={{clientSecret}}`, and no test script.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Send `POST /oauth2/v1/revoke` with `token=<RT1>` and App A's `client_id` and `client_secret`.<br>Postman: Revoke token. | Response is `200`. |
+| 2. | Send a refresh request with RT1.<br>Postman: 02 · Refresh the access token. | Request is rejected (expected `invalid_grant`). No tokens are returned. |
+
+Post Conditions:
+The following should be true after test completion:
+- RT1 is permanently unusable.
+
+TEST CASE 15
+Title: Verify that a new sign-in to the same application replaces the previous refresh token
+
+Tags: GK ID, OAuth, Token Refresh, API, Edge Case
+
+Pre Conditions:
+The following should be true before proceeding:
+- Customer has signed in to App A with `offline_access`; App A holds RT1 (Postman: SIGN IN, then copy `refreshToken` into `rt1`).
+- Postman has the "Refresh with old token" request.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | In the same browser/Postman session, sign in to App A again with `offline_access` (use `prompt=login` if a session is still live).<br>Postman: 02 · Build the sign-in URL → add `&prompt=login` to the console URL → open it in the same browser and sign in → paste `code` into `authCode` → 02 · Exchange code for tokens. | A new refresh token (RT1-new) is returned. |
+| 2. | Send a refresh request with RT1 (the original).<br>Postman: Refresh with old token (body `refresh_token` = `{{rt1}}`). | Request is rejected. |
+| 3. | Send a refresh request with RT1-new.<br>Postman: 02 · Refresh the access token. | Response is `200` and returns new tokens. |
+
+Post Conditions:
+The following should be true after test completion:
+- Only the refresh token from the latest sign-in works.
+
+TEST CASE 16
+Title: Verify that a refresh request is rejected with `invalid_client` when the client secret is wrong or missing
+
+Tags: GK ID, OAuth, Token Refresh, API, Security, Negative
+
+Pre Conditions:
+The following should be true before proceeding:
+- App A holds a current, unused refresh token (RT1) (Postman: SIGN IN).
+- Postman has a "Refresh, bad secret" request: a copy of 02 · Refresh the access token.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Send a refresh request with RT1 and App A's `client_id`, but an incorrect `client_secret`.<br>Postman: Refresh, bad secret with body `client_secret` = `wrong`. | Request is rejected with `invalid_client` (expected status `401`). No tokens are returned. |
+| 2. | Send a refresh request with RT1 and App A's `client_id`, with no `client_secret`.<br>Postman: Refresh, bad secret with the `client_secret` row unticked. | Request is rejected with `invalid_client`. No tokens are returned. |
+| 3. | Send a refresh request with RT1 and App A's correct `client_id` and `client_secret`.<br>Postman: 02 · Refresh the access token. | Response is `200` and returns new tokens. |
+
+Post Conditions:
+The following should be true after test completion:
+- The failed attempts did not use up or revoke RT1.
+
+TEST CASE 17
+Title: Verify that a refresh token issued to one application cannot be redeemed with another application's credentials
+
+Tags: GK ID, OAuth, Token Refresh, API, Security, Negative
+
+Pre Conditions:
+The following should be true before proceeding:
+- App A holds a current refresh token (RT1) (Postman: SIGN IN).
+- App B's `client_id` and `client_secret` are known.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Send a refresh request with RT1 using App B's `client_id` and `client_secret`.<br>Postman: Refresh, bad secret with body `client_id` and `client_secret` typed in as App B's values (variables unchanged) and `refresh_token` = `{{refreshToken}}`. | Request is rejected with `invalid_grant` (expected status `400`). No tokens are returned. |
+| 2. | Send a refresh request with RT1 using App A's credentials.<br>Postman: 02 · Refresh the access token. | Record whether RT1 still works after the cross-client attempt. |
+
+Post Conditions:
+The following should be true after test completion:
+- App B has received no tokens for the customer.
+
+TEST CASE 18
+Title: Verify that a refresh request with an invalid or missing refresh token is rejected
+
+Tags: GK ID, OAuth, Token Refresh, API, Negative
+
+Pre Conditions:
+The following should be true before proceeding:
+- App A's `client_id` and `client_secret` are known.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Send a refresh request with `refresh_token` set to a made-up value.<br>Postman: Refresh with old token with body `refresh_token` = `made-up-value`. | Request is rejected (expected `invalid_grant`). |
+| 2. | Send a refresh request with RT1 with one character changed.<br>Postman: Refresh with old token with body `refresh_token` = a real refresh token with one character changed. | Request is rejected (expected `invalid_grant`). |
+| 3. | Send a refresh request with the `refresh_token` parameter left out.<br>Postman: Refresh with old token with the `refresh_token` row unticked. | Request is rejected (expected `invalid_request`). |
+
+Post Conditions:
+The following should be true after test completion:
+- No tokens are issued.
+
+TEST CASE 19
+Title: Verify that a token request with a grant type other than `authorization_code` or `refresh_token` returns `unsupported_grant_type`
+
+Tags: GK ID, OAuth, API, Negative
+
+Pre Conditions:
+The following should be true before proceeding:
+- App A's `client_id` and `client_secret` are known.
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Send `POST /token` with `grant_type=client_credentials`.<br>Postman: 03 · Token with an unsupported grant type. | Response is `unsupported_grant_type`. |
+| 2. | Send `POST /token` with `grant_type=password`.<br>Postman: 03 · Token with an unsupported grant type with body `grant_type` = `password`. | Response is `unsupported_grant_type`. |
+| 3. | Send `POST /token` with `grant_type=made_up_value`.<br>Postman: 03 · Token with an unsupported grant type with body `grant_type` = `made_up_value`. | Response is `unsupported_grant_type`. |
+
+Post Conditions:
+The following should be true after test completion:
+- No tokens are issued.
+- Postman 03 · Token with an unsupported grant type body is set back to `client_credentials`.

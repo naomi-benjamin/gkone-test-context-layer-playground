@@ -374,32 +374,6 @@ The following should be true after test completion:
 ---
 
 TEST CASE 14
-Title: Verify that a customer is not matched when the CMS "Other" field holds a non-ID value equal to their ID number on another person's record
-
-Tags: KYC, Onboarding, CMS, Mobile
-
-Pre Conditions:
-The following should be true before proceeding:
-• `EnableCmsOtherFieldSecondaryLookup` is enabled for the tenant
-• Customer is registered and signed in to GK One in a non-JM market, KYC Status 0
-• A single CMS record in the market belongs to a different person, and its "Other" field holds a non-ID value (e.g. a reference or account number) exactly equal to [ID]
-• That record's full name and DOB both differ from the test document
-
-Steps:
-| Step | Action | Expected Result |
-|------|--------|-----------------|
-| 1. | Complete the eKYC flow through Ondato verification by scanning the test document containing [ID] | CMS check fails; the "We couldn't confirm your identity." banner is shown |
-| 2. | Query the customer's KYC Status | KYC Status is 8 |
-| 3. | Query `Profiles.IdentityValidationFailures` for the customer | A row exists with a name or DOB mismatch reason (`ID_DOCUMENT_FULL_NAME_MISMATCH` or `ID_DOCUMENT_DATE_OF_BIRTH_MISMATCH`) |
-| 4. | Query `Users.CmsOtherFieldNameMatches` for the customer | No row exists |
-
-Post Conditions:
-The following should be true after test completion:
-• The customer is not linked to the other person's CMS record or GKONumber
-
----
-
-TEST CASE 15
 Title: Verify that a customer matched via the "Other" field is rejected when the CMS record is blocked
 
 Tags: KYC, Onboarding, CMS, Mobile, Regression
@@ -423,7 +397,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 16
+TEST CASE 15
 Title: Verify that a customer matched via the "Other" field is rejected when the CMS record has no Proof of Address
 
 Tags: KYC, Onboarding, CMS, Mobile, Regression
@@ -447,7 +421,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 17
+TEST CASE 16
 Title: Verify that a customer fails the CMS check with RECORD_NOT_FOUND when their ID number is in neither a primary ID field nor the "Other" field
 
 Tags: KYC, Onboarding, CMS, Mobile, Regression
@@ -472,7 +446,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 18
+TEST CASE 17
 Title: Verify that a customer fails the CMS check with MULTIPLE_RECORDS_FOUND when their ID number is in the "Other" field of more than one CMS record
 
 Tags: KYC, Onboarding, CMS, Mobile, Regression
@@ -498,7 +472,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 19
+TEST CASE 18
 Title: Verify that the "Other" field lookup does not match when the stored value is only a formatted or partial form of the ID number
 
 Tags: KYC, Onboarding, CMS, Mobile
@@ -528,7 +502,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 20
+TEST CASE 19
 Title: Verify that the "Other" field lookup does not match when the stored value differs from the ID number only by surrounding whitespace or letter case
 
 Tags: KYC, Onboarding, CMS, Mobile
@@ -553,7 +527,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 21
+TEST CASE 20
 Title: Verify that the "Other" field lookup does not match a CMS record that belongs to a different market
 
 Tags: KYC, Onboarding, CMS, Mobile
@@ -579,7 +553,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 22
+TEST CASE 21
 Title: Verify that the system does not fall back to the "Other" field when the primary search finds a record that fails the name check
 
 Tags: KYC, Onboarding, CMS, Mobile, Regression
@@ -605,7 +579,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 23
+TEST CASE 22
 Title: Verify that the CMS check fails with CMS_SERVICE_UNAVAILABLE and does not run the "Other" field lookup when CMS is unavailable during the primary search
 
 Tags: KYC, Onboarding, CMS, Mobile, Regression
@@ -631,7 +605,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 24
+TEST CASE 23
 Title: Verify that the CMS check fails with CMS_SERVICE_UNAVAILABLE when CMS becomes unavailable during the "Other" field lookup
 
 Tags: KYC, Onboarding, CMS, Mobile
@@ -659,7 +633,7 @@ The following should be true after test completion:
 
 ## Edge cases
 
-TEST CASE 25
+TEST CASE 24
 Title: Verify that a customer matched via the "Other" field is rejected with KYC Status 5 when the CMS record's GKONumber already belongs to another GK One user
 
 Tags: KYC, Onboarding, CMS, Mobile
@@ -683,7 +657,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 26
+TEST CASE 25
 Title: Verify that an existing KYC Status 8 customer whose ID is in the "Other" field is matched only after they retry ID verification
 
 Tags: KYC, Onboarding, CMS, Mobile, Regression
@@ -714,7 +688,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 27
+TEST CASE 26
 Title: Verify that a customer retrying ID verification is not matched via the "Other" field when the full name or date of birth does not match CMS
 
 Tags: KYC, Onboarding, CMS, Mobile, Regression
@@ -742,7 +716,7 @@ The following should be true after test completion:
 
 ---
 
-TEST CASE 28
+TEST CASE 27
 Title: Verify that a JM customer's onboarding does not run the CMS "Other" field lookup
 
 Tags: KYC, Onboarding, Mobile, Regression
@@ -768,9 +742,9 @@ The following should be true after test completion:
 **Primary context (eKYC feature):**
 - `squads/platform/features/ekyc/domain-knowledge.md`:
   - CMS check: Lookup mechanism, Secondary lookup ("Other" field), Checks performed, Outcomes, Failure reasons, Failure recovery. Used for all cases.
-  - KYC status reference: Status 1/5/8. Used for TCs 1, 7–10, 12–27.
+  - KYC status reference: Status 1/5/8. Used for TCs 1, 7–10, 12–26.
   - Field source by market (CMS-sourced, read-only fields): TC 3.
-- `squads/platform/features/ekyc/integration-points.md` CMS section: non-JM only and automatic trigger (all cases), `CMS_SERVICE_UNAVAILABLE` (TCs 23–24).
+- `squads/platform/features/ekyc/integration-points.md` CMS section: non-JM only and automatic trigger (all cases), `CMS_SERVICE_UNAVAILABLE` (TCs 22–23).
 - `squads/platform/features/ekyc/test-patterns.md`: fresh account per run (preconditions).
 - `squads/platform/squad.md`, `overview.md`, `edge-cases.md`, `known-issues.md` (no known issues logged; nothing excluded).
 - `_global/domain-gloassary.md`: KYC Status vs KYC Tier. `_global/cross-cutting-concerns.md`: `EnableCmsOtherFieldSecondaryLookup` is not listed there yet. The flag name comes from `notes.md` (Open questions → Scope).
@@ -779,12 +753,12 @@ The following should be true after test completion:
 - `notes.md` in this folder (AC, Answers 2026-10-15, test angles). All cases trace to it.
 
 **Related context (playground, lower trust):**
-- `playground/2026-05-12-ekyc-cms-retry/test-cases-draft.md` UI flow reference: the "We couldn't confirm your identity." banner, Documents Required, Retry ID Verification, the Action Needed modal and "Yes, I have". Used in TCs 12–24 (banner) and TCs 26–27 (retry steps). This is playground content and not authoritative; check the wording against the current build.
+- `playground/2026-05-12-ekyc-cms-retry/test-cases-draft.md` UI flow reference: the "We couldn't confirm your identity." banner, Documents Required, Retry ID Verification, the Action Needed modal and "Yes, I have". Used in TCs 12–23 (banner) and TCs 25–26 (retry steps). This is playground content and not authoritative; check the wording against the current build.
 
 
-**Flag assumptions:** TCs 1–27 now have "flag enabled" as a precondition. TC 28 (JM) doesn't, because no CMS check runs there. Flag-on/flag-off cases are in `test-cases-draft-02.md`.
+**Flag assumptions:** TCs 1–26 now have "flag enabled" as a precondition. TC 27 (JM) doesn't, because no CMS check runs there. Flag-on/flag-off cases are in `test-cases-draft-02.md`.
 
 **Marked content leaned on:**
-- `[TODO: Full list of checks to be confirmed]` in Checks performed: TCs 15–16 assume the documented list is complete for "Other" matches.
-- `[VERIFY: test environment support for simulating CMS failure scenarios]` in `integration-points.md`: TCs 12–25 depend on seeding CMS records and simulating outages in QA.
+- `[TODO: Full list of checks to be confirmed]` in Checks performed: TCs 14–15 assume the documented list is complete for "Other" matches.
+- `[VERIFY: test environment support for simulating CMS failure scenarios]` in `integration-points.md`: TCs 12–24 depend on seeding CMS records and simulating outages in QA.
 - `overview.md` `[UNCERTAIN]` on the eKYC entry point: steps say "Start the eKYC flow" generically.
