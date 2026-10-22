@@ -25,29 +25,28 @@
 ## Happy path
 
 TEST CASE 1
-Title: Verify that a remittance snapshot is created from the User Profile service the first time an existing customer starts an outbound remittance
+Title: Verify that a remittance snapshot is created from the User Profile service when an existing customer taps Send to start an outbound remittance
 
 Tags: Remittances, User Profile Sync, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
 • The customer is KYC Tier 1 and eligible to send a WU Outbound remittance
-• The customer has no document in `RemittanceUserProfiles`
+• The customer has no document in `RemittanceUserProfiles` (they haven't used remittances since the feature was deployed)
 
 Steps:
 | Step | Action | Expected Result |
 |------|--------|-----------------|
 | 1. | Query `RemittanceUserProfiles` for the customer's `userId` | No document is returned |
-| 2. | Log in to the app as the customer, start a WU Outbound remittance and request a quote | The quote is displayed |
-| 3. | Complete the recipient details and proceed to confirmation | The confirmation screen shows the customer's correct details |
-| 4. | Confirm and complete payment | The transaction completes |
-| 5. | Query `RemittanceUserProfiles` again | One document exists, with `id` = `userId` |
-| 6. | Compare the snapshot with the customer's User Profile record (name, email, phone, DOB, address, KYC status, ID document, eligibility flags, GKO number, birth country, employment info) | Every stored field matches User Profile |
+| 2. | Log in to the app as the customer | The home screen is displayed |
+| 3. | Tap Send to start an outbound remittance | The send flow opens |
+| 4. | Query `RemittanceUserProfiles` again | One document exists, with `id` = `userId` |
+| 5. | Compare the snapshot with the customer's User Profile record (name, email, phone, DOB, address, KYC status, ID document, eligibility flags, GKO number, birth country, employment info) | Every stored field matches User Profile |
 
 Post Conditions:
 The following should be true after test completion:
 • The customer has exactly one remittance snapshot
-
+• Leave the send flow without sending; nothing past tapping Send is needed for this case
 ---
 
 ## Alternate valid paths

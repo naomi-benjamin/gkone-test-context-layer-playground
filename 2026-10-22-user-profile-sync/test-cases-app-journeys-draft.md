@@ -40,6 +40,7 @@ The following should be true after test completion:
 • The customer has exactly one remittance snapshot
 • The transaction record holds the same participant details as before this feature existed
 
+
 ---
 
 TEST CASE 2
