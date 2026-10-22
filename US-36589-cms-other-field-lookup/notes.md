@@ -1,6 +1,6 @@
 # CMS "Other" Field — Secondary Identity Lookup
 
-Story: Incorporate the CMS "Other" field into onboarding identity searches to improve customer match rates. No ADO ID given; rename the folder to `US-<id>-cms-other-field-lookup` once known.
+Story: US-36589 — Incorporate the CMS "Other" field into onboarding identity searches to improve customer match rates.
 
 Primary feature: `squads/platform/features/ekyc/` (CMS check, non-JM markets only: KY, VG, GY, TT).
 

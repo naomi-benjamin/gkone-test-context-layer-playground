@@ -1,0 +1,341 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkone.example/schemas/profile-iam/UserProfileUpdated.schema.json",
+  "title": "UserProfileUpdated",
+  "description": "Legacy message body published to the Profile IAM topic by KycPublisherService after KYC completion. Contract: GKOne.Messaging 6.6.3, GKOne.Messaging.Contracts.UserProfile.Events.UserProfileUpdated. It carries the whole GkOneUser document (GKOne.UserProfile.SharedLibrary 4.3.0), serialized by MassTransit's System.Text.Json options: camelCase names, indented, nulls written, enums as integers (no string-enum converter is configured), decimals as strings (MassTransit StringDecimalJsonConverter), GUIDs as strings, DateTime as ISO 8601. Newtonsoft [JsonProperty] attributes on the model are ignored, so DocumentId's properties and BaseEntity.Id are camelCase like the rest. GkOneUser.PendingProfileChanges and PendingProfileChangesSince are removed from the output by MassTransitConfiguration.ExcludeProfileOutboxProperties. Wire format is the MassTransit envelope with this object under 'message'. Properties whose type is not expanded here are described as open objects.",
+  "type": "object",
+  "required": ["userId", "id", "user"],
+  "properties": {
+    "userId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Guid.Parse(user.Id)."
+    },
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "A fresh Guid per publish (new Guid in the constructor). It is also the MassTransit MessageId. Not stable across republishes, and this path has no retry or outbox anyway."
+    },
+    "user": { "$ref": "#/$defs/GkOneUser" }
+  },
+  "$defs": {
+    "GkOneUser": {
+      "type": "object",
+      "description": "A Newtonsoft deep copy of the persisted document with PendingProfileChanges cleared, taken after the write. Every public getter is serialized, including the computed ones (isIdentityValidated, mostRecentIdentificationDocument and similar).",
+      "properties": {
+        "id": { "type": "string" },
+        "partitionKey": { "type": ["string", "null"], "description": "Same value as phoneNumber." },
+        "firstName": { "type": "string" },
+        "middleName": { "type": ["string", "null"] },
+        "lastName": { "type": "string" },
+        "birthdate": { "type": "string", "format": "date-time" },
+        "trn": { "type": "string" },
+        "timeZone": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "updatePasswordNextLogin": { "type": "boolean" },
+        "entraExternalId": { "type": ["string", "null"] },
+        "email": { "type": "string" },
+        "registrationDate": { "type": ["string", "null"], "format": "date-time" },
+        "loginAttempts": { "type": ["integer", "null"] },
+        "lockoutEnabled": { "type": ["boolean", "null"] },
+        "lockoutEnd": { "type": ["string", "null"], "format": "date-time" },
+        "password": { "type": ["string", "null"], "description": "SENSITIVE. Serialized if populated." },
+        "updatePasscode": { "type": "boolean" },
+        "isPep": { "type": "boolean" },
+        "hash": { "type": ["string", "null"], "description": "SENSITIVE. Serialized if populated." },
+        "address": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/Address" }] },
+        "mailingAddress": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/MailingAddress" }] },
+        "nationality": { "type": "string" },
+        "tenantId": { "type": "string" },
+        "occupation": { "type": "string" },
+        "occupationalLevel": { "type": "string" },
+        "gender": { "type": ["string", "null"] },
+        "timeMoneyTransferId": { "type": ["string", "null"] },
+        "amountMoneyTransferId": { "type": ["string", "null"] },
+        "status": { "$ref": "#/$defs/UserStatus" },
+        "kycStatus": { "$ref": "#/$defs/KycStatus" },
+        "kycInfo": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/KycInfo" }] },
+        "kycSource": { "type": "integer", "enum": [0, 1], "description": "0 ONDATO, 1 ORBAONE." },
+        "cmsStatus": { "type": "integer", "enum": [0, 1, 2, 3], "description": "0 INITIAL, 1 AWAITING_UPDATE, 2 UPDATED, 3 BLOCKED." },
+        "motherName": { "type": "string" },
+        "deviceId": { "type": ["string", "null"] },
+        "applicantId": { "type": ["string", "null"] },
+        "termsAndCondAccepted": { "type": "boolean" },
+        "remittanceFrequency": { "type": ["string", "null"] },
+        "remittanceAmount": { "type": ["string", "null"] },
+        "sourceOfWealth": { "type": ["string", "null"] },
+        "birthCountry": { "type": ["string", "null"] },
+        "documentId": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/UserDocumentId" }] },
+        "sourcesOfFunds": { "type": "array", "items": { "$ref": "#/$defs/SourceOfFundSupport" } },
+        "identityVerificationRejections": { "type": "array", "items": { "$ref": "#/$defs/IdentityVerificationRejection" } },
+        "identityVerificationStatus": {
+          "type": ["integer", "null"],
+          "enum": [0, 1, 2, 3, 4, null],
+          "description": "0 CREATED, 1 PROCESSING, 2 APPROVED, 3 REJECTED, 4 UPDATED."
+        },
+        "kycTier": { "type": "integer", "enum": [0, 1, 2], "description": "0 TIER_0, 1 TIER_1, 2 TIER_2." },
+        "pickUpLocation": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/PickUpLocation" }] },
+        "title": { "type": ["string", "null"] },
+        "maritalStatus": { "type": ["string", "null"] },
+        "mothersMaidenName": { "type": ["string", "null"] },
+        "employmentStatus": { "type": ["string", "null"] },
+        "monthlyExpense": { "type": ["string", "null"] },
+        "monthlyIncome": { "type": ["string", "null"] },
+        "termsAcceptanceEntries": { "type": "array", "items": { "$ref": "#/$defs/TermsAcceptanceEntry" } },
+        "identificationDocuments": { "type": "array", "items": { "$ref": "#/$defs/IdentificationDocument" } },
+        "amendIdentificationDocument": { "$ref": "#/$defs/UserDocumentId" },
+        "identityValidationFailureId": { "type": "string" },
+        "queuedForCmsUpsert": { "type": "boolean" },
+        "mostRecentIdentificationDocument": { "$ref": "#/$defs/IdentificationDocument" },
+        "isSanctioned": { "type": "boolean" },
+        "pepApproval": { "$ref": "#/$defs/PepApproval" },
+        "sourcesOfWealth": { "type": "array", "items": { "$ref": "#/$defs/SourceOfWealth" } },
+        "passcodeVerificationToken": { "type": ["string", "null"], "description": "SENSITIVE. Serialized if populated." },
+        "emailVerification": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/UserEmailVerification" }] },
+        "gkoNumber": { "type": ["string", "null"] },
+        "creditCardInfo": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/CreditCardInfo" }] },
+        "blockedFrom": { "type": ["array", "null"], "items": { "type": "string" } },
+        "isIdentityValidated": { "type": "boolean" },
+        "isTaxIdentificationNumberValidated": { "type": "boolean" },
+        "meetsTheMinimumEligibilityAge": { "type": "boolean" },
+        "cmsUploadDate": { "type": ["string", "null"], "format": "date-time" },
+        "cmsStatusMessage": { "type": ["string", "null"] },
+        "isIdentificationExpired": { "type": "boolean" },
+        "cmsUpsertRetryCount": { "type": ["integer", "null"] },
+        "walletBalance": { "$ref": "#/$defs/DecimalString" },
+        "walletTopUpLimit": { "$ref": "#/$defs/DecimalString" },
+        "remittancesDailyLimit": { "$ref": "#/$defs/DecimalString" },
+        "remittanceAvailableLimit": { "$ref": "#/$defs/DecimalString" },
+        "wallet": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/Wallet" }] },
+        "isJamaican": { "type": "boolean" },
+        "shouldTaxRegistrationNumberHaveBeenVerified": { "type": "boolean" },
+        "customerNameVariations": { "type": "array", "items": { "type": "string" } },
+        "updatedAtUtc": { "type": ["string", "null"], "format": "date-time" },
+        "externalWalletReferenceNo": { "type": "string" },
+        "deletionRequestReason": { "type": "string" },
+        "deletionRequestDate": { "type": ["string", "null"], "format": "date-time" },
+        "isDeleted": { "type": "boolean" },
+        "dateDeleted": { "type": ["string", "null"], "format": "date-time" },
+        "userEmploymentInfo": { "$ref": "#/$defs/UserEmploymentInfo" },
+        "annualIncome": { "type": ["string", "null"] },
+        "hasValidProofOfAddress": { "type": "boolean" },
+        "customerInn": { "type": "string" }
+      }
+    },
+    "DecimalString": {
+      "type": "string",
+      "pattern": "^-?\\d+(\\.\\d+)?$",
+      "description": "System.Decimal written as a string by MassTransit's StringDecimalJsonConverter."
+    },
+    "UserStatus": { "type": "integer", "enum": [0, 1, 2], "description": "0 PENDING_VERIFICATION, 1 VALIDATED, 2 BLACKLISTED." },
+    "KycStatus": {
+      "type": "integer",
+      "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      "description": "0 TIER_0, 1 NOT_COMPLETED, 2 TIER_1, 3 TIER_2, 4 PENDING_TO_BE_PROCESSED, 5 REJECTED, 6 WAITING_FOR_DOCUMENTS_REVIEW, 7 FAILED, 8 CMS_FAILED, 9 PENDING_CARD_REGISTRATION, 10 TRN_DUPLICATED."
+    },
+    "Address": {
+      "type": "object",
+      "properties": {
+        "street": { "type": ["string", "null"] },
+        "line2": { "type": ["string", "null"] },
+        "city": { "type": ["string", "null"] },
+        "state": { "type": ["string", "null"] },
+        "zipCode": { "type": ["string", "null"] },
+        "country": { "type": ["string", "null"] },
+        "proofOfAddress": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/ProofOfAddress" }] }
+      }
+    },
+    "MailingAddress": {
+      "type": "object",
+      "properties": {
+        "street": { "type": ["string", "null"] },
+        "line2": { "type": ["string", "null"] },
+        "city": { "type": ["string", "null"] },
+        "state": { "type": ["string", "null"] },
+        "country": { "type": ["string", "null"] }
+      }
+    },
+    "ProofOfAddress": {
+      "type": "object",
+      "properties": {
+        "documentType": { "type": "string" },
+        "issueDate": { "type": ["string", "null"], "format": "date-time" },
+        "expiryDate": { "type": "string", "format": "date-time" },
+        "documentNumber": { "type": "string" },
+        "issuingCountry": { "type": "string" },
+        "supportingDocument": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "properties": {
+                "documentType": { "type": "string" },
+                "expiryDate": { "type": "string", "format": "date-time" },
+                "documentNumber": { "type": "string" },
+                "dateTimeUpdatedUtc": { "type": "string", "format": "date-time" }
+              }
+            }
+          ]
+        },
+        "dateTimeCreatedUtc": { "type": ["string", "null"], "format": "date-time" },
+        "dateTimeUpdatedUtc": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "KycInfo": {
+      "type": "object",
+      "properties": {
+        "applicantId": { "type": ["string", "null"] },
+        "identityVerificationId": { "type": ["string", "null"] },
+        "source": { "type": "integer", "enum": [0, 1] },
+        "status": { "$ref": "#/$defs/KycStatus" },
+        "updatedToTier_1": { "type": "string", "format": "date-time" },
+        "updatedToTier_2": { "type": "string", "format": "date-time" }
+      }
+    },
+    "UserDocumentId": {
+      "type": "object",
+      "properties": {
+        "documentNumber": { "type": "string" },
+        "documentType": { "type": "string" },
+        "expirationDate": { "type": "string", "format": "date-time" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "issueDate": { "type": "string", "format": "date-time" },
+        "issuingCountry": { "type": "string" },
+        "nationality": { "type": "string" }
+      }
+    },
+    "IdentificationDocument": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "documentNumber": { "type": "string" },
+        "expiryDate": { "type": "string", "format": "date-time" },
+        "issueDate": { "type": "string", "format": "date-time" },
+        "issuingCountry": { "type": "string" },
+        "nationality": { "type": "string" },
+        "documentType": {
+          "type": "integer",
+          "enum": [1, 2, 3, 4, 5, 6, 7],
+          "description": "1 DRIVERS_LICENSE, 2 NATIONAL_ID, 3 PASSPORT, 4 VOTERS_ID, 5 ID_CARD, 6 MISSING_DOCUMENT, 7 OTHER."
+        },
+        "documentSource": {
+          "type": ["integer", "null"],
+          "enum": [1, 2, null],
+          "description": "1 ONDATO, 2 CUSTOMER_MANAGEMENT_SYSTEM."
+        },
+        "dateTimeCreatedUtc": { "type": "string", "format": "date-time" }
+      }
+    },
+    "PepApproval": {
+      "type": "object",
+      "properties": {
+        "isPepClearedToDoBusiness": { "type": "boolean" },
+        "pepClearedToDoBusinessDateTimeUtc": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "CreditCardInfo": {
+      "type": "object",
+      "properties": {
+        "token": { "type": ["string", "null"] },
+        "cardNumber": { "type": ["string", "null"], "description": "SENSITIVE. The full card number, unmasked." },
+        "cardReference": { "type": ["string", "null"] }
+      }
+    },
+    "PickUpLocation": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "partitionKey": { "type": "string", "description": "Same value as state." },
+        "country": { "type": "string" },
+        "state": { "type": "string" },
+        "city": { "type": "string" },
+        "mailingAddress": { "type": "string" },
+        "office": { "type": "string" },
+        "tenantId": { "type": "string" },
+        "emailAddress": { "type": "string" },
+        "isEnabled": { "type": "boolean" }
+      }
+    },
+    "Wallet": {
+      "type": "object",
+      "properties": {
+        "id": { "type": ["string", "null"] },
+        "cardNumber": { "type": "string", "description": "SENSITIVE. Serialized if populated." },
+        "cvv": { "type": ["string", "null"], "description": "SENSITIVE. Serialized if populated." },
+        "cardHolderName": { "type": ["string", "null"] },
+        "amount": { "$ref": "#/$defs/DecimalString" },
+        "prepaidCardReferenceId": { "type": ["string", "null"] },
+        "accountReference": { "type": ["string", "null"] },
+        "cardReference": { "type": "string" },
+        "customerReference": { "type": ["string", "null"] },
+        "remittanceAvailableLimit": { "$ref": "#/$defs/DecimalString" },
+        "remittancesDailyLimit": { "$ref": "#/$defs/DecimalString" }
+      }
+    },
+    "UserEmploymentInfo": {
+      "type": "object",
+      "properties": {
+        "occupation": { "type": "string" },
+        "occupationalLevel": { "type": "string" },
+        "employmentStatus": { "type": ["string", "null"] },
+        "employmentIndustry": { "type": ["string", "null"] },
+        "employer": { "type": ["object", "null"], "description": "{ name, address } - address type not expanded." },
+        "employmentConfirmation": {
+          "type": ["object", "null"],
+          "description": "{ isConfirmed, informationSource, dateTimeCreatedUtc }."
+        },
+        "dateTimeUpdatedUtc": { "type": "string", "format": "date-time" }
+      }
+    },
+    "TermsAcceptanceEntry": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "termsAndConditionsName": { "type": "string" },
+        "termsAndConditionsType": { "type": "integer", "description": "TERMS_AND_CONDITIONS_TYPE enum value." }
+      }
+    },
+    "UserEmailVerification": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "boolean" },
+        "token": { "type": "string", "description": "SENSITIVE. Serialized if populated." }
+      }
+    },
+    "SourceOfWealth": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "dateAndTimeAddedUtc": { "type": "string", "format": "date-time" }
+      }
+    },
+    "SourceOfFundSupport": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "name": { "type": ["string", "null"] },
+        "supportingDocs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string", "format": "uuid" },
+              "url": { "type": ["string", "null"], "format": "uri" }
+            }
+          }
+        }
+      }
+    },
+    "IdentityVerificationRejection": {
+      "type": "object",
+      "properties": {
+        "rejectionReason": { "type": "string" },
+        "id": { "type": "string", "format": "uuid" },
+        "rejectionDateTimeUtc": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

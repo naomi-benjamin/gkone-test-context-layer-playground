@@ -1,0 +1,290 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkone.example/schemas/profile-iam/UserProfileChanged.schema.json",
+  "title": "UserProfileChanged",
+  "description": "Message body published to the Profile IAM topic by the outbox dispatcher (UserProfileChangedPublisher). Contract: GKOne.Messaging 6.6.3, GKOne.Messaging.Contracts.UserProfile.Events.UserProfileChanged. Wire format is the MassTransit envelope (application/vnd.masstransit+json) with this object under 'message'. Every property is always written (nulls are not omitted).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "eventId",
+    "eventType",
+    "occurredAtUtc",
+    "correlationId",
+    "profileId",
+    "changeSource",
+    "changedFields",
+    "profile"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1,
+      "description": "UserProfileChanged.CurrentSchemaVersion."
+    },
+    "eventId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "PendingProfileChange.Id. Stable across retries, so it is also the MassTransit MessageId. Consumers dedupe on it; delivery is at least once."
+    },
+    "eventType": {
+      "type": "string",
+      "const": "UserProfileChanged"
+    },
+    "occurredAtUtc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "GkOneUser.UpdatedAtUtc, the write time of the profile document the snapshot was taken from. Not the time the change was recorded or published."
+    },
+    "correlationId": {
+      "type": ["string", "null"],
+      "description": "Activity.Current.TraceId (32 hex chars) captured when the change was recorded. Null when no activity was current."
+    },
+    "profileId": {
+      "type": "string",
+      "description": "GkOneUser.Id (a GUID string)."
+    },
+    "changeSource": {
+      "type": "string",
+      "enum": [
+        "EmailUpdate",
+        "PhoneNumberUpdate",
+        "PrimaryAddressUpdate",
+        "OccupationalLevelUpdate",
+        "AdminUserDetailsPatch",
+        "KycStatusReset",
+        "KycStatusUpdate",
+        "KycCompletion",
+        "CmsProfileValidation",
+        "CreditCardApplicationProfileUpdate",
+        "PrepaidCardRegistration",
+        "PrepaidCardReplacement",
+        "TaxRegistrationNumberUpdate",
+        "CmsAddressSync",
+        "IdentificationDocumentUpdate",
+        "OndatoIdentityVerification",
+        "EntraProfileSync",
+        "CustomerNameVariationsSync",
+        "IdentityConflictResolution"
+      ],
+      "description": "ProfileChangeSource constants. Typed as string on the contract, so a consumer must tolerate values added later."
+    },
+    "changedFields": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "tenantId",
+          "firstName",
+          "middleName",
+          "lastName",
+          "birthdate",
+          "nationality",
+          "timezone",
+          "gender",
+          "trn",
+          "email",
+          "phoneNumber",
+          "address",
+          "prepaidCardInfo",
+          "kycStatus",
+          "kycTier",
+          "gkoNumber",
+          "externalWalletReferenceNo",
+          "customerNameVariations",
+          "identificationDocument",
+          "motherName",
+          "occupationalLevel",
+          "title",
+          "occupation",
+          "maritalStatus",
+          "monthlyIncome",
+          "monthlyExpense",
+          "employmentStatus",
+          "mothersMaidenName"
+        ]
+      },
+      "description": "ProfileChangedFieldNames. Names which parts of 'profile' the change touched. An empty set is never recorded, so this is never empty on the wire. motherName, title, maritalStatus, monthlyIncome, monthlyExpense, employmentStatus and mothersMaidenName can appear here but have no property in 'profile'."
+    },
+    "profile": { "$ref": "#/$defs/ProfileSnapshot" }
+  },
+  "$defs": {
+    "ProfileSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The profile as it is at publish time (not as it was when the change was recorded), mapped by ProfileChangeEventMapper.MapToSnapshot.",
+      "required": [
+        "firstName",
+        "middleName",
+        "lastName",
+        "email",
+        "phoneNumber",
+        "trn",
+        "birthdate",
+        "nationality",
+        "timezone",
+        "gender",
+        "status",
+        "kycStatus",
+        "kycTier",
+        "kycApplicantId",
+        "gkoNumber",
+        "cmsStatus",
+        "entraExternalId",
+        "tenantId",
+        "occupation",
+        "occupationalLevel",
+        "customerNameVariations",
+        "address",
+        "identificationDocument",
+        "eligibility",
+        "paymentReferences",
+        "updatedAtUtc"
+      ],
+      "properties": {
+        "firstName": { "type": "string" },
+        "middleName": { "type": ["string", "null"] },
+        "lastName": { "type": "string" },
+        "email": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "trn": { "type": "string", "description": "Tax Registration Number. Empty string when not captured." },
+        "birthdate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "A DateTime, so it carries a time component (T00:00:00). DateTime.MinValue (0001-01-01T00:00:00) when unknown."
+        },
+        "nationality": { "type": "string" },
+        "timezone": { "type": "string", "description": "IANA zone, defaults to America/Jamaica." },
+        "gender": { "type": ["string", "null"] },
+        "status": {
+          "type": "string",
+          "description": "UserStatus display name: PENDING_VERIFICATION, VALIDATED or BLACKLISTED."
+        },
+        "kycStatus": {
+          "type": "string",
+          "description": "KycStatus display name: TIER_0, NOT_COMPLETED, TIER_1, TIER_2, PENDING_TO_BE_PROCESSED, REJECTED, WAITING_FOR_DOCUMENTS_REVIEW, FAILED, CMS_FAILED, PENDING_CARD_REGISTRATION or TRN_DUPLICATED."
+        },
+        "kycTier": {
+          "type": "string",
+          "description": "KycTier display name: TIER_0, TIER_1 or TIER_2."
+        },
+        "kycApplicantId": { "type": ["string", "null"], "description": "KycInfo.ApplicantId." },
+        "gkoNumber": { "type": ["string", "null"] },
+        "cmsStatus": {
+          "type": "string",
+          "description": "CmsStatus display name: INITIAL, AWAITING_UPDATE, UPDATED or BLOCKED."
+        },
+        "entraExternalId": { "type": ["string", "null"] },
+        "tenantId": { "type": "string" },
+        "occupation": { "type": "string" },
+        "occupationalLevel": { "type": "string" },
+        "customerNameVariations": { "type": "array", "items": { "type": "string" } },
+        "address": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/AddressSnapshot" }] },
+        "identificationDocument": {
+          "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/IdentificationDocumentSnapshot" }],
+          "description": "GkOneUser.MostRecentIdentificationDocument."
+        },
+        "eligibility": { "$ref": "#/$defs/EligibilitySnapshot" },
+        "paymentReferences": { "$ref": "#/$defs/PaymentReferencesSnapshot" },
+        "updatedAtUtc": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "AddressSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["line1", "line2", "city", "parish", "country", "postalCode", "proofOfAddress"],
+      "properties": {
+        "line1": { "type": ["string", "null"], "description": "Address.Street." },
+        "line2": { "type": ["string", "null"] },
+        "city": { "type": ["string", "null"] },
+        "parish": { "type": ["string", "null"], "description": "Address.State." },
+        "country": { "type": ["string", "null"] },
+        "postalCode": { "type": ["string", "null"], "description": "Address.ZipCode." },
+        "proofOfAddress": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/ProofOfAddressSnapshot" }] }
+      }
+    },
+    "ProofOfAddressSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "documentType",
+        "documentNumber",
+        "issuingCountry",
+        "issueDate",
+        "expiryDate",
+        "dateTimeCreatedUtc",
+        "dateTimeUpdatedUtc"
+      ],
+      "properties": {
+        "documentType": { "type": "string" },
+        "documentNumber": { "type": "string" },
+        "issuingCountry": { "type": "string" },
+        "issueDate": { "type": ["string", "null"], "format": "date-time" },
+        "expiryDate": { "type": "string", "format": "date-time" },
+        "dateTimeCreatedUtc": { "type": ["string", "null"], "format": "date-time" },
+        "dateTimeUpdatedUtc": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "IdentificationDocumentSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["documentType", "documentNumber", "issuingCountry", "issueDate", "expiryDate"],
+      "properties": {
+        "documentType": {
+          "type": "string",
+          "description": "IdentificationDocumentType display name: DRIVERS_LICENSE, NATIONAL_ID, PASSPORT, VOTERS_ID, ID_CARD, MISSING_DOCUMENT or OTHER."
+        },
+        "documentNumber": { "type": "string" },
+        "issuingCountry": { "type": "string" },
+        "issueDate": { "type": "string", "format": "date-time", "description": "0001-01-01T00:00:00 when the issue date is unknown." },
+        "expiryDate": { "type": "string", "format": "date-time" }
+      }
+    },
+    "EligibilitySnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "isSanctioned",
+        "isPep",
+        "isPepClearedToDoBusiness",
+        "isIdentityValidated",
+        "isTaxIdentificationNumberValidated",
+        "isIdentificationExpired",
+        "meetsMinimumEligibilityAge"
+      ],
+      "properties": {
+        "isSanctioned": { "type": "boolean" },
+        "isPep": { "type": "boolean" },
+        "isPepClearedToDoBusiness": { "type": "boolean" },
+        "isIdentityValidated": { "type": "boolean" },
+        "isTaxIdentificationNumberValidated": { "type": "boolean" },
+        "isIdentificationExpired": { "type": "boolean" },
+        "meetsMinimumEligibilityAge": { "type": "boolean" }
+      }
+    },
+    "PaymentReferencesSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["externalWalletReferenceNo", "prepaidCardInfo"],
+      "properties": {
+        "externalWalletReferenceNo": { "type": "string" },
+        "prepaidCardInfo": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/PrepaidCardInfoSnapshot" }] }
+      }
+    },
+    "PrepaidCardInfoSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["token", "cardReference", "maskedCardNumber"],
+      "properties": {
+        "token": { "type": ["string", "null"] },
+        "cardReference": { "type": ["string", "null"] },
+        "maskedCardNumber": {
+          "type": ["string", "null"],
+          "description": "First 6 and last 4 digits kept, the rest '*'. Shorter than 10 characters is all '*'. Null when there is no card number. The full PAN is never published on this event."
+        }
+      }
+    }
+  }
+}

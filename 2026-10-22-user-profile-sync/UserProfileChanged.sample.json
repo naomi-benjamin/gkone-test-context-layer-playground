@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "eventId": "3f2504e0-4f89-4f9f-9c1d-0c6c1a6b9f1a",
+  "eventType": "UserProfileChanged",
+  "occurredAtUtc": "2026-10-21T14:32:07.1000000Z",
+  "correlationId": "4bf92f3577b34da6a3ce929d0e0e4736",
+  "profileId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "changeSource": "PrepaidCardRegistration",
+  "changedFields": ["prepaidCardInfo", "kycStatus"],
+  "profile": {
+    "firstName": "Andrea",
+    "middleName": null,
+    "lastName": "Campbell",
+    "email": "andrea.campbell@example.com",
+    "phoneNumber": "+18765550142",
+    "trn": "123456789",
+    "birthdate": "1990-05-14T00:00:00",
+    "nationality": "JM",
+    "timezone": "America/Jamaica",
+    "gender": "FEMALE",
+    "status": "VALIDATED",
+    "kycStatus": "TIER_1",
+    "kycTier": "TIER_1",
+    "kycApplicantId": "ond-applicant-8891273",
+    "gkoNumber": "GKO-0004471123",
+    "cmsStatus": "AWAITING_UPDATE",
+    "entraExternalId": "8f14e45f-ceea-467e-bd0a-1234567890ab",
+    "tenantId": "004d1636-64b1-4f10-9cfd-16cdb736c4d7",
+    "occupation": "Software Engineer",
+    "occupationalLevel": "PROFESSIONAL",
+    "customerNameVariations": ["Andrea Campbell", "Andrea M Campbell"],
+    "address": {
+      "line1": "12 Half Way Tree Road",
+      "line2": null,
+      "city": "Kingston",
+      "parish": "Kingston",
+      "country": "JM",
+      "postalCode": "JMAAW05",
+      "proofOfAddress": {
+        "documentType": "UTILITY_BILL",
+        "documentNumber": "UB-20260301-7731",
+        "issuingCountry": "JM",
+        "issueDate": "2026-03-01T00:00:00",
+        "expiryDate": "2027-03-01T00:00:00",
+        "dateTimeCreatedUtc": "2026-03-02T09:15:44Z",
+        "dateTimeUpdatedUtc": "2026-03-02T09:15:44Z"
+      }
+    },
+    "identificationDocument": {
+      "documentType": "PASSPORT",
+      "documentNumber": "A1234567",
+      "issuingCountry": "JM",
+      "issueDate": "2021-03-01T00:00:00",
+      "expiryDate": "2031-02-28T00:00:00"
+    },
+    "eligibility": {
+      "isSanctioned": false,
+      "isPep": false,
+      "isPepClearedToDoBusiness": false,
+      "isIdentityValidated": true,
+      "isTaxIdentificationNumberValidated": true,
+      "isIdentificationExpired": false,
+      "meetsMinimumEligibilityAge": true
+    },
+    "paymentReferences": {
+      "externalWalletReferenceNo": "andreacampbell5550142",
+      "prepaidCardInfo": {
+        "token": "810180762",
+        "cardReference": "card-qnhi5t-ljxn0r6sovh-ncmea3pf",
+        "maskedCardNumber": "512345******6789"
+      }
+    },
+    "updatedAtUtc": "2026-10-21T14:32:07.1000000Z"
+  }
+}
