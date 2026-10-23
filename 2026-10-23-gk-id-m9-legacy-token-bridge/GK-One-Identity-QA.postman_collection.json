@@ -1,0 +1,4863 @@
+{
+  "info": {
+    "name": "GK One Identity — QA (dev)",
+    "description": "Exercises GK One Identity the way an integrating application does: the OAuth 2.1 authorization code flow with PKCE, and the endpoints a token opens.\n\nIt is pointed at the **dev** test client. Folders `00` to `04` need nothing filled in; the milestone folders say what they need in their own descriptions.\n\n**Sign in.** Open the collection's **Authorization** tab and press **Get New Access Token**. Postman opens the GK One sign-in window, and the token comes back to it. Press **Use Token**. Nothing here posts a password to an internal endpoint: the sign-in happens where a customer's would.\n\nFolder `01` copies that token into the **accessToken** variable, for the requests that need the raw string. Folder `02` runs the same flow by hand when you want the refresh token captured too, which Postman's helper keeps to itself.\n\n**Milestones 9 to 11.** Each milestone has a folder named after it, and **Milestones 9 to 11 · Sign in first** runs the sign-ins they share. Each request is named after the outcome it checks in *GK One Identity, Milestones 9 to 11*: `M10.7` is outcome 7 of milestone 10. The Milestone 11 folder calls the account page's API with the browser's session cookie, which you copy into a variable; its description says how. Each folder lists the outcomes only a browser or the admin portal can show.\n\n**One refresh token per customer and application.** The last sign-in wins: a sign-in with `clientId` anywhere, the dev test client and Postman's OAuth helper included, ends the refresh token an earlier sign-in captured. A sign-out anywhere for that application ends its access tokens on every browser. A refresh that answers `invalid_grant`, or a `401` on a token that has not expired, means you start that folder's sign-in again.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "grant_type",
+        "value": "authorization_code_with_pkce",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "{{issuer}}/authorize",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "{{issuer}}/token",
+        "type": "string"
+      },
+      {
+        "key": "clientId",
+        "value": "{{clientId}}",
+        "type": "string"
+      },
+      {
+        "key": "clientSecret",
+        "value": "{{clientSecret}}",
+        "type": "string"
+      },
+      {
+        "key": "redirect_uri",
+        "value": "{{redirectUri}}",
+        "type": "string"
+      },
+      {
+        "key": "scope",
+        "value": "{{scope}}",
+        "type": "string"
+      },
+      {
+        "key": "challengeAlgorithm",
+        "value": "S256",
+        "type": "string"
+      },
+      {
+        "key": "client_authentication",
+        "value": "body",
+        "type": "string"
+      },
+      {
+        "key": "addTokenTo",
+        "value": "header",
+        "type": "string"
+      },
+      {
+        "key": "tokenName",
+        "value": "GK One Identity (dev)",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "issuer",
+      "value": "https://api-dev.mygkone.com/user-profile/oauth2/v1",
+      "description": "Everything OAuth hangs off this. From the discovery document."
+    },
+    {
+      "key": "loginBase",
+      "value": "https://app-gkone-identity-001-dev.azurewebsites.net",
+      "description": "The sign-in and account web app."
+    },
+    {
+      "key": "clientId",
+      "value": "43dcd764-231f-430a-85b0-82a413135481",
+      "description": "The dev test client. Swap it for your own application's ID, from GK Identity → Applications."
+    },
+    {
+      "key": "clientSecret",
+      "value": "kwmPq32ICco4W9L_20FDJoMgHaixuROkpsinI6iiBmc",
+      "description": "The dev test client's secret. Dev only. Swap it along with clientId when you point this at another application."
+    },
+    {
+      "key": "redirectUri",
+      "value": "https://oauth.pstmn.io/v1/callback",
+      "description": "Register this on the application or sign-in is refused."
+    },
+    {
+      "key": "scope",
+      "value": "openid profile email offline_access",
+      "description": "Drop offline_access where the application is not allowed it."
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "description": "Filled by the requests below."
+    },
+    {
+      "key": "idToken",
+      "value": "",
+      "description": "Filled by the requests below."
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "description": "Filled by folder 02."
+    },
+    {
+      "key": "authCode",
+      "value": "",
+      "description": "Paste the code from the address bar (folder 02)."
+    },
+    {
+      "key": "codeVerifier",
+      "value": "",
+      "description": "Generated by folder 02."
+    },
+    {
+      "key": "state",
+      "value": ""
+    },
+    {
+      "key": "nonce",
+      "value": ""
+    },
+    {
+      "key": "authorizeUrl",
+      "value": ""
+    },
+    {
+      "key": "sub",
+      "value": "",
+      "description": "The signed-in customer's id."
+    },
+    {
+      "key": "authorizeEndpoint",
+      "value": ""
+    },
+    {
+      "key": "tokenEndpoint",
+      "value": ""
+    },
+    {
+      "key": "userinfoEndpoint",
+      "value": ""
+    },
+    {
+      "key": "introspectEndpoint",
+      "value": ""
+    },
+    {
+      "key": "jwksEndpoint",
+      "value": ""
+    },
+    {
+      "key": "apiIdentifier",
+      "value": "https://localhost:4001/43dcd764-231f-430a-85b0-82a413135481",
+      "type": "string"
+    },
+    {
+      "key": "thirdPartyClientId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "thirdPartyClientSecret",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "thirdPartyScope",
+      "value": "openid profile email offline_access",
+      "type": "string"
+    },
+    {
+      "key": "scopesSupported",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "fpAuthorizeUrl",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "fpCodeVerifier",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "fpNonce",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "fpAuthCode",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "fpAccessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "fpIdToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "fpRefreshToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "apiAccessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tpAuthorizeUrl",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tpCodeVerifier",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tpNonce",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tpAuthCode",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tpAccessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tpRefreshToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "sessionToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "sessionTokenB",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "currentSessionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "currentBrowserId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "browserBId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "legacyApiBase",
+      "value": "https://api-dev.mygkone.com/user-profile",
+      "type": "string"
+    },
+    {
+      "key": "coreBase",
+      "value": "https://api-dev.mygkone.com/gkone-core",
+      "type": "string"
+    },
+    {
+      "key": "apimSubscriptionKey",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "iamToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "rateLimited",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "00 · Discovery",
+      "description": "Run these first. They need no token, and they fill the endpoint variables the rest of the collection uses, so a moved endpoint shows up here instead of breaking every request below.",
+      "item": [
+        {
+          "name": "Discovery document",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/.well-known/openid-configuration",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                ".well-known",
+                "openid-configuration"
+              ]
+            },
+            "description": "What an integrator points an OIDC library at. Must answer without a subscription key.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 200 with no subscription key', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const body = pm.response.json();",
+                  "",
+                  "pm.test('Advertises S256 and refuses plain', function () {",
+                  "    pm.expect(body.code_challenge_methods_supported).to.eql(['S256']);",
+                  "});",
+                  "",
+                  "pm.test('Advertises RS256 signing', function () {",
+                  "    pm.expect(body.id_token_signing_alg_values_supported).to.include('RS256');",
+                  "});",
+                  "",
+                  "pm.test('Advertises only the two grant types', function () {",
+                  "    pm.expect(body.grant_types_supported).to.have.members(['authorization_code', 'refresh_token']);",
+                  "});",
+                  "",
+                  "// The rest of the collection addresses whatever this document names, so a moved endpoint is picked",
+                  "// up here rather than by every request failing on its own.",
+                  "pm.collectionVariables.set('authorizeEndpoint', body.authorization_endpoint);",
+                  "pm.collectionVariables.set('tokenEndpoint', body.token_endpoint);",
+                  "pm.collectionVariables.set('userinfoEndpoint', body.userinfo_endpoint);",
+                  "pm.collectionVariables.set('introspectEndpoint', body.introspection_endpoint);",
+                  "pm.collectionVariables.set('jwksEndpoint', body.jwks_uri);",
+                  "pm.collectionVariables.set('scopesSupported', (body.scopes_supported || []).join(' '));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "JWKS",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/jwks",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "jwks"
+              ]
+            },
+            "description": "The public keys a third party verifies an id_token against.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Publishes at least one RS256 key with a kid', function () {",
+                  "    const keys = pm.response.json().keys;",
+                  "    pm.expect(keys).to.be.an('array').that.is.not.empty;",
+                  "    pm.expect(keys[0]).to.have.property('kid');",
+                  "    pm.expect(keys[0].alg).to.eql('RS256');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "01 · Signed in, through Postman's OAuth helper",
+      "description": "Press **Get New Access Token** on the collection's Authorization tab, sign in, then **Use Token**. Run **Userinfo** first: it copies the token into the **accessToken** variable, for the requests that need the raw string.",
+      "item": [
+        {
+          "name": "Userinfo, and capture the token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/userinfo",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "userinfo"
+              ]
+            },
+            "description": "Reads the signed-in customer back out of the token, and saves the token to the accessToken variable."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Postman holds the OAuth token in its own store. This copies it into accessToken so the",
+                  "// requests below that need the raw string (introspect, and anything pasted elsewhere) can use it.",
+                  "const sent = pm.request.headers.get('Authorization') || '';",
+                  "const bearer = sent.replace(/^Bearer\\s+/i, '').trim();",
+                  "",
+                  "if (bearer) {",
+                  "    pm.collectionVariables.set('accessToken', bearer);",
+                  "}",
+                  "",
+                  "pm.test('Answers 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Carries the claims the contract lists', function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('sub');",
+                  "    pm.expect(body).to.have.property('email');",
+                  "    pm.collectionVariables.set('sub', body.sub);",
+                  "});",
+                  "",
+                  "pm.test('Access token was captured into the accessToken variable', function () {",
+                  "    pm.expect(pm.collectionVariables.get('accessToken')).to.be.a('string').and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Introspect the access token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/introspect",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "introspect"
+              ]
+            },
+            "description": "RFC 7662. The endpoint is itself protected, so the bearer authorises the call and the form carries the token being asked about.",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Reports the access token as active', function () {",
+                  "    pm.expect(pm.response.json().active).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Introspect the id token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/introspect",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "introspect"
+              ]
+            },
+            "description": "An id_token is not an access token. Introspection should report it inactive.",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "token",
+                  "value": "{{idToken}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "console.log('active:', pm.response.json().active);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 · Sign in by hand, to capture the refresh token",
+      "description": "Postman's OAuth helper keeps the refresh token to itself. This folder runs the same flow request by request so every token lands in a variable.\n\n1. Run **Build the sign-in URL**. It generates the PKCE pair and prints the URL to the Postman console.\n2. Open that URL in a browser and sign in.\n3. Copy the `code` from the address bar into the `authCode` variable.\n4. Run **Exchange code for tokens**.",
+      "item": [
+        {
+          "name": "Build the sign-in URL",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/.well-known/openid-configuration",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                ".well-known",
+                "openid-configuration"
+              ]
+            },
+            "description": "Builds the PKCE pair and prints the authorize URL. The request itself is the discovery document, which keeps this from being a request to nowhere.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Builds a PKCE pair and the /authorize URL. Use this folder when you want the refresh token",
+                  "// captured for you; the collection-level OAuth 2.0 helper does not hand it to a variable.",
+                  "const verifier = CryptoJS.lib.WordArray.random(48)",
+                  "    .toString(CryptoJS.enc.Base64)",
+                  "    .replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=/g, '');",
+                  "",
+                  "const challenge = CryptoJS.SHA256(verifier)",
+                  "    .toString(CryptoJS.enc.Base64)",
+                  "    .replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=/g, '');",
+                  "",
+                  "const state = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);",
+                  "const nonce = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);",
+                  "",
+                  "pm.collectionVariables.set('codeVerifier', verifier);",
+                  "pm.collectionVariables.set('state', state);",
+                  "pm.collectionVariables.set('nonce', nonce);",
+                  "",
+                  "const url = pm.collectionVariables.get('issuer') + '/authorize'",
+                  "    + '?response_type=code'",
+                  "    + '&client_id=' + encodeURIComponent(pm.collectionVariables.get('clientId'))",
+                  "    + '&redirect_uri=' + encodeURIComponent(pm.collectionVariables.get('redirectUri'))",
+                  "    + '&scope=' + encodeURIComponent(pm.collectionVariables.get('scope'))",
+                  "    + '&code_challenge=' + challenge",
+                  "    + '&code_challenge_method=S256'",
+                  "    + '&state=' + state",
+                  "    + '&nonce=' + nonce;",
+                  "",
+                  "pm.collectionVariables.set('authorizeUrl', url);",
+                  "console.log('Open this in a browser, sign in, then copy the \"code\" from the address bar:');",
+                  "console.log(url);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Authorize URL built. Open it from the Postman console.', function () {",
+                  "    pm.expect(pm.collectionVariables.get('authorizeUrl')).to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "console.log('');",
+                  "console.log('=== Sign-in URL ===');",
+                  "console.log(pm.collectionVariables.get('authorizeUrl'));",
+                  "console.log('');",
+                  "console.log('Sign in, then paste the code from the address bar into the {{authCode}} variable');",
+                  "console.log('and run \"Exchange code for tokens\".');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Exchange code for tokens",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "Spends the authorization code with the verifier that matches the challenge sent at /authorize. Saves the access, id and refresh tokens.",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code",
+                  "type": "text"
+                },
+                {
+                  "key": "code",
+                  "value": "{{authCode}}",
+                  "type": "text"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{redirectUri}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "code_verifier",
+                  "value": "{{codeVerifier}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const body = pm.response.json();",
+                  "",
+                  "pm.test('Returns an access token and an id token', function () {",
+                  "    pm.expect(body).to.have.property('access_token');",
+                  "    pm.expect(body).to.have.property('id_token');",
+                  "});",
+                  "",
+                  "pm.collectionVariables.set('accessToken', body.access_token || '');",
+                  "pm.collectionVariables.set('idToken', body.id_token || '');",
+                  "",
+                  "// offline_access decides this one. Its absence is a pass where the scope was not asked for or the",
+                  "// application is not allowed it: see the Session and token refresh milestone.",
+                  "if (body.refresh_token) {",
+                  "    pm.collectionVariables.set('refreshToken', body.refresh_token);",
+                  "    console.log('Refresh token captured.');",
+                  "} else {",
+                  "    console.log('No refresh token. Expected unless offline_access is both allowed and requested.');",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Refresh the access token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "Needs offline_access allowed on the application and asked for in the scope. Saves the rotated refresh token over the one just spent.",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{refreshToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const body = pm.response.json();",
+                  "",
+                  "pm.test('Returns a new access token', function () {",
+                  "    pm.expect(body).to.have.property('access_token');",
+                  "});",
+                  "",
+                  "pm.collectionVariables.set('accessToken', body.access_token || '');",
+                  "",
+                  "// A rotated refresh token replaces the one just spent; without this the next refresh uses a dead one.",
+                  "if (body.refresh_token) {",
+                  "    pm.collectionVariables.set('refreshToken', body.refresh_token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 · Refusals",
+      "description": "Each of these should fail, and the test asserts the failure. A 200 here is the bug.",
+      "item": [
+        {
+          "name": "Authorize without code_challenge",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/authorize?response_type=code&client_id={{clientId}}&redirect_uri={{redirectUri}}&scope=openid&state=qa-no-pkce",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "authorize"
+              ],
+              "query": [
+                {
+                  "key": "response_type",
+                  "value": "code"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{redirectUri}}"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid"
+                },
+                {
+                  "key": "state",
+                  "value": "qa-no-pkce"
+                }
+              ]
+            },
+            "description": "OAuth 2.1 requires PKCE on every request. Redirects are not followed, so the refusal stays visible.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// OAuth 2.1 requires PKCE on every authorization request. The server checks redirect_uri first, so",
+                  "// an unregistered callback fails here for the wrong reason. That case is called out rather than",
+                  "// passing quietly as \"it returned an error\".",
+                  "const location = pm.response.headers.get('Location') || '';",
+                  "const body = pm.response.text() || '';",
+                  "const setupIncomplete = pm.response.code === 400 && /redirect_uri/i.test(body);",
+                  "",
+                  "if (setupIncomplete) {",
+                  "    pm.test('SETUP NEEDED: register the Postman callback, then run this again', function () {",
+                  "        pm.expect.fail(",
+                  "            'The server refused the redirect_uri, so PKCE was never reached. Add ' +",
+                  "            pm.collectionVariables.get('redirectUri') +",
+                  "            ' under GK Identity -> Applications -> Redirect URIs.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Redirects the refusal back to the application', function () {",
+                  "        pm.expect(pm.response.code).to.eql(302);",
+                  "    });",
+                  "",
+                  "    pm.test('Names invalid_request and issues no code', function () {",
+                  "        pm.expect(location).to.include('error=invalid_request');",
+                  "        pm.expect(location).to.not.include('code=');",
+                  "    });",
+                  "",
+                  "    pm.test('Refuses before the sign-in screen', function () {",
+                  "        pm.expect(location).to.not.include('/auth?');",
+                  "    });",
+                  "}",
+                  "",
+                  "console.log('Status:', pm.response.code, '| Location:', location || '(none)');"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Authorize with an unregistered redirect_uri",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/authorize?response_type=code&client_id={{clientId}}&redirect_uri=https%3A%2F%2Fevil.example%2Fcallback&scope=openid&code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM&code_challenge_method=S256&state=qa-bad-redirect",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "authorize"
+              ],
+              "query": [
+                {
+                  "key": "response_type",
+                  "value": "code"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "https%3A%2F%2Fevil.example%2Fcallback"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid"
+                },
+                {
+                  "key": "code_challenge",
+                  "value": "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM"
+                },
+                {
+                  "key": "code_challenge_method",
+                  "value": "S256"
+                },
+                {
+                  "key": "state",
+                  "value": "qa-bad-redirect"
+                }
+              ]
+            },
+            "description": "An unregistered URI must never be redirected to. The refusal comes back directly, or the server is an open redirector.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// An unregistered redirect_uri must never be redirected to, or the server is an open redirector.",
+                  "// The refusal has to come back directly.",
+                  "const location = pm.response.headers.get('Location') || '';",
+                  "",
+                  "pm.test('Answers 400 rather than redirecting', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Does not redirect to the unregistered URI', function () {",
+                  "    pm.expect(location).to.not.include('evil.example');",
+                  "});",
+                  "",
+                  "pm.test('Says the redirect_uri is the problem', function () {",
+                  "    pm.expect(pm.response.text()).to.match(/redirect_uri/i);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Token without code_verifier",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "PKCE is not optional at the token endpoint either.",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code",
+                  "type": "text"
+                },
+                {
+                  "key": "code",
+                  "value": "{{authCode}}",
+                  "type": "text"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{redirectUri}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Names invalid_request', function () {",
+                  "    pm.expect(pm.response.json().error).to.eql('invalid_request');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Token with a mismatched code_verifier",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "A verifier that does not hash to the challenge sent at /authorize. Run it with a fresh code from folder 02.",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code",
+                  "type": "text"
+                },
+                {
+                  "key": "code",
+                  "value": "{{authCode}}",
+                  "type": "text"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{redirectUri}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "code_verifier",
+                  "value": "wrong-verifier-wrong-verifier-wrong-verifier-1234",
+                  "type": "text"
+                }
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Refuses', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 401]);",
+                  "});",
+                  "",
+                  "console.log('error:', (pm.response.json() || {}).error);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Token with an unsupported grant type",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "Only authorization_code and refresh_token exist, as discovery says.",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Names unsupported_grant_type', function () {",
+                  "    pm.expect(pm.response.json().error).to.eql('unsupported_grant_type');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Introspect without a bearer",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/introspect",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "introspect"
+              ]
+            },
+            "description": "RFC 7662 §2.3: the introspection endpoint is itself protected.",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 401', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Userinfo without a bearer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/userinfo",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "userinfo"
+              ]
+            },
+            "description": "No token, no claims.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 401', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 · Sign out",
+      "description": "Ends the session the browser holds. Open it in a browser, not here.",
+      "item": [
+        {
+          "name": "End session (open in a browser)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{loginBase}}/logout",
+              "host": [
+                "{{loginBase}}"
+              ],
+              "path": [
+                "logout"
+              ]
+            },
+            "description": "The end_session_endpoint discovery advertises. It clears the session cookie, so it means nothing from Postman; the URL is here to copy.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "console.log('Open this in a browser to sign out:', pm.collectionVariables.get('loginBase') + '/logout');"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Milestones 9 to 11 · Sign in first",
+      "description": "The sign-ins milestones 9, 10 and 11 share. Run this folder first.\n\n**Setup**\n- `clientId` is the dev test client: a GK One application, with **First-party application** on and the API in `apiIdentifier` under **Expose an API**. `redirectUri` is registered on it.\n- `thirdPartyClientId` and `thirdPartyClientSecret` name a third-party application: First-party off, `redirectUri` registered, `offline_access` enabled. Ask an operator for one. The requests that need it report SETUP NEEDED until you fill them in.\n\n**Run in this order**\n1. Run `00 · Discovery document`. It saves the scope catalogue that M10.2 compares against.\n2. Run **M10.2 · Build the sign-in URL**, open the URL from the Postman console in a browser, sign in, and paste the `code` into `fpAuthCode`. Then run the three requests below it.\n3. Run **M10.5 · Build the sign-in URL**, sign in the same way, paste its `code` into `tpAuthCode`, and run the exchange below it.\n\nM10.3 and M10.5 are what you see in the browser during these sign-ins: no consent screen for the GK One application, and a consent screen for the third-party one.",
+      "item": [
+        {
+          "name": "M10.2 · Build the sign-in URL (GK One application)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/.well-known/openid-configuration",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                ".well-known",
+                "openid-configuration"
+              ]
+            },
+            "description": "Builds the PKCE pair and prints the `/authorize` URL to the Postman console. It asks for `openid` alone and names your API with `resource`, so the next requests can show that a GK One application gets the whole catalogue and a token for its API. It also sends `prompt=consent`, for M10.3: the sign-in shows no consent screen anyway.\n\nOpen the URL in a browser, sign in, and paste the `code` from the address bar into `fpAuthCode`.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// openid alone: a GK One application gets the whole catalogue whatever it asks for (M10.2).",
+                  "// prompt=consent: it never shows the consent screen, even when asked (M10.3).",
+                  "const b64url = (words) => words.toString(CryptoJS.enc.Base64)",
+                  "    .replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=/g, '');",
+                  "const verifier = b64url(CryptoJS.lib.WordArray.random(48));",
+                  "const challenge = b64url(CryptoJS.SHA256(verifier));",
+                  "const state = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);",
+                  "const nonce = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);",
+                  "",
+                  "pm.collectionVariables.set('fpCodeVerifier', verifier);",
+                  "pm.collectionVariables.set('fpNonce', nonce);",
+                  "",
+                  "const url = pm.collectionVariables.get('issuer') + '/authorize'",
+                  "    + '?response_type=code'",
+                  "    + '&client_id=' + encodeURIComponent(pm.collectionVariables.get('clientId'))",
+                  "    + '&redirect_uri=' + encodeURIComponent(pm.collectionVariables.get('redirectUri'))",
+                  "    + '&scope=openid'",
+                  "    + '&resource=' + encodeURIComponent(pm.collectionVariables.get('apiIdentifier'))",
+                  "    + '&prompt=consent'",
+                  "    + '&code_challenge=' + challenge",
+                  "    + '&code_challenge_method=S256'",
+                  "    + '&state=' + state",
+                  "    + '&nonce=' + nonce;",
+                  "",
+                  "pm.collectionVariables.set('fpAuthorizeUrl', url);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Sign-in URL built. Open it from the Postman console.', function () {",
+                  "    pm.expect(pm.collectionVariables.get('fpAuthorizeUrl')).to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "console.log('');",
+                  "console.log('=== Sign-in URL, GK One application ===');",
+                  "console.log(pm.collectionVariables.get('fpAuthorizeUrl'));",
+                  "console.log('');",
+                  "console.log('M10.3: the sign-in must not show a consent screen, although the URL sends prompt=consent.');",
+                  "console.log('Paste the code from the address bar into fpAuthCode and run the next requests in order.');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M10.7 · Exchange with a resource the application does not expose",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "Names a resource the application does not expose. GK One Identity refuses it before it spends the code, so the next request still redeems the same code.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code",
+                  "type": "text"
+                },
+                {
+                  "key": "code",
+                  "value": "{{fpAuthCode}}",
+                  "type": "text"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{redirectUri}}",
+                  "type": "text"
+                },
+                {
+                  "key": "code_verifier",
+                  "value": "{{fpCodeVerifier}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "resource",
+                  "value": "https://unknown.example/api",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Names invalid_target', function () {",
+                  "    pm.expect(pm.response.json().error).to.eql('invalid_target');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M10.2 · Exchange the code: the whole catalogue and a refresh token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "Redeems the code without `resource`, so the access token is GK One Identity's own and `/userinfo` accepts it. Saves the access, id and refresh tokens.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code",
+                  "type": "text"
+                },
+                {
+                  "key": "code",
+                  "value": "{{fpAuthCode}}",
+                  "type": "text"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{redirectUri}}",
+                  "type": "text"
+                },
+                {
+                  "key": "code_verifier",
+                  "value": "{{fpCodeVerifier}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Reads a JWT's header and payload. The signature is the API's job, not this test's.",
+                  "function decodeJwt(token) {",
+                  "    const parts = String(token || '').split('.');",
+                  "    const read = (part) => {",
+                  "        let b64 = part.replace(/-/g, '+').replace(/_/g, '/');",
+                  "        while (b64.length % 4) { b64 += '='; }",
+                  "        return JSON.parse(CryptoJS.enc.Base64.parse(b64).toString(CryptoJS.enc.Utf8));",
+                  "    };",
+                  "    return parts.length === 3 ? { header: read(parts[0]), payload: read(parts[1]) } : { header: {}, payload: {} };",
+                  "}",
+                  "",
+                  "pm.test('Answers 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('fpAccessToken', body.access_token || '');",
+                  "pm.collectionVariables.set('fpIdToken', body.id_token || '');",
+                  "if (body.refresh_token) {",
+                  "    pm.collectionVariables.set('fpRefreshToken', body.refresh_token);",
+                  "}",
+                  "",
+                  "pm.test('M10.2: grants every scope in the catalogue, although the sign-in asked for openid alone', function () {",
+                  "    const catalogue = (pm.collectionVariables.get('scopesSupported') || '').split(' ').filter(Boolean);",
+                  "    pm.expect(catalogue, 'Run 00 · Discovery document first').to.not.be.empty;",
+                  "    pm.expect(String(body.scope || '').split(' ')).to.include.members(catalogue);",
+                  "});",
+                  "",
+                  "pm.test('Returns a refresh token: a GK One application always holds offline_access', function () {",
+                  "    pm.expect(body.refresh_token).to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "pm.test('The access token is addressed to GK One Identity, because this exchange named no resource', function () {",
+                  "    pm.expect([].concat(decodeJwt(body.access_token).payload.aud)).to.include(pm.collectionVariables.get('issuer'));",
+                  "});",
+                  "",
+                  "pm.test('The id token carries this sign-in\\'s nonce', function () {",
+                  "    pm.expect(decodeJwt(body.id_token).payload.nonce).to.eql(pm.collectionVariables.get('fpNonce'));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M10.7 · Refresh into a token for your API",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "Spends the refresh token with `resource` set to your API identifier. The new access token is addressed to the API, and the rotated refresh token replaces the spent one.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{fpRefreshToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "resource",
+                  "value": "{{apiIdentifier}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Reads a JWT's header and payload. The signature is the API's job, not this test's.",
+                  "function decodeJwt(token) {",
+                  "    const parts = String(token || '').split('.');",
+                  "    const read = (part) => {",
+                  "        let b64 = part.replace(/-/g, '+').replace(/_/g, '/');",
+                  "        while (b64.length % 4) { b64 += '='; }",
+                  "        return JSON.parse(CryptoJS.enc.Base64.parse(b64).toString(CryptoJS.enc.Utf8));",
+                  "    };",
+                  "    return parts.length === 3 ? { header: read(parts[0]), payload: read(parts[1]) } : { header: {}, payload: {} };",
+                  "}",
+                  "",
+                  "pm.test('Answers 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('apiAccessToken', body.access_token || '');",
+                  "const token = decodeJwt(body.access_token);",
+                  "",
+                  "pm.test('aud is the API identifier', function () {",
+                  "    pm.expect([].concat(token.payload.aud)).to.eql([pm.collectionVariables.get('apiIdentifier')]);",
+                  "});",
+                  "",
+                  "pm.test('typ is at+jwt, the header an API checks', function () {",
+                  "    pm.expect(token.header.typ).to.eql('at+jwt');",
+                  "});",
+                  "",
+                  "pm.test('client_id names the application', function () {",
+                  "    pm.expect(token.payload.client_id).to.eql(pm.collectionVariables.get('clientId'));",
+                  "});",
+                  "",
+                  "console.log('API token lifetime, seconds:', token.payload.exp - token.payload.iat);",
+                  "",
+                  "// Refresh tokens rotate, and the spent one is dead: keep the new one or the next refresh fails.",
+                  "if (pm.response.code === 200 && pm.response.json().refresh_token) {",
+                  "    pm.collectionVariables.set('fpRefreshToken', pm.response.json().refresh_token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M10.5 · Build the sign-in URL (third-party application)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/.well-known/openid-configuration",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                ".well-known",
+                "openid-configuration"
+              ]
+            },
+            "description": "Builds the sign-in URL for the third-party application in `thirdPartyClientId`, with the scopes in `thirdPartyScope` and no `resource`.\n\nOpen the URL in a browser and sign in. M10.5: the consent screen appears before the application gets any data, at the first sign-in and again after the customer removes the application. Accept, then paste the `code` from the address bar into `tpAuthCode`.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const b64url = (words) => words.toString(CryptoJS.enc.Base64)",
+                  "    .replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=/g, '');",
+                  "const verifier = b64url(CryptoJS.lib.WordArray.random(48));",
+                  "const challenge = b64url(CryptoJS.SHA256(verifier));",
+                  "const state = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);",
+                  "const nonce = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);",
+                  "",
+                  "pm.collectionVariables.set('tpCodeVerifier', verifier);",
+                  "pm.collectionVariables.set('tpNonce', nonce);",
+                  "",
+                  "const url = pm.collectionVariables.get('issuer') + '/authorize'",
+                  "    + '?response_type=code'",
+                  "    + '&client_id=' + encodeURIComponent(pm.collectionVariables.get('thirdPartyClientId'))",
+                  "    + '&redirect_uri=' + encodeURIComponent(pm.collectionVariables.get('redirectUri'))",
+                  "    + '&scope=' + encodeURIComponent(pm.collectionVariables.get('thirdPartyScope'))",
+                  "    + '&code_challenge=' + challenge",
+                  "    + '&code_challenge_method=S256'",
+                  "    + '&state=' + state",
+                  "    + '&nonce=' + nonce;",
+                  "",
+                  "pm.collectionVariables.set('tpAuthorizeUrl', pm.collectionVariables.get('thirdPartyClientId') ? url : '');"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('thirdPartyClientId')) {",
+                  "    pm.test('SETUP NEEDED: fill in thirdPartyClientId and thirdPartyClientSecret (see the folder description)', function () {",
+                  "        pm.expect.fail('The thirdPartyClientId variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Sign-in URL built. Open it from the Postman console.', function () {",
+                  "        pm.expect(pm.collectionVariables.get('tpAuthorizeUrl')).to.be.a('string').and.not.empty;",
+                  "    });",
+                  "",
+                  "    console.log('');",
+                  "    console.log('=== Sign-in URL, third-party application ===');",
+                  "    console.log(pm.collectionVariables.get('tpAuthorizeUrl'));",
+                  "    console.log('');",
+                  "    console.log('M10.5: the consent screen must appear before the application gets any data. Accept it.');",
+                  "    console.log('Paste the code from the address bar into tpAuthCode and run the next request.');",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M10.5 · Exchange the third-party code",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "Saves the third-party application's tokens. The Milestone 9 folder uses them for M9.3 and M9.5, and the Milestone 11 folder to show that removing the application ends them.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code",
+                  "type": "text"
+                },
+                {
+                  "key": "code",
+                  "value": "{{tpAuthCode}}",
+                  "type": "text"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{redirectUri}}",
+                  "type": "text"
+                },
+                {
+                  "key": "code_verifier",
+                  "value": "{{tpCodeVerifier}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{thirdPartyClientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{thirdPartyClientSecret}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('thirdPartyClientId')) {",
+                  "    pm.test('SETUP NEEDED: fill in thirdPartyClientId and thirdPartyClientSecret (see the folder description)', function () {",
+                  "        pm.expect.fail('The thirdPartyClientId variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 200', function () {",
+                  "        pm.response.to.have.status(200);",
+                  "    });",
+                  "",
+                  "    const body = pm.response.json();",
+                  "    pm.collectionVariables.set('tpAccessToken', body.access_token || '');",
+                  "    if (body.refresh_token) {",
+                  "        pm.collectionVariables.set('tpRefreshToken', body.refresh_token);",
+                  "    }",
+                  "",
+                  "    pm.test('Grants only scopes the sign-in asked for, unlike a GK One application', function () {",
+                  "        const asked = pm.collectionVariables.get('thirdPartyScope').split(' ');",
+                  "        pm.expect(asked).to.include.members(String(body.scope || '').split(' ').filter(Boolean));",
+                  "    });",
+                  "",
+                  "    pm.test('Returns a refresh token, for M11.7', function () {",
+                  "        pm.expect(body.refresh_token, 'Enable offline_access on the registration and keep it in thirdPartyScope').to.be.a('string').and.not.empty;",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Milestone 9 · Legacy IAM token bridge",
+      "description": "Milestone 9's outcomes that an API call can prove. Run **Milestones 9 to 11 · Sign in first** before this folder, then the requests top to bottom.\n\n**Setup**\n- `apimSubscriptionKey`: the APIM subscription key the existing `/api` endpoints and gkone-core need. The two M9.1 requests that call them report SETUP NEEDED until you fill it in.\n- The third-party requests, M9.3 and M9.5, need the third-party sign-in from **Sign in first**.\n\n**Subfolders.** M9.6 signs the customer out in the browser. M9.7 needs the admin portal. M9.9 runs in the Collection Runner and makes `/token` refuse this application for up to a minute. Leave the three out of a Runner pass over this folder.\n\n**Not covered here:** M9.6 covers a customer whose session ends; a customer deleted from GK One is left out, because deleting cannot be undone.",
+      "item": [
+        {
+          "name": "M9.1 · Exchange the access token for a legacy token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "The call a GK One application's backend makes: `grant_type=iam_token` with the access token as `subject_token`. Saves the legacy token to `iamToken`.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "iam_token",
+                  "type": "text"
+                },
+                {
+                  "key": "subject_token",
+                  "value": "{{fpAccessToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Reads a JWT's header and payload. The signature is the API's job, not this test's.",
+                  "function decodeJwt(token) {",
+                  "    const parts = String(token || '').split('.');",
+                  "    const read = (part) => {",
+                  "        let b64 = part.replace(/-/g, '+').replace(/_/g, '/');",
+                  "        while (b64.length % 4) { b64 += '='; }",
+                  "        return JSON.parse(CryptoJS.enc.Base64.parse(b64).toString(CryptoJS.enc.Utf8));",
+                  "    };",
+                  "    return parts.length === 3 ? { header: read(parts[0]), payload: read(parts[1]) } : { header: {}, payload: {} };",
+                  "}",
+                  "",
+                  "pm.test('Answers 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const body = pm.response.json();",
+                  "const legacy = decodeJwt(body.access_token).payload;",
+                  "const subject = decodeJwt(pm.collectionVariables.get('fpAccessToken')).payload;",
+                  "pm.collectionVariables.set('iamToken', body.access_token || '');",
+                  "",
+                  "pm.test('Answers access_token, token_type and expires_in', function () {",
+                  "    pm.expect(body.access_token).to.be.a('string').and.not.empty;",
+                  "    pm.expect(body.token_type).to.eql('Bearer');",
+                  "    pm.expect(body.expires_in).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test('M9.1: the legacy token names the same customer', function () {",
+                  "    pm.expect(legacy.userId).to.eql(subject.sub);",
+                  "});",
+                  "",
+                  "pm.test('M9.2: the legacy token expires no later than the access token it came from', function () {",
+                  "    pm.expect(legacy.exp).to.be.at.most(subject.exp);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M9.1 · Exchange a token addressed to your API",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "The same exchange with the token addressed to your API, which is what a GK One application's API holds.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "iam_token",
+                  "type": "text"
+                },
+                {
+                  "key": "subject_token",
+                  "value": "{{apiAccessToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Reads a JWT's header and payload. The signature is the API's job, not this test's.",
+                  "function decodeJwt(token) {",
+                  "    const parts = String(token || '').split('.');",
+                  "    const read = (part) => {",
+                  "        let b64 = part.replace(/-/g, '+').replace(/_/g, '/');",
+                  "        while (b64.length % 4) { b64 += '='; }",
+                  "        return JSON.parse(CryptoJS.enc.Base64.parse(b64).toString(CryptoJS.enc.Utf8));",
+                  "    };",
+                  "    return parts.length === 3 ? { header: read(parts[0]), payload: read(parts[1]) } : { header: {}, payload: {} };",
+                  "}",
+                  "",
+                  "pm.test('Answers 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const body = pm.response.json();",
+                  "const legacy = decodeJwt(body.access_token).payload;",
+                  "const subject = decodeJwt(pm.collectionVariables.get('apiAccessToken')).payload;",
+                  "",
+                  "pm.test('Answers access_token, token_type and expires_in', function () {",
+                  "    pm.expect(body.access_token).to.be.a('string').and.not.empty;",
+                  "    pm.expect(body.token_type).to.eql('Bearer');",
+                  "    pm.expect(body.expires_in).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test('M9.1: the legacy token names the same customer', function () {",
+                  "    pm.expect(legacy.userId).to.eql(subject.sub);",
+                  "});",
+                  "",
+                  "pm.test('M9.2: the legacy token expires no later than the access token it came from', function () {",
+                  "    pm.expect(legacy.exp).to.be.at.most(subject.exp);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M9.1 · The legacy token works on the existing /api endpoints",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Ocp-Apim-Subscription-Key",
+                "value": "{{apimSubscriptionKey}}"
+              }
+            ],
+            "url": {
+              "raw": "{{legacyApiBase}}/api/Users/GetDashboard",
+              "host": [
+                "{{loginBase}}"
+              ],
+              "path": [
+                "{{legacyApiBase}}",
+                "api",
+                "Users",
+                "GetDashboard"
+              ]
+            },
+            "description": "The dashboard GK One Mobile loads after a sign-in, called with the legacy token. It reads the customer the token names.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{iamToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('apimSubscriptionKey')) {",
+                  "    pm.test('SETUP NEEDED: fill in apimSubscriptionKey, the APIM key the existing /api endpoints need', function () {",
+                  "        pm.expect.fail('The apimSubscriptionKey variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    if (!pm.collectionVariables.get('iamToken')) {",
+                  "        pm.test('SETUP NEEDED: run M9.1 · Exchange the access token for a legacy token first', function () {",
+                  "            pm.expect.fail('The iamToken variable is empty.');",
+                  "        });",
+                  "    } else {",
+                  "        pm.test('Answers 200', function () {",
+                  "            pm.response.to.have.status(200);",
+                  "        });",
+                  "",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M9.1 · The legacy token works on gkone-core",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Ocp-Apim-Subscription-Key",
+                "value": "{{apimSubscriptionKey}}"
+              }
+            ],
+            "url": {
+              "raw": "{{coreBase}}/api/ServicesMenuItems",
+              "host": [
+                "{{loginBase}}"
+              ],
+              "path": [
+                "{{coreBase}}",
+                "api",
+                "ServicesMenuItems"
+              ]
+            },
+            "description": "gkone-core's services menu, called with the legacy token.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{iamToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('apimSubscriptionKey')) {",
+                  "    pm.test('SETUP NEEDED: fill in apimSubscriptionKey, the APIM key the existing /api endpoints need', function () {",
+                  "        pm.expect.fail('The apimSubscriptionKey variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    if (!pm.collectionVariables.get('iamToken')) {",
+                  "        pm.test('SETUP NEEDED: run M9.1 · Exchange the access token for a legacy token first', function () {",
+                  "            pm.expect.fail('The iamToken variable is empty.');",
+                  "        });",
+                  "    } else {",
+                  "        pm.test('Answers 200', function () {",
+                  "            pm.response.to.have.status(200);",
+                  "        });",
+                  "",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M9.4 · An ID token is refused",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "An ID token says who signed in. It is not an access token, and the exchange refuses it.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "iam_token",
+                  "type": "text"
+                },
+                {
+                  "key": "subject_token",
+                  "value": "{{fpIdToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Names invalid_grant', function () {",
+                  "    pm.expect(pm.response.json().error).to.eql('invalid_grant');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M9.4 · A legacy token is refused",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "A legacy token cannot be exchanged for another one.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "iam_token",
+                  "type": "text"
+                },
+                {
+                  "key": "subject_token",
+                  "value": "{{iamToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('iamToken')) {",
+                  "    pm.test('SETUP NEEDED: run M9.1 · Exchange the access token for a legacy token first', function () {",
+                  "        pm.expect.fail('The iamToken variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 400', function () {",
+                  "        pm.response.to.have.status(400);",
+                  "    });",
+                  "",
+                  "    pm.test('Names invalid_grant', function () {",
+                  "        pm.expect(pm.response.json().error).to.eql('invalid_grant');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M9.8 · No subject_token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "The request names no token to exchange.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "iam_token",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Names invalid_request', function () {",
+                  "    pm.expect(pm.response.json().error).to.eql('invalid_request');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M9.8 · No client_id",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "The request names no application.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "iam_token",
+                  "type": "text"
+                },
+                {
+                  "key": "subject_token",
+                  "value": "{{fpAccessToken}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Names invalid_request', function () {",
+                  "    pm.expect(pm.response.json().error).to.eql('invalid_request');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M9.3 · A third-party application gets unauthorized_client",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "The third-party application exchanges its own access token. Only a GK One application may.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "iam_token",
+                  "type": "text"
+                },
+                {
+                  "key": "subject_token",
+                  "value": "{{tpAccessToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{thirdPartyClientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{thirdPartyClientSecret}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('thirdPartyClientId')) {",
+                  "    pm.test('SETUP NEEDED: fill in thirdPartyClientId and thirdPartyClientSecret (see the folder description)', function () {",
+                  "        pm.expect.fail('The thirdPartyClientId variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 400', function () {",
+                  "        pm.response.to.have.status(400);",
+                  "    });",
+                  "",
+                  "    pm.test('Names unauthorized_client', function () {",
+                  "        pm.expect(pm.response.json().error).to.eql('unauthorized_client');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M9.5 · An access token issued to a different application is refused",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "The GK One application presents the third-party application's access token.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "iam_token",
+                  "type": "text"
+                },
+                {
+                  "key": "subject_token",
+                  "value": "{{tpAccessToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('tpAccessToken')) {",
+                  "    pm.test('SETUP NEEDED: run M10.5 · Exchange the third-party code first', function () {",
+                  "        pm.expect.fail('The tpAccessToken variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 400', function () {",
+                  "        pm.response.to.have.status(400);",
+                  "    });",
+                  "",
+                  "    pm.test('Names invalid_grant', function () {",
+                  "        pm.expect(pm.response.json().error).to.eql('invalid_grant');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M9.6 · Sign out, then exchange",
+          "description": "The customer signs out of the GK One application in the browser. The access tokens issued before the sign-out stop exchanging, and the refresh token survives it.\n\n1. Run **M9.6 · Build the sign-out URL** and open the URL from the Postman console in a browser.\n2. Back in Postman, run the four requests below it in order. The last two leave fresh tokens for the Milestone 10 folder.\n\nThe sign-out also ends the browser's GK One session. Sign in again at `/account` before the Milestone 11 folder.",
+          "item": [
+            {
+              "name": "M9.6 · Build the sign-out URL",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{issuer}}/.well-known/openid-configuration",
+                  "host": [
+                    "{{issuer}}"
+                  ],
+                  "path": [
+                    ".well-known",
+                    "openid-configuration"
+                  ]
+                },
+                "description": "Builds the `end_session_endpoint` URL from the discovery document, with the ID token as `id_token_hint` and `redirectUri` as `post_logout_redirect_uri`.",
+                "auth": {
+                  "type": "noauth"
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (!pm.collectionVariables.get('fpIdToken')) {",
+                      "    pm.test('SETUP NEEDED: run the GK One application sign-in in Milestones 9 to 11 · Sign in first', function () {",
+                      "        pm.expect.fail('The fpIdToken variable is empty.');",
+                      "    });",
+                      "} else {",
+                      "    const url = pm.response.json().end_session_endpoint",
+                      "        + '?client_id=' + encodeURIComponent(pm.collectionVariables.get('clientId'))",
+                      "        + '&id_token_hint=' + encodeURIComponent(pm.collectionVariables.get('fpIdToken'))",
+                      "        + '&post_logout_redirect_uri=' + encodeURIComponent(pm.collectionVariables.get('redirectUri'));",
+                      "",
+                      "    pm.test('Sign-out URL built. Open it from the Postman console.', function () {",
+                      "        pm.expect(url).to.include('id_token_hint=');",
+                      "    });",
+                      "",
+                      "    console.log('');",
+                      "    console.log('=== Sign-out URL ===');",
+                      "    console.log(url);",
+                      "    console.log('');",
+                      "    console.log('Open it in a browser. GK One signs you out and returns to the Postman callback page.');",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "M9.6 · The token from before the sign-out is refused",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{issuer}}/token",
+                  "host": [
+                    "{{issuer}}"
+                  ],
+                  "path": [
+                    "token"
+                  ]
+                },
+                "description": "The access token from the sign-in no longer exchanges.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "iam_token",
+                      "type": "text"
+                    },
+                    {
+                      "key": "subject_token",
+                      "value": "{{fpAccessToken}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "{{clientId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "{{clientSecret}}",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Answers 400', function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test('Names invalid_grant', function () {",
+                      "    pm.expect(pm.response.json().error).to.eql('invalid_grant');",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "M9.6 · The refresh token outlives the sign-out",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{issuer}}/token",
+                  "host": [
+                    "{{issuer}}"
+                  ],
+                  "path": [
+                    "token"
+                  ]
+                },
+                "description": "A GK One application keeps its offline access after a sign-out. Saves the new access token and the rotated refresh token.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "refresh_token",
+                      "type": "text"
+                    },
+                    {
+                      "key": "refresh_token",
+                      "value": "{{fpRefreshToken}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "{{clientId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "{{clientSecret}}",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Answers 200', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "if (pm.response.code === 200) {",
+                      "    pm.collectionVariables.set('fpAccessToken', pm.response.json().access_token || '');",
+                      "}",
+                      "",
+                      "// Refresh tokens rotate, and the spent one is dead: keep the new one or the next refresh fails.",
+                      "if (pm.response.code === 200 && pm.response.json().refresh_token) {",
+                      "    pm.collectionVariables.set('fpRefreshToken', pm.response.json().refresh_token);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "M9.6 · A token issued after the sign-out exchanges",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{issuer}}/token",
+                  "host": [
+                    "{{issuer}}"
+                  ],
+                  "path": [
+                    "token"
+                  ]
+                },
+                "description": "The access token the refresh just issued exchanges again.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "iam_token",
+                      "type": "text"
+                    },
+                    {
+                      "key": "subject_token",
+                      "value": "{{fpAccessToken}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "{{clientId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "{{clientSecret}}",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Reads a JWT's header and payload. The signature is the API's job, not this test's.",
+                      "function decodeJwt(token) {",
+                      "    const parts = String(token || '').split('.');",
+                      "    const read = (part) => {",
+                      "        let b64 = part.replace(/-/g, '+').replace(/_/g, '/');",
+                      "        while (b64.length % 4) { b64 += '='; }",
+                      "        return JSON.parse(CryptoJS.enc.Base64.parse(b64).toString(CryptoJS.enc.Utf8));",
+                      "    };",
+                      "    return parts.length === 3 ? { header: read(parts[0]), payload: read(parts[1]) } : { header: {}, payload: {} };",
+                      "}",
+                      "",
+                      "pm.test('Answers 200', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const body = pm.response.json();",
+                      "const legacy = decodeJwt(body.access_token).payload;",
+                      "const subject = decodeJwt(pm.collectionVariables.get('fpAccessToken')).payload;",
+                      "pm.collectionVariables.set('iamToken', body.access_token || '');",
+                      "",
+                      "pm.test('Answers access_token, token_type and expires_in', function () {",
+                      "    pm.expect(body.access_token).to.be.a('string').and.not.empty;",
+                      "    pm.expect(body.token_type).to.eql('Bearer');",
+                      "    pm.expect(body.expires_in).to.be.above(0);",
+                      "});",
+                      "",
+                      "pm.test('M9.1: the legacy token names the same customer', function () {",
+                      "    pm.expect(legacy.userId).to.eql(subject.sub);",
+                      "});",
+                      "",
+                      "pm.test('M9.2: the legacy token expires no later than the access token it came from', function () {",
+                      "    pm.expect(legacy.exp).to.be.at.most(subject.exp);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "M9.6 · Refresh the API token for the Milestone 10 folder",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{issuer}}/token",
+                  "host": [
+                    "{{issuer}}"
+                  ],
+                  "path": [
+                    "token"
+                  ]
+                },
+                "description": "The sign-out also ended the API token from the sign-in. This one replaces it.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "refresh_token",
+                      "type": "text"
+                    },
+                    {
+                      "key": "refresh_token",
+                      "value": "{{fpRefreshToken}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "{{clientId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "{{clientSecret}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "resource",
+                      "value": "{{apiIdentifier}}",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Answers 200', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "if (pm.response.code === 200) {",
+                      "    pm.collectionVariables.set('apiAccessToken', pm.response.json().access_token || '');",
+                      "}",
+                      "",
+                      "// Refresh tokens rotate, and the spent one is dead: keep the new one or the next refresh fails.",
+                      "if (pm.response.code === 200 && pm.response.json().refresh_token) {",
+                      "    pm.collectionVariables.set('fpRefreshToken', pm.response.json().refresh_token);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "M9.7 · Suspended customer (admin portal)",
+          "description": "Needs the admin portal. Use a test customer that nobody else is signing in with.\n\n1. Suspend the customer you signed in with.\n2. Run the request below.\n3. Reactivate the customer, then sign in again in **Milestones 9 to 11 · Sign in first**.",
+          "item": [
+            {
+              "name": "M9.7 · A suspended customer gets invalid_grant",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{issuer}}/token",
+                  "host": [
+                    "{{issuer}}"
+                  ],
+                  "path": [
+                    "token"
+                  ]
+                },
+                "description": "The exchange applies the same suspension rule as the legacy sign-in.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "iam_token",
+                      "type": "text"
+                    },
+                    {
+                      "key": "subject_token",
+                      "value": "{{fpAccessToken}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "{{clientId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "{{clientSecret}}",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Answers 400', function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test('Names invalid_grant', function () {",
+                      "    pm.expect(pm.response.json().error).to.eql('invalid_grant');",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "M9.9 · More than 60 a minute (Runner, 121 iterations)",
+          "description": "Run this subfolder alone in the Collection Runner, with **121** iterations and no delay. 121 requests in under a minute put more than 60 into one of the fixed one-minute windows, wherever the run starts.\n\nThe limit counts every `/token` request of this application, so for up to a minute afterwards its sign-ins and refreshes answer `429` too. Run it when nobody else is using the dev test client, or point `clientId` at a client of your own.",
+          "item": [
+            {
+              "name": "M9.9 · The exchange answers 429 past 60 a minute",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{issuer}}/token",
+                  "host": [
+                    "{{issuer}}"
+                  ],
+                  "path": [
+                    "token"
+                  ]
+                },
+                "description": "Each iteration exchanges the same access token. The last iteration checks that at least one answered `429`.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "iam_token",
+                      "type": "text"
+                    },
+                    {
+                      "key": "subject_token",
+                      "value": "{{fpAccessToken}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "{{clientId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "{{clientSecret}}",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.info.iteration === 0) {",
+                      "    pm.collectionVariables.set('rateLimited', '0');",
+                      "}",
+                      "",
+                      "if (pm.response.code === 429) {",
+                      "    pm.collectionVariables.set('rateLimited', String(Number(pm.collectionVariables.get('rateLimited') || 0) + 1));",
+                      "    pm.test('A 429 carries Retry-After: 60', function () {",
+                      "        pm.expect(pm.response.headers.get('Retry-After')).to.eql('60');",
+                      "    });",
+                      "} else {",
+                      "    pm.test('Answers 200 until the limit', function () {",
+                      "        pm.response.to.have.status(200);",
+                      "    });",
+                      "}",
+                      "",
+                      "if (pm.info.iterationCount < 121) {",
+                      "    pm.test('SETUP NEEDED: run this subfolder in the Collection Runner with 121 iterations', function () {",
+                      "        pm.expect.fail('This run has ' + pm.info.iterationCount + ' iterations.');",
+                      "    });",
+                      "} else if (pm.info.iteration === pm.info.iterationCount - 1) {",
+                      "    pm.test('M9.9: some requests past 60 a minute answered 429', function () {",
+                      "        pm.expect(Number(pm.collectionVariables.get('rateLimited'))).to.be.above(0);",
+                      "    });",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Milestone 10 · GK One applications and API resources",
+      "description": "Milestone 10's outcomes that an API call can prove. Run **Milestones 9 to 11 · Sign in first** before this folder, then the requests top to bottom. M10.2, M10.3 and M10.5 run during those sign-ins.\n\nLeave the **M10.8** subfolder, at the end, out of a Runner pass. It needs a client of its own, as its description says.\n\n**Checked in the browser or the admin portal, not here:** M10.1 (the switch locks the settings), M10.4 (single sign-on between GK applications), M10.6 (**Expose an API** appears after saving and refuses a duplicate), and the toggle itself in M10.8. M10.10 runs in the Milestone 11 folder, because it needs a session.",
+      "item": [
+        {
+          "name": "M10.7 · Userinfo answers GK One Identity's own token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/userinfo",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "userinfo"
+              ]
+            },
+            "description": "The token from the exchange above names GK One Identity, so `/userinfo` answers it.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{fpAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Carries the customer and their email', function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('sub');",
+                  "    pm.expect(body).to.have.property('email');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M10.7 · Userinfo refuses the API token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/userinfo",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "userinfo"
+              ]
+            },
+            "description": "A token addressed to your API is not GK One Identity's to answer. A different API refuses it for the same reason.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{apiAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 401', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test('Names invalid_token', function () {",
+                  "    pm.expect(pm.response.json().error).to.eql('invalid_token');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M10.7 · Introspect the API token, as the API does",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/introspect",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "introspect"
+              ]
+            },
+            "description": "The API authenticates with the application's `client_id` and `client_secret`, the way an API asks whether a token is still good before it expires.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "token",
+                  "value": "{{apiAccessToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const body = pm.response.json();",
+                  "",
+                  "pm.test('Reports the token active', function () {",
+                  "    pm.expect(body.active).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test('aud is the API identifier and client_id the application', function () {",
+                  "    pm.expect(body.aud).to.eql(pm.collectionVariables.get('apiIdentifier'));",
+                  "    pm.expect(body.client_id).to.eql(pm.collectionVariables.get('clientId'));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M10.7 · Refresh with a resource the application does not expose",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "Refused before the refresh token is spent, so the saved one stays good.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{fpRefreshToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "resource",
+                  "value": "https://unknown.example/api",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Names invalid_target', function () {",
+                  "    pm.expect(pm.response.json().error).to.eql('invalid_target');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M10.7 · Refresh with two resources",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "A token has one `aud`, so a request may name one resource. Refused before the refresh token is spent.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{fpRefreshToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "resource",
+                  "value": "{{apiIdentifier}}",
+                  "type": "text"
+                },
+                {
+                  "key": "resource",
+                  "value": "https://unknown.example/api",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Names invalid_target', function () {",
+                  "    pm.expect(pm.response.json().error).to.eql('invalid_target');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M10.7 · Refresh with a resource and a scope",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "`scope` narrows GK One Identity's own token only. An API token has no scope to narrow, so the pair is refused.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{fpRefreshToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "resource",
+                  "value": "{{apiIdentifier}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Names invalid_request', function () {",
+                  "    pm.expect(pm.response.json().error).to.eql('invalid_request');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M10.7 · Authorize with a resource the application does not expose",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/authorize?response_type=code&client_id={{clientId}}&redirect_uri={{redirectUri}}&scope=openid&resource=https%3A%2F%2Funknown.example%2Fapi&code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM&code_challenge_method=S256&state=qa-unknown-resource",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "authorize"
+              ],
+              "query": [
+                {
+                  "key": "response_type",
+                  "value": "code"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{redirectUri}}"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid"
+                },
+                {
+                  "key": "resource",
+                  "value": "https%3A%2F%2Funknown.example%2Fapi"
+                },
+                {
+                  "key": "code_challenge",
+                  "value": "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM"
+                },
+                {
+                  "key": "code_challenge_method",
+                  "value": "S256"
+                },
+                {
+                  "key": "state",
+                  "value": "qa-unknown-resource"
+                }
+              ]
+            },
+            "description": "An unknown `resource` comes back to the application as `invalid_target`, before the sign-in screen. Redirects are not followed, so the refusal stays visible.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const location = pm.response.headers.get('Location') || '';",
+                  "",
+                  "pm.test('Redirects the refusal back to the application', function () {",
+                  "    pm.expect(pm.response.code).to.eql(302);",
+                  "});",
+                  "",
+                  "pm.test('Names invalid_target and issues no code', function () {",
+                  "    pm.expect(location).to.include('error=invalid_target');",
+                  "    pm.expect(location).to.not.include('code=');",
+                  "});",
+                  "",
+                  "console.log('Status:', pm.response.code, '| Location:', location || '(none)');"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "M10.7 · A third-party application owns no API",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/authorize?response_type=code&client_id={{thirdPartyClientId}}&redirect_uri={{redirectUri}}&scope=openid&resource={{apiIdentifier}}&code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM&code_challenge_method=S256&state=qa-third-party-resource",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "authorize"
+              ],
+              "query": [
+                {
+                  "key": "response_type",
+                  "value": "code"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{thirdPartyClientId}}"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{redirectUri}}"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid"
+                },
+                {
+                  "key": "resource",
+                  "value": "{{apiIdentifier}}"
+                },
+                {
+                  "key": "code_challenge",
+                  "value": "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM"
+                },
+                {
+                  "key": "code_challenge_method",
+                  "value": "S256"
+                },
+                {
+                  "key": "state",
+                  "value": "qa-third-party-resource"
+                }
+              ]
+            },
+            "description": "A third-party application exposes no API, so any `resource` it names comes back as `invalid_target`.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('thirdPartyClientId')) {",
+                  "    pm.test('SETUP NEEDED: fill in thirdPartyClientId and thirdPartyClientSecret (see the folder description)', function () {",
+                  "        pm.expect.fail('The thirdPartyClientId variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    const location = pm.response.headers.get('Location') || '';",
+                  "",
+                  "    pm.test('Redirects the refusal back to the application', function () {",
+                  "        pm.expect(pm.response.code).to.eql(302);",
+                  "    });",
+                  "",
+                  "    pm.test('Names invalid_target and issues no code', function () {",
+                  "        pm.expect(location).to.include('error=invalid_target');",
+                  "        pm.expect(location).to.not.include('code=');",
+                  "    });",
+                  "",
+                  "    console.log('Status:', pm.response.code, '| Location:', location || '(none)');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "M10.9 · JWKS: the current key, and the previous one after a rotation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/jwks",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "jwks"
+              ]
+            },
+            "description": "One set of keys serves every application. After a rotation, the document lists the new key and the previous one, so tokens signed before the rotation keep verifying. Until the first rotation it lists one key.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Reads a JWT's header and payload. The signature is the API's job, not this test's.",
+                  "function decodeJwt(token) {",
+                  "    const parts = String(token || '').split('.');",
+                  "    const read = (part) => {",
+                  "        let b64 = part.replace(/-/g, '+').replace(/_/g, '/');",
+                  "        while (b64.length % 4) { b64 += '='; }",
+                  "        return JSON.parse(CryptoJS.enc.Base64.parse(b64).toString(CryptoJS.enc.Utf8));",
+                  "    };",
+                  "    return parts.length === 3 ? { header: read(parts[0]), payload: read(parts[1]) } : { header: {}, payload: {} };",
+                  "}",
+                  "",
+                  "pm.test('Answers 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const keys = pm.response.json().keys || [];",
+                  "",
+                  "pm.test('Every key is an RS256 signing key with a kid of its own', function () {",
+                  "    pm.expect(keys).to.not.be.empty;",
+                  "    keys.forEach((key) => {",
+                  "        pm.expect(key.alg).to.eql('RS256');",
+                  "        pm.expect(key.use).to.eql('sig');",
+                  "    });",
+                  "    pm.expect(new Set(keys.map((key) => key.kid)).size).to.eql(keys.length);",
+                  "});",
+                  "",
+                  "const idToken = pm.collectionVariables.get('fpIdToken');",
+                  "if (idToken) {",
+                  "    pm.test('Publishes the key that signed this folder\\'s id token', function () {",
+                  "        pm.expect(keys.map((key) => key.kid)).to.include(decodeJwt(idToken).header.kid);",
+                  "    });",
+                  "}",
+                  "",
+                  "console.log('Keys published:', keys.length, keys.map((key) => key.kid).join(', '));",
+                  "if (keys.length === 1) {",
+                  "    console.log('One key: no rotation has happened in this environment yet, so there is no previous key to list.');",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M10.8 · Turn First-party off, then on (dedicated client only)",
+          "description": "**Use a dedicated client.** Turning **First-party application** off on the shared dev test client stops the test client and the tutorials for everyone using it. Register a GK One application for this test, point `clientId`, `clientSecret` and `apiIdentifier` at it, and run the GK One application sign-in in **Milestones 9 to 11 · Sign in first** again, so `apiAccessToken` and `fpRefreshToken` belong to it.\n\n1. In the admin portal, turn **First-party application** off and save. Run the two **off** requests.\n2. Turn it on again and save. Run the **on again** request.\n\nThe API token lives an hour by default. Run the three requests inside that hour.",
+          "item": [
+            {
+              "name": "M10.8 · First-party off: introspect answers inactive",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{issuer}}/introspect",
+                  "host": [
+                    "{{issuer}}"
+                  ],
+                  "path": [
+                    "introspect"
+                  ]
+                },
+                "description": "With First-party off the application exposes no API, so its API tokens stop being active.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "token",
+                      "value": "{{apiAccessToken}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "{{clientId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "{{clientSecret}}",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Answers 200', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test('Reports the API token inactive', function () {",
+                      "    pm.expect(pm.response.json().active).to.be.false;",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "M10.8 · First-party off: no new token for the API",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{issuer}}/token",
+                  "host": [
+                    "{{issuer}}"
+                  ],
+                  "path": [
+                    "token"
+                  ]
+                },
+                "description": "Refused before the refresh token is spent. Run with First-party still on, it succeeds and rotates the refresh token, which this request then saves.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "refresh_token",
+                      "type": "text"
+                    },
+                    {
+                      "key": "refresh_token",
+                      "value": "{{fpRefreshToken}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "{{clientId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "{{clientSecret}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "resource",
+                      "value": "{{apiIdentifier}}",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Answers 400', function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test('Names invalid_target', function () {",
+                      "    pm.expect(pm.response.json().error).to.eql('invalid_target');",
+                      "});",
+                      "",
+                      "// Refresh tokens rotate, and the spent one is dead: keep the new one or the next refresh fails.",
+                      "if (pm.response.code === 200 && pm.response.json().refresh_token) {",
+                      "    pm.collectionVariables.set('fpRefreshToken', pm.response.json().refresh_token);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "M10.8 · First-party on again: introspect answers active",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{issuer}}/introspect",
+                  "host": [
+                    "{{issuer}}"
+                  ],
+                  "path": [
+                    "introspect"
+                  ]
+                },
+                "description": "Turning First-party back on restores the API, and the same token is active again.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "token",
+                      "value": "{{apiAccessToken}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "{{clientId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "{{clientSecret}}",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Answers 200', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test('Reports the API token active again', function () {",
+                      "    pm.expect(pm.response.json().active).to.be.true;",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Milestone 11 · Account page",
+      "description": "Milestone 11's rules, through the calls the account page makes. Each call takes the customer's GK One session in the body, as `sessionToken`.\n\n**Copy the session.** In a browser, sign in at `/account` on the sign-in host, the address in `loginBase` (`https://app-gkone-identity-001-dev.azurewebsites.net/account` in dev). Open the developer tools, then **Application → Cookies** for that address, and copy the value of `__Host-gkone-session` into `sessionToken`. For M11.2 and M11.3, sign in from a second browser or a private window too, and copy its cookie into `sessionTokenB`. Either cookie signs in as that customer: clear both variables when you finish, and keep them out of any export you share.\n\n**Before you start**\n- Sign in with `clientId` once, through **Milestones 9 to 11 · Sign in first** or the dev test client, so a GK One application is listed.\n- For M11.6 and M11.7, sign in with the third-party application through M10.5 in that same folder.\n\n**Run top to bottom.** The reads and refusals come first. Then M11.3 ends browser B's sessions, M11.5 ends every other session, M11.7 removes the third-party application, and M11.4 ends this browser's own session, which signs it out.\n\n**Checked in the browser, not here:** the cards, the five rows per card, **View all** and the header tabs (M11.1); the grouping by operating system and browser and the **This device** label (M11.2); the **Keep this session** and **End this session too** dialog (M11.4); and the confirmation before **Remove access** (M11.7).",
+      "item": [
+        {
+          "name": "M11.1 · Account overview",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account"
+              ]
+            },
+            "description": "What `/account` reads: the profile, the GK One apps, the connected apps and the sessions. Saves this session's id and browser id for the requests below.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('sessionToken')) {",
+                  "    pm.test('SETUP NEEDED: copy the __Host-gkone-session cookie into sessionToken (see the folder description)', function () {",
+                  "        pm.expect.fail('The sessionToken variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 200', function () {",
+                  "        pm.response.to.have.status(200);",
+                  "    });",
+                  "",
+                  "    const body = pm.response.json();",
+                  "    const sessions = body.sessions || [];",
+                  "",
+                  "    pm.test('Returns the sections the page shows', function () {",
+                  "        pm.expect(body.profile).to.be.an('object');",
+                  "        ['firstPartyApplications', 'applications', 'sessions'].forEach((list) => {",
+                  "            pm.expect(body[list], list).to.be.an('array');",
+                  "        });",
+                  "    });",
+                  "",
+                  "    pm.test('Marks one session as this one', function () {",
+                  "        pm.expect(sessions.filter((session) => session.current)).to.have.lengthOf(1);",
+                  "    });",
+                  "",
+                  "    const current = sessions.find((session) => session.current) || {};",
+                  "    pm.collectionVariables.set('currentSessionId', current.sessionId || '');",
+                  "    pm.collectionVariables.set('currentBrowserId', current.browserId || '');",
+                  "",
+                  "    const firstPartyIds = (body.firstPartyApplications || []).map((application) => application.clientId);",
+                  "    const connectedIds = (body.applications || []).map((application) => application.clientId);",
+                  "",
+                  "    pm.test('M11.6: the GK One application is under GK One apps only', function () {",
+                  "        const clientId = pm.collectionVariables.get('clientId');",
+                  "        pm.expect(firstPartyIds, 'Sign in with clientId once (Milestones 9 to 11 · Sign in first)').to.include(clientId);",
+                  "        pm.expect(connectedIds).to.not.include(clientId);",
+                  "    });",
+                  "",
+                  "    const thirdParty = pm.collectionVariables.get('thirdPartyClientId');",
+                  "    if (thirdParty) {",
+                  "        pm.test('M11.6: the third-party application is under Connected apps only', function () {",
+                  "            pm.expect(connectedIds, 'Sign in with the third-party application once (M10.5, in Milestones 9 to 11 · Sign in first)').to.include(thirdParty);",
+                  "            pm.expect(firstPartyIds).to.not.include(thirdParty);",
+                  "        });",
+                  "    }",
+                  "",
+                  "    const groups = {};",
+                  "    sessions.forEach((session) => {",
+                  "        const key = session.browserId || '(no browser id)';",
+                  "        groups[key] = (groups[key] || 0) + 1;",
+                  "    });",
+                  "    console.log('Sessions per browser (M11.2):', JSON.stringify(groups));",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11.2 · Account overview from browser B",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account"
+              ]
+            },
+            "description": "Reads the account from the second browser's session. Its browser id differs from this one's, which is why the page shows two groups.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionTokenB}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('sessionTokenB')) {",
+                  "    pm.test('SETUP NEEDED: sign in from a second browser and copy its cookie into sessionTokenB', function () {",
+                  "        pm.expect.fail('The sessionTokenB variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 200', function () {",
+                  "        pm.response.to.have.status(200);",
+                  "    });",
+                  "",
+                  "    const current = (pm.response.json().sessions || []).find((session) => session.current) || {};",
+                  "    pm.collectionVariables.set('browserBId', current.browserId || '');",
+                  "",
+                  "    pm.test('Browser B has a browser id of its own', function () {",
+                  "        pm.expect(current.browserId).to.be.a('string').and.not.empty;",
+                  "        pm.expect(current.browserId).to.not.eql(pm.collectionVariables.get('currentBrowserId'));",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M10.10 · Removing a GK One application is refused",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account/apps/revoke",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account",
+                "apps",
+                "revoke"
+              ]
+            },
+            "description": "The page offers no remove action for a GK application, and the call behind it refuses one too.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\",\n  \"clientId\": \"{{clientId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('sessionToken')) {",
+                  "    pm.test('SETUP NEEDED: copy the __Host-gkone-session cookie into sessionToken (see the folder description)', function () {",
+                  "        pm.expect.fail('The sessionToken variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 400', function () {",
+                  "        pm.response.to.have.status(400);",
+                  "    });",
+                  "",
+                  "    pm.test('Names invalid_request', function () {",
+                  "        pm.expect(pm.response.json().error).to.eql('invalid_request');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11 · Removing an application without a clientId is refused",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account/apps/revoke",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account",
+                "apps",
+                "revoke"
+              ]
+            },
+            "description": "A request that names no application.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\",\n  \"clientId\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('sessionToken')) {",
+                  "    pm.test('SETUP NEEDED: copy the __Host-gkone-session cookie into sessionToken (see the folder description)', function () {",
+                  "        pm.expect.fail('The sessionToken variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 400', function () {",
+                  "        pm.response.to.have.status(400);",
+                  "    });",
+                  "",
+                  "    pm.test('Names invalid_request', function () {",
+                  "        pm.expect(pm.response.json().error).to.eql('invalid_request');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11 · Ending this session by its id is refused",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account/sessions/revoke",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account",
+                "sessions",
+                "revoke"
+              ]
+            },
+            "description": "A session cannot end itself through this call. The page signs a customer out with **End this session too** instead, which M11.4 checks at the end of this folder.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\",\n  \"sessionId\": \"{{currentSessionId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('currentSessionId')) {",
+                  "    pm.test('SETUP NEEDED: run M11.1 first', function () {",
+                  "        pm.expect.fail('The currentSessionId variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 400', function () {",
+                  "        pm.response.to.have.status(400);",
+                  "    });",
+                  "",
+                  "    pm.test('Names invalid_request', function () {",
+                  "        pm.expect(pm.response.json().error).to.eql('invalid_request');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11 · A session that does not exist is refused",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account"
+              ]
+            },
+            "description": "Every account call answers 401 to a session it does not know.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"not-a-session\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Answers 401', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test('Names invalid_token', function () {",
+                  "    pm.expect(pm.response.json().error).to.eql('invalid_token');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11.3 · End browser B's sessions",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account/sessions/revoke-browser",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account",
+                "sessions",
+                "revoke-browser"
+              ]
+            },
+            "description": "**End sessions** on browser B's group, from this browser.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\",\n  \"browserId\": \"{{browserBId}}\",\n  \"includeCurrent\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('browserBId')) {",
+                  "    pm.test('SETUP NEEDED: run M11.2 with browser B first', function () {",
+                  "        pm.expect.fail('The browserBId variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 204', function () {",
+                  "        pm.response.to.have.status(204);",
+                  "    });",
+                  "",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11.3 · Browser B is signed out",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account"
+              ]
+            },
+            "description": "Browser B's session no longer opens anything. Its next visit to a GK One page lands on the sign-in screen.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionTokenB}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('sessionTokenB')) {",
+                  "    pm.test('SETUP NEEDED: sign in from a second browser and copy its cookie into sessionTokenB', function () {",
+                  "        pm.expect.fail('The sessionTokenB variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 401', function () {",
+                  "        pm.response.to.have.status(401);",
+                  "    });",
+                  "",
+                  "    pm.test('Names invalid_token', function () {",
+                  "        pm.expect(pm.response.json().error).to.eql('invalid_token');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11.3 · This browser stays signed in, and B's group is gone",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account"
+              ]
+            },
+            "description": "The browser that ended B's sessions keeps its own.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('sessionToken')) {",
+                  "    pm.test('SETUP NEEDED: copy the __Host-gkone-session cookie into sessionToken (see the folder description)', function () {",
+                  "        pm.expect.fail('The sessionToken variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 200', function () {",
+                  "        pm.response.to.have.status(200);",
+                  "    });",
+                  "",
+                  "    const sessions = pm.response.json().sessions || [];",
+                  "",
+                  "    pm.test('No session of browser B is left', function () {",
+                  "        pm.expect(sessions.map((session) => session.browserId)).to.not.include(pm.collectionVariables.get('browserBId'));",
+                  "    });",
+                  "",
+                  "    pm.test('This session is still the current one', function () {",
+                  "        pm.expect(sessions.filter((session) => session.current)).to.have.lengthOf(1);",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11.5 · End all other sessions",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account/sessions/revoke-all",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account",
+                "sessions",
+                "revoke-all"
+              ]
+            },
+            "description": "**End all other sessions**. To see it end something, sign in from another browser first.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('sessionToken')) {",
+                  "    pm.test('SETUP NEEDED: copy the __Host-gkone-session cookie into sessionToken (see the folder description)', function () {",
+                  "        pm.expect.fail('The sessionToken variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 204', function () {",
+                  "        pm.response.to.have.status(204);",
+                  "    });",
+                  "",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11.5 · Only this session is left",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account"
+              ]
+            },
+            "description": "The session that asked is the one left.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('sessionToken')) {",
+                  "    pm.test('SETUP NEEDED: copy the __Host-gkone-session cookie into sessionToken (see the folder description)', function () {",
+                  "        pm.expect.fail('The sessionToken variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 200', function () {",
+                  "        pm.response.to.have.status(200);",
+                  "    });",
+                  "",
+                  "    const sessions = pm.response.json().sessions || [];",
+                  "",
+                  "    pm.test('One session is left, and it is this one', function () {",
+                  "        pm.expect(sessions).to.have.lengthOf(1);",
+                  "        pm.expect(sessions[0].current).to.be.true;",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11.7 · Remove the connected application",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account/apps/revoke",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account",
+                "apps",
+                "revoke"
+              ]
+            },
+            "description": "**Remove access** on the third-party application. The page asks for confirmation first; this call is what runs after it.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\",\n  \"clientId\": \"{{thirdPartyClientId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('thirdPartyClientId')) {",
+                  "    pm.test('SETUP NEEDED: fill in thirdPartyClientId and thirdPartyClientSecret (see the folder description)', function () {",
+                  "        pm.expect.fail('The thirdPartyClientId variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 204', function () {",
+                  "        pm.response.to.have.status(204);",
+                  "    });",
+                  "",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11.7 · Its refresh token stops working",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/token",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "token"
+              ]
+            },
+            "description": "The refresh token from **M10.5 · Exchange the third-party code** died with the grant.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{tpRefreshToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{thirdPartyClientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{thirdPartyClientSecret}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('tpRefreshToken')) {",
+                  "    pm.test('SETUP NEEDED: run M10.5 · Exchange the third-party code first, so the third-party application holds a refresh token', function () {",
+                  "        pm.expect.fail('The tpRefreshToken variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 400', function () {",
+                  "        pm.response.to.have.status(400);",
+                  "    });",
+                  "",
+                  "    pm.test('Names invalid_grant', function () {",
+                  "        pm.expect(pm.response.json().error).to.eql('invalid_grant');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11.7 · Its access token stops working too",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{issuer}}/userinfo",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "userinfo"
+              ]
+            },
+            "description": "Removing the application also ends the access tokens it already holds, before they expire.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tpAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('tpAccessToken')) {",
+                  "    pm.test('SETUP NEEDED: run M10.5 · Exchange the third-party code first, so the third-party application holds an access token', function () {",
+                  "        pm.expect.fail('The tpAccessToken variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 401', function () {",
+                  "        pm.response.to.have.status(401);",
+                  "    });",
+                  "",
+                  "    pm.test('Names invalid_token', function () {",
+                  "        pm.expect(pm.response.json().error).to.eql('invalid_token');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11.7 · It is gone from Connected apps",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account"
+              ]
+            },
+            "description": "The page's list no longer shows it. A new sign-in shows the consent screen again.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('thirdPartyClientId')) {",
+                  "    pm.test('SETUP NEEDED: fill in thirdPartyClientId and thirdPartyClientSecret (see the folder description)', function () {",
+                  "        pm.expect.fail('The thirdPartyClientId variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 200', function () {",
+                  "        pm.response.to.have.status(200);",
+                  "    });",
+                  "",
+                  "    pm.test('Connected apps no longer list the third-party application', function () {",
+                  "        const ids = (pm.response.json().applications || []).map((application) => application.clientId);",
+                  "        pm.expect(ids).to.not.include(pm.collectionVariables.get('thirdPartyClientId'));",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11.4 · End this browser's sessions too (signs you out)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account/sessions/revoke-browser",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account",
+                "sessions",
+                "revoke-browser"
+              ]
+            },
+            "description": "**End sessions** on this browser's own group, then **End this session too**. It signs this browser out: to run the folder again, sign in and copy the new cookie.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\",\n  \"browserId\": \"{{currentBrowserId}}\",\n  \"includeCurrent\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('currentBrowserId')) {",
+                  "    pm.test('SETUP NEEDED: run M11.1 first', function () {",
+                  "        pm.expect.fail('The currentBrowserId variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 204', function () {",
+                  "        pm.response.to.have.status(204);",
+                  "    });",
+                  "",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "M11.4 · This session is refused now",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{issuer}}/account",
+              "host": [
+                "{{issuer}}"
+              ],
+              "path": [
+                "account"
+              ]
+            },
+            "description": "The browser that ended its own session is signed out, and `/account` sends it to the sign-in page.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.collectionVariables.get('sessionToken')) {",
+                  "    pm.test('SETUP NEEDED: copy the __Host-gkone-session cookie into sessionToken (see the folder description)', function () {",
+                  "        pm.expect.fail('The sessionToken variable is empty.');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Answers 401', function () {",
+                  "        pm.response.to.have.status(401);",
+                  "    });",
+                  "",
+                  "    pm.test('Names invalid_token', function () {",
+                  "        pm.expect(pm.response.json().error).to.eql('invalid_token');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
