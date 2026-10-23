@@ -11,8 +11,8 @@
 | `EnableProfileChangeOutboxDispatch` (IAM) | **true** | `UserProfileChanged` is published |
 | `WalletUserProfileEventSyncEnabled` (wallet) | **true** | Wallet applies events. Read once at startup |
 | `EnableRemittanceUserProfileEventSync` (remittance) | **false** | **Remittance doesn't read its subscription in QA.** Turn it on before the remittance-snapshot checks (it's re-read every minute, so no redeploy). Otherwise run those checks in Dev |
-| `EnablePhoneNumberProfileMigration` (IAM) | [confirm] | Needed for a phone change to publish (TC 24, deferred) |
-| `EnableIdentityConflictResolution` (IAM) | [confirm]; off in UAT | Needed for merge or conflict resolution to publish (TC 21) |
+| `EnablePhoneNumberProfileMigration` (IAM) | [confirm] | Needed for a phone change to publish (TC 21, deferred) |
+| `EnableIdentityConflictResolution` (IAM) | [confirm]; off in UAT | Needed for merge or conflict resolution to publish (TC 17, deferred) |
 
 **Global preconditions** (not repeated per case):
 - QA environment, with the flags above.
@@ -47,36 +47,12 @@ Post Conditions:
 The following should be true after test completion:
 • The customer has exactly one remittance snapshot
 • Leave the send flow without sending; nothing past tapping Send is needed for this case
+
 ---
 
 ## Alternate valid paths
 
 TEST CASE 2
-Title: Verify that an admin change to a customer's name and date of birth reaches both profile copies
-
-Tags: Remittances, Wallet, User Profile Sync, Admin Portal
-
-Pre Conditions:
-The following should be true before proceeding:
-• The customer has existing remittance and wallet profile documents
-• Admin access to the user-details edit (`PATCH` on `UpdateUserDetails`)
-• `EnableRemittanceUserProfileEventSync` is on
-
-Steps:
-| Step | Action | Expected Result |
-|------|--------|-----------------|
-| 1. | Record the names and date of birth on both documents | |
-| 2. | In the admin portal, change the customer's last name and date of birth and save (approving it if required) | The change is saved |
-| 3. | Allow propagation, then query the remittance snapshot | `lastName` and `dateOfBirth` show the new values; other fields are unchanged |
-| 4. | Query the wallet profile | `LastName` and `Birthdate` show the new values |
-
-Post Conditions:
-The following should be true after test completion:
-• The published event had `changeSource` = `AdminUserDetailsPatch`, and `changedFields` listed only the two changed fields (check if you can see the topic)
-
----
-
-TEST CASE 3
 Title: Verify whether an admin change to mother's maiden name reaches the remittance snapshot
 
 Tags: Remittances, User Profile Sync, Admin Portal, Compliance
@@ -98,9 +74,10 @@ Post Conditions:
 The following should be true after test completion:
 • If step 3 shows the old value, raise it as a defect candidate: the snapshot holds a stale compliance field until the next forced refresh
 
+
 ---
 
-TEST CASE 4
+TEST CASE 3
 Title: Verify that an admin TRN change updates the TRN on both profile copies
 
 Tags: Remittances, Wallet, User Profile Sync, Admin Portal, Compliance
@@ -122,9 +99,10 @@ Post Conditions:
 The following should be true after test completion:
 • The new TRN is on User Profile and both copies
 
+
 ---
 
-TEST CASE 5
+TEST CASE 4
 Title: Verify that an admin save with no actual changes publishes nothing and leaves both profile copies untouched
 
 Tags: Remittances, Wallet, User Profile Sync, Admin Portal
@@ -144,9 +122,10 @@ Post Conditions:
 The following should be true after test completion:
 • No profile data changed
 
+
 ---
 
-TEST CASE 6
+TEST CASE 5
 Title: Verify that a primary address change replaces the address on both profile copies
 
 Tags: Remittances, Wallet, User Profile Sync, Mobile
@@ -163,16 +142,17 @@ Steps:
 | 1. | Record the address on both documents, and `hasValidProofOfAddress` on the remittance snapshot | |
 | 2. | Change the primary address so every line is different | The change is saved |
 | 3. | Allow propagation, then query the remittance snapshot | Every address field matches the new address, with nothing left over from the old one |
-| 4. | Query the wallet profile | `Address.city`, `country` and `parish` match |
+| 4. | Query the wallet profile | `Address.city`, `Address.country` and `Address.parish` match the new address (the wallet stores only these address fields) |
 | 5. | Check `hasValidProofOfAddress` on the remittance snapshot | Record the result *(the review says remittance keeps its stored proof-of-address validity on events)* |
 
 Post Conditions:
 The following should be true after test completion:
 • Both copies match User Profile's primary address
 
+
 ---
 
-TEST CASE 7
+TEST CASE 6
 Title: Verify that an occupational level change updates the remittance snapshot only when the value actually changes
 
 Tags: Remittances, User Profile Sync, Mobile
@@ -197,9 +177,10 @@ Post Conditions:
 The following should be true after test completion:
 • The occupational level matches User Profile
 
+
 ---
 
-TEST CASE 8
+TEST CASE 7
 Title: Verify that completing eKYC brings both profile copies to Tier 1, including prepaid card data for JM
 
 Tags: Remittances, Wallet, User Profile Sync, KYC, Onboarding, Mobile
@@ -222,9 +203,10 @@ Post Conditions:
 The following should be true after test completion:
 • Both copies agree with User Profile. *(KYC completion publishes both `UserProfileChanged` (`KycCompletion`) and `UserProfileUpdated`; remittance receives both.)*
 
+
 ---
 
-TEST CASE 9
+TEST CASE 8
 Title: Verify that an address change in CMS reaches both profile copies when the customer next signs in
 
 Tags: Remittances, Wallet, User Profile Sync, CMS, Mobile
@@ -246,34 +228,10 @@ Post Conditions:
 The following should be true after test completion:
 • The published event had `changeSource` = `CmsAddressSync`
 
----
-
-TEST CASE 10
-Title: Verify that an existing customer's KYC becomes TRN_DUPLICATED on their profile copies when another customer with the same TRN passes Ondato
-
-Tags: Remittances, Wallet, User Profile Sync, KYC, Onboarding, Compliance
-
-Pre Conditions:
-The following should be true before proceeding:
-• Customer A is Tier 1 with profile documents in both containers
-• Customer B is new and will pass Ondato with the same TRN as customer A
-• `EnableRemittanceUserProfileEventSync` is on
-
-Steps:
-| Step | Action | Expected Result |
-|------|--------|-----------------|
-| 1. | Complete Ondato verification for customer B | Ondato approves customer B |
-| 2. | Query customer A's User Profile record | `KycStatus` = `TRN_DUPLICATED` |
-| 3. | Allow propagation, then query customer A's remittance and wallet documents | Both show `TRN_DUPLICATED` |
-| 4. | As customer A, attempt a WU Outbound remittance | Blocked at customer profile validation |
-
-Post Conditions:
-The following should be true after test completion:
-• The published event for customer A had `changeSource` = `OndatoIdentityVerification` and `changedFields` = `kycStatus`
 
 ---
 
-TEST CASE 11
+TEST CASE 9
 Title: Verify that a credit card application update carries the address and occupation to the remittance snapshot
 
 Tags: Remittances, Wallet, User Profile Sync, Credit Card
@@ -295,9 +253,10 @@ Post Conditions:
 The following should be true after test completion:
 • Record any fields User Profile changed that neither copy received
 
+
 ---
 
-TEST CASE 12
+TEST CASE 10
 Title: Verify that a prepaid card replacement updates the masked card details on the wallet profile
 
 Tags: Wallet, Prepaid Card, User Profile Sync, Mobile
@@ -318,58 +277,38 @@ Post Conditions:
 The following should be true after test completion:
 • The wallet profile and User Profile agree on the active card
 
+
 ---
 
-## Negative / error cases
-
-TEST CASE 13
-Title: Verify that a customer whose KYC was reset by an admin can't complete a remittance, and that both copies show the reset
+TEST CASE 11
+Title: Verify that an admin KYC reset updates the KYC status on both profile copies
 
 Tags: Remittances, Wallet, User Profile Sync, KYC, Admin Portal, Compliance
 
 Pre Conditions:
 The following should be true before proceeding:
-• The customer is Tier 1 in User Profile and both copies
+• The customer is below `TIER_1` (KYC reset is blocked once a customer is `TIER_1`)
+• The customer has documents in both `RemittanceUserProfiles` and wallet `UserProfiles`
 • Admin maker and checker access; `EnableRemittanceUserProfileEventSync` is on
 
 Steps:
 | Step | Action | Expected Result |
 |------|--------|-----------------|
-| 1. | Propose a Reset KYC action for the customer, and approve it as checker | The customer's KYC status in User Profile is reset |
-| 2. | Immediately attempt a WU Outbound remittance as the customer | Blocked at customer profile validation (the forced refresh) |
-| 3. | Allow propagation, then query both copies | Both show the reset KYC status; note whether wallet `KycTier` was also cleared |
+| 1. | Record `kycStatus` and `syncInfo` on the remittance snapshot, and `KycStatus`, `KycTier` and `LastEventId` on the wallet profile | |
+| 2. | Propose a Reset KYC action for the customer, and approve it as checker | The customer's KYC status in User Profile is reset |
+| 3. | Allow propagation, then query the remittance snapshot | `kycStatus` matches the reset status in User Profile; `syncInfo` has changed |
+| 4. | Query the wallet profile | `KycStatus` matches the reset status in User Profile; `LastEventId` has changed. Record whether `KycTier` was also cleared |
 
 Post Conditions:
 The following should be true after test completion:
-• No remittance was created
+• Both copies agree with User Profile on KYC status. *(The published event has `changeSource` = `KycStatusReset` and `changedFields` = `kycStatus`.)*
 
----
-
-TEST CASE 14
-Title: Verify that the eligibility check uses the current KYC status when the customer's profile is cached mid-flow
-
-Tags: Remittances, User Profile Sync, KYC, Compliance
-
-Pre Conditions:
-The following should be true before proceeding:
-• The customer is Tier 1 and starts a remittance (so the profile is cached)
-
-Steps:
-| Step | Action | Expected Result |
-|------|--------|-----------------|
-| 1. | As the customer, open WU Outbound and get a quote | The quote is shown |
-| 2. | In the admin portal, reset the customer's KYC and approve it | The reset is approved |
-| 3. | Continue to confirmation and submit | Blocked at customer profile validation; no payment is taken |
-
-Post Conditions:
-The following should be true after test completion:
-• This doesn't depend on remittance event sync, because the forced refresh reads User Profile directly
 
 ---
 
 ## Edge cases
 
-TEST CASE 15
+TEST CASE 12
 Title: Verify that a remittance started straight after a profile change uses the updated details
 
 Tags: Remittances, User Profile Sync, Mobile
@@ -389,9 +328,10 @@ Post Conditions:
 The following should be true after test completion:
 • No transaction after the change holds the old address
 
+
 ---
 
-TEST CASE 16
+TEST CASE 13
 Title: Verify that inbound and outbound participant fields match the pre-feature baseline for the same customer
 
 Tags: Remittances, User Profile Sync, Regression
@@ -411,16 +351,17 @@ Post Conditions:
 The following should be true after test completion:
 • Moving to the shared resolver changed no participant field
 
+
 ---
 
-TEST CASE 17
+TEST CASE 14
 Title: Verify that a P2P transfer between two Tier 1 customers succeeds and leaves each with one remittance snapshot
 
 Tags: Remittances, P2P, User Profile Sync, Mobile
 
 Pre Conditions:
 The following should be true before proceeding:
-• Two Tier 1 customers with valid prepaid cards
+• Two Tier 1 customers with valid prepaid cards who do not already have snapshots
 
 Steps:
 | Step | Action | Expected Result |
@@ -432,9 +373,10 @@ Post Conditions:
 The following should be true after test completion:
 • No duplicate snapshots
 
+
 ---
 
-TEST CASE 18
+TEST CASE 15
 Title: Verify that a new sign-up publishes no profile event and creates no profile copies until the customer is first read
 
 Tags: Remittances, Wallet, User Profile Sync, Onboarding
@@ -453,9 +395,10 @@ Post Conditions:
 The following should be true after test completion:
 • The customer's copies only appear on their first read or first published change
 
+
 ---
 
-TEST CASE 19
+TEST CASE 16
 Title: Verify that an account-deletion request publishes no event and leaves both profile copies in place
 
 Tags: Remittances, Wallet, User Profile Sync, Data Retention
@@ -474,34 +417,17 @@ Post Conditions:
 The following should be true after test completion:
 • Record the result for the open question on PII retention in the copies
 
----
-
-## Known-issue and flag-dependent checks
-
-TEST CASE 20
-Title: Verify that the wallet profile's KYC status is not updated after a proof-of-funds upload (known issue)
-
-Tags: Wallet, User Profile Sync, KYC, Known Issue
-
-Pre Conditions:
-The following should be true before proceeding:
-• A customer for whom uploading proof of funds changes their KYC status
-
-Steps:
-| Step | Action | Expected Result |
-|------|--------|-----------------|
-| 1. | Record `KycStatus` on the wallet profile | |
-| 2. | Upload proof of funds until User Profile's KYC status changes | User Profile shows the new status |
-| 3. | Allow propagation, then query the wallet profile | Known issue: still the old status (`FundsService` isn't a publish point). If it has updated, update `known-issues.md` |
-
-Post Conditions:
-The following should be true after test completion:
-• The result is recorded against the known issue
 
 ---
 
-TEST CASE 21
-Title: Verify what reaches the profile copies after an admin account merge, depending on the identity-conflict flag
+## Deferred
+
+TC 19–21 were marked `[DEFER]` in draft 01, and TC 17–18 in draft 02 (2026-10-22). Kept here so they can be picked up later.
+
+---
+
+TEST CASE 17
+Title: Verify what reaches the profile copies after an admin account merge, depending on the identity-conflict flag [DEFER]
 
 Tags: Remittances, Wallet, User Profile Sync, Customer Account Management, Known Issue
 
@@ -521,14 +447,36 @@ Post Conditions:
 The following should be true after test completion:
 • *(The IAM CR lists `MergeOrchestrator` as an uncovered writer. Record which path the merge actually took.)*
 
----
-## Deferred
-
-Marked `[DEFER]` in draft 01 (2026-10-22). Kept here so they can be picked up later.
 
 ---
 
-TEST CASE 22
+TEST CASE 18
+Title: Verify that an existing customer's KYC becomes TRN_DUPLICATED on their profile copies when another customer with the same TRN passes Ondato [DEFER]
+
+Tags: Remittances, Wallet, User Profile Sync, KYC, Onboarding, Compliance
+
+Pre Conditions:
+The following should be true before proceeding:
+• Customer A is Tier 1 with profile documents in both containers
+• Customer B is new and will pass Ondato with the same TRN as customer A
+• `EnableRemittanceUserProfileEventSync` is on
+
+Steps:
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1. | Complete Ondato verification for customer B | Ondato approves customer B |
+| 2. | Query customer A's User Profile record | `KycStatus` = `TRN_DUPLICATED` |
+| 3. | Allow propagation, then query customer A's remittance and wallet documents | Both show `TRN_DUPLICATED` |
+| 4. | As customer A, attempt a WU Outbound remittance | Blocked at customer profile validation |
+
+Post Conditions:
+The following should be true after test completion:
+• The published event for customer A had `changeSource` = `OndatoIdentityVerification` and `changedFields` = `kycStatus`
+
+
+---
+
+TEST CASE 19
 Title: Verify that an OTP-verified email change in the app is reflected in the remittance and wallet snapshots [DEFER]
 
 Tags: Remittances, Wallet, User Profile Sync, GK ID, Mobile
@@ -551,16 +499,17 @@ Post Conditions:
 The following should be true after test completion:
 • No second profile document exists for the customer in either container
 
+
 ---
 
-TEST CASE 23
+TEST CASE 20
 Title: Verify that a remittance sent after an email change sends its confirmation to the new address only [DEFER]
 
 Tags: Remittances, User Profile Sync, Mobile, Regression
 
 Pre Conditions:
 The following should be true before proceeding:
-• TC 22 has been completed for this customer
+• TC 19 has been completed for this customer
 
 Steps:
 | Step | Action | Expected Result |
@@ -573,9 +522,10 @@ Post Conditions:
 The following should be true after test completion:
 • Nothing is sent to the old email address after the change
 
+
 ---
 
-TEST CASE 24
+TEST CASE 21
 Title: Verify that an OTP-verified phone number change updates the existing profile copies without creating a second record [DEFER]
 
 Tags: Remittances, Wallet, User Profile Sync, GK ID, Mobile
@@ -598,60 +548,38 @@ Post Conditions:
 The following should be true after test completion:
 • `profileId` on the User Profile record is unchanged *(still an open question)*
 
----
-
-TEST CASE 25
-Title: Verify that a Reset KYC that is proposed but not approved doesn't change either profile copy [DEFER]
-
-Tags: Remittances, Wallet, User Profile Sync, KYC, Admin Portal
-
-Pre Conditions:
-The following should be true before proceeding:
-• The customer is Tier 1 with both copies
-
-Steps:
-| Step | Action | Expected Result |
-|------|--------|-----------------|
-| 1. | Record the KYC fields and sync metadata on both copies | |
-| 2. | Propose a Reset KYC action and leave it pending | The action is shown as PENDING |
-| 3. | Query both copies | Unchanged |
-| 4. | As checker, reject the action, then query both copies again | Still unchanged |
-
-Post Conditions:
-The following should be true after test completion:
-• The customer remains Tier 1 everywhere
 
 ---
 
 
 ## Notes
 
-**Count:** 25 cases: 21 active and 4 deferred.
-- Active: happy path 1 (TC 1), alternate valid paths 11 (TC 2–12), negative 2 (TC 13–14), edge 5 (TC 15–19), known-issue/flag checks 2 (TC 20–21).
-- Deferred (TC 22–25): the email change, the remittance after an email change, the phone change, and the Reset KYC that's proposed but not approved.
+**Count:** 21 cases: 16 active and 5 deferred. Removed from draft 02: the admin name and date-of-birth change (the admin portal can't edit those fields), the proof-of-funds KYC check (there's no proof-of-funds upload at the moment), and the mid-flow KYC reset and pending Reset KYC cases (a KYC reset is blocked once a customer is able to transact).
+- Active: happy path 1 (TC 1), alternate valid paths 10 (TC 2–11), edge 5 (TC 12–16).
+- Deferred (TC 17–21): the account merge, the TRN-duplicate flip, the email change, the remittance after an email change, and the phone change.
 
 **Assumptions to confirm:**
-- **Entry points.** The app or portal entry points for TC 6, 7 and 11 aren't confirmed, and nobody has said whether the admin detail edit uses maker-checker.
+- **Entry points.** The app or portal entry points for TC 5, 6 and 9 aren't confirmed, and nobody has said whether the admin detail edit uses maker-checker.
 - **Flags in QA.** The QA values of `EnablePhoneNumberProfileMigration` and `EnableIdentityConflictResolution` are unknown.
 - **Remittance event sync is off in QA.** Every remittance-snapshot check after a change needs `EnableRemittanceUserProfileEventSync` turned on first. Coordinate this, because the subscription has a backlog that will start processing when it's turned on.
 - **Expected gaps, from the review, to raise as defect candidates if confirmed:**
-  - TC 3: `mothersMaidenName` doesn't propagate.
-  - TC 11: employment status and mother's maiden name don't propagate.
-  - TC 6: proof-of-address validity isn't refreshed by events.
+  - TC 2: `mothersMaidenName` doesn't propagate.
+  - TC 9: employment status and mother's maiden name don't propagate.
+  - TC 5: proof-of-address validity isn't refreshed by events.
 
 **Context applied:**
 - **Primary context:**
   - The "Published events" review PDF (shared 2026-10-22): sections 2.2, 2.3, 2.4, 3, 4.1, 4.2, 4.3.
   - `user-profile-sync/domain-knowledge.md`: read path, forced refresh, consumer rules.
-  - `known-issues.md`: uncovered writers (TC 20, 21).
+  - `known-issues.md`: uncovered writers: merge (TC 17).
   - `edge-cases.md`: phone change and profile ID; no backfill.
   - Story notes 37227, 37231, 35690.
 - **Related context:**
-  - ekyc: KYC status values, JM completion (TC 8, 10).
-  - customer-account-management: Reset KYC maker-checker, `TRN_DUPLICATED`, merge (TC 10, 13, 14, 21, 25).
-  - The GK ID M6 playground notes: OTP flows (TC 22–24).
-  - wu-outbound: customer profile validation (TC 1, 10, 13, 14).
+  - ekyc: KYC status values, JM completion (TC 7, 18).
+  - customer-account-management: Reset KYC maker-checker, `TRN_DUPLICATED`, merge (TC 11, 17, 18).
+  - The GK ID M6 playground notes: OTP flows (TC 19–21).
+  - wu-outbound: customer profile validation (TC 1, 18).
 - **Marked content these cases lean on:**
-  - `[UNCERTAIN]` forced refresh coverage (TC 13, 14, 17).
-  - `[VERIFY]` profile ID after a phone change (TC 24).
-  - Entry-point assumptions (TC 6, 7, 11).
+  - `[UNCERTAIN]` forced refresh coverage (TC 14).
+  - `[VERIFY]` profile ID after a phone change (TC 21).
+  - Entry-point assumptions (TC 5, 6, 9).
